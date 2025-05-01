@@ -1,12 +1,6 @@
-document.addEventListener('DOMContentLoaded', function () {
-    const paymentBtn = document.getElementById('goPaymentBtn');
-    if (paymentBtn) {
-        paymentBtn.addEventListener('click', function () {
-            goPaymentPage();
-        });
-    }
-});
+const menuToggle = document.getElementById("menuToggle");
+const sideMenu = document.getElementById("sideMenu");
 
-function goPaymentPage() {
-    window.location.href = '/payment'; //결제 페이지로 이동
-}
+menuToggle.addEventListener("click", () => {
+  sideMenu.classList.toggle("open");
+});

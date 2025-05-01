@@ -1,60 +1,107 @@
 * {
-    box-sizing: border-box;
-  }
+  box-sizing: border-box;
+  font-family: "Cafe24Ssurround", sans-serif;
+}
 
-  body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Arial', sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #f5f5f5;
-  }
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Cafe24Ssurround", sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f5f5f5;
 
+  color: #333;
+  text-align: center;
+  padding: 50px;
+}
+
+.login-box {
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+}
+
+.login-box h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.login-box input[type="text"],
+.login-box input[type="password"] {
+  width: 100%;
+  padding: 0.75rem;
+  margin: 0.5rem 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+.login-box button {
+  width: 100%;
+  padding: 0.75rem;
+  margin-top: 1rem;
+  background-color: #ffffff;
+  color: #000000;
+  border: 1px solid #000000;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 약한 그림자 효과 */
+  transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+.login-box button:hover {
+  background-color: #f0f0f0;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* 호버 시 조금 더 진한 그림자 */
+}
+
+/* 기본적으로 input에는 시스템 폰트 적용 */
+input[type="password"] {
+  font-family: sans-serif;
+}
+
+/* placeholder에는 커스텀 폰트 적용 */
+input[type="password"]::placeholder {
+  font-family: "Cafe24Ssurround", sans-serif;
+}
+
+.login-links {
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.login-links a {
+  text-decoration: none;
+  color: #555;
+  margin: 0 0.5rem;
+}
+
+.login-links a:hover {
+  text-decoration: underline;
+}
+
+.login-links span {
+  color: #ccc;
+}
+
+@media (max-width: 480px) {
   .login-box {
-    background: white;
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 400px;
+    padding: 1.5rem;
   }
+}
 
-  .login-box h2 {
-    text-align: center;
-    margin-bottom: 1.5rem;
-  }
-
-  .login-box input[type="text"],
-  .login-box input[type="password"] {
-    width: 100%;
-    padding: 0.75rem;
-    margin: 0.5rem 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 1rem;
-  }
-
-  .login-box button {
-    width: 100%;
-    padding: 0.75rem;
-    margin-top: 1rem;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 1rem;
-    cursor: pointer;
-  }
-
-  .login-box button:hover {
-    background-color: #0056b3;
-  }
-
-  @media (max-width: 480px) {
-    .login-box {
-      padding: 1.5rem;
-    }
-  }
+@font-face {
+  font-family: "Cafe24Ssurround";
+  src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2105_2@1.0/Cafe24Ssurround.woff")
+    format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
