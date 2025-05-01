@@ -11,6 +11,10 @@ const cors = require("cors");
 
 const app = express();
 
+const expressLayouts = require("express-ejs-layouts");
+app.use(expressLayouts);
+app.set("layout", "main");
+
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

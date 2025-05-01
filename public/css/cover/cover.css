@@ -1,0 +1,22 @@
+
+.cover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 80%;
+    height: 80%;
+    background-color: rgba(255, 255, 255, 0.9); /* 투명한 흰색 */
+    cursor: move;
+    z-index: 10;
+    user-select: none;
+    display: none; /* 처음에는 숨겨놓기 */
+  }
+  
+  /* 가림판 위치를 조정할 수 있도록 추가 */
+  .cover.dragging {
+    cursor: grabbing;
+  }
+
+  .cover.show {
+    display: block; /* show 클래스가 있을 때만 보이게 */
+  }

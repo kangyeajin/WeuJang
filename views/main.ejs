@@ -3,85 +3,39 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>외우장 대시보드</title>
+    <title>외우장</title>
+    <link rel="icon" href="/images/folder.jpg" type="image/png" />
+    <link rel="stylesheet" href="/css/common/header.css" />
+    <link rel="stylesheet" href="/css/common/nav.css" />
+    <link rel="stylesheet" href="/css/common/footer.css" />
+    <link rel="stylesheet" href="/css/cover/cover.css" />
     <link rel="stylesheet" href="/css/styles.css" />
     <link rel="stylesheet" href="/css/main.css" />
-    <script defer src="/js/main.js"></script>
+    <% if (typeof cssFile !== 'undefined') { %>
+      <link rel="stylesheet" href="<%= cssFile %>" />
+    <% } %>
   </head>
 
   <body>
-    <nav class="side-menu" id="sideMenu">
-      <div class="menu-header">
-        <div id="menuToggle" class="menu-toggle">☰</div>
-        <a href="/main" class="home-button" title="메인으로 이동">🏠</a>
-      </div>
-      <ul>
-        <li>
-          <p class="icon">📝</p>
-          <span class="label">학습기록</span>
-        </li>
-        <li>
-          <p class="icon">✨</p>
-          <span class="label">가림판 꾸미기</span>
-        </li>
-        <li>
-          <p class="icon">💡</p>
-          <span class="label">문의하기</span>
-        </li>
-      </ul>
-    </nav>
+    <%- include('common/header') %>
+    <%- include('common/nav') %>
+
 
     <div class="container" id="container">
-      <header class="header">
-        <div class="header-icons">
-          <span
-            ><img
-              src="/images/logout.png"
-              alt="로그아웃"
-              style="border-radius: 8px"
-              width="30"
-          /></span>
-          <span
-            ><img
-              src="/images/mypage.png"
-              alt="마이페이지"
-              style="border-radius: 8px"
-              width="30"
-          /></span>
-        </div>
-      </header>
 
       <!-- 메인 콘텐츠 -->
       <main class="main">
-        <div class="folder-grid">
-          <!-- 예시 폴더 15개 -->
-          <div class="folder-item">
-            <img src="/images/folder.jpg" alt="폴더" />
-          </div>
-          <div class="folder-item">
-            <img src="/images/folder.jpg" alt="폴더" />
-          </div>
-          <div class="folder-item">
-            <img src="/images/folder.jpg" alt="폴더" />
-          </div>
-          <div class="folder-item">
-            <img src="/images/folder.jpg" alt="폴더" />
-          </div>
-          <div class="folder-item">
-            <img src="/images/folder.jpg" alt="폴더" />
-          </div>
-          <div class="folder-item">
-            <img src="/images/folder.jpg" alt="폴더" />
-          </div>
-          <!-- 아래 항목은 반복해서 넣으면 됩니다 -->
-          <!-- ... 반복 ... -->
-        </div>
+        <%- body %>
+        <div class="cover" id="cover"></div>
       </main>
 
-      <!-- 우측 하단 + 버튼 -->
-      <a href="add.html" class="add-button">
-        <img src="/images/plus_icon.png" alt="+" />
-      </a>
+      <%- include('common/footer') %>
     </div>
   </body>
+
+  <script defer src="/js/main.js"></script>
+  <script defer src="/js/cover/cover.js"></script>
+  <% if (typeof jsFile !== 'undefined') { %>
+    <script src="<%= jsFile %>"></script>
+  <% } %>
 </html>

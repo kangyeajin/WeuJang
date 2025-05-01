@@ -1,0 +1,67 @@
+/* 문제와 답 세트 컨테이너 */
+.note-container {
+    display: flex;
+    flex-direction: column; /* 세로로 나열 */
+    justify-content: flex-start;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+    height: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  
+  /* 각 문제와 답 쌍 */
+  .note {
+    width: 90%;
+    max-width: 1200px;
+    margin-bottom: 20px; /* 문제와 답 쌍 사이의 간격 */
+    border: 2px solid #ccc;
+    padding: 15px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column; /* 문제와 답을 세로로 배치 */
+    background-color: #f9f9f9;
+  }
+  
+  /* 문제 부분 */
+  .note .question {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  /* 답 부분 */
+  .note .answer {
+    font-size: 1rem;
+    color: #555;
+  }
+  
+  /* 문제와 답 사이의 구분선 */
+  .note .divider {
+    margin: 10px 0;
+    border-top: 1px solid #ccc;
+  }
+  
+  /* 모바일에서 세로로 나열될 때 보기 좋게 조정 */
+  @media (max-width: 768px) {
+    .note-container {
+      width: 100%;
+      padding: 10px;
+    }
+  
+    .note {
+      width: 100%;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .note .question {
+      font-size: 1rem;
+    }
+  
+    .note .answer {
+      font-size: 0.9rem;
+    }
+  }
+  

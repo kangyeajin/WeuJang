@@ -5,6 +5,7 @@
 - cd ..\WeuJang\
 2. 모듈 설치 
 - npm install
+- npm install express-ejs-layouts
 3. 실행 
   * 개발환경 : npm run dev (nodemon으로 실행)
   * 운영환경 : npm run start 

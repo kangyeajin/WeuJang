@@ -11,7 +11,7 @@ router.use(express.json());
 router.get("/favicon.ico", function (req, res) {});
 
 router.get("/", (req, res) => {
-  res.render("login");
+  res.render("login", { layout: false });
 });
 
 // 로그인 처리
@@ -32,9 +32,38 @@ router.get("/logout", (req, res) => {
   });
 });
 
-// 로그인 성공 후 메이페이지로 이동
+// main페이지 body 세팅
 router.get("/main", (req, res) => {
-  res.render("main");
+  res.render("notes/notes", {
+    layout: "main", // main.ejs를 레이아웃으로 사용
+    title: "외우장",
+    cssFile: "/css/notes/notes.css"
+  });
+});
+
+router.get("/cards_split", (req, res) => {
+  res.render("notes/cards_split", {
+    layout: "main", // main.ejs를 레이아웃으로 사용
+    title: "외우장",
+    cssFile: "/css/notes/cards_split.css"
+  });
+});
+
+router.get("/cards_filp", (req, res) => {
+  res.render("notes/cards_filp", {
+    layout: "main", // main.ejs를 레이아웃으로 사용
+    title: "외우장",
+    cssFile: "/css/notes/cards_filp.css",
+    jsFile: "/js/notes/cards_filp.js" // JS 파일 경로 추가
+  });
+});
+
+router.get("/cards_text", (req, res) => {
+  res.render("notes/cards_text", {
+    layout: "main", // main.ejs를 레이아웃으로 사용
+    title: "외우장",
+    cssFile: "/css/notes/cards_text.css"
+  });
 });
 
 // 동적 페이지 렌더링 예시
