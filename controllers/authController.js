@@ -1,53 +1,97 @@
-const sql = require("mssql");
-const dbConfig = require("../dbconfig.js");
+const { getUserInfo, searchSameUserId, insertUserInfo } = require("../models/authMapper");
 
-// 로그인 처리 함수
-async function handleLogin(req, res, id, pw) {
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 
-    if (id === 'admin' && pw === '1234') {
-        res.redirect('/main');
-      } else {
-        res.send('로그인 실패. 아이디 또는 비밀번호가 잘못되었습니다.');
-      }
+/**
+ * 사용가능 아이디 확인
+ */
+async function chkUserId(user_id) {
+    return await searchSameUserId(user_id);
+};
 
+/**
+ * 회원가입
+ */
+async function registerUser(req) {
+    try {
+        const { user_id, password, name, email, birth, coverSet } = req;
 
-/*     if (!frID || frID.length < 3 || frID.length > 20) {
-        return res.status(400).json({ message: "ID는 3글자 이상 20글자 이하이어야 합니다." });
+        // 비밀번호 형식 체크
+
+        // 비밀번호 암호화
+        const hashedPw = await bcrypt.hash(password, saltRounds);
+
+        // 날짜값 자동 생성여부 확인필요
+        const now = new Date();
+        const creatDTM = now.toISOString().replace(/[-:T.Z]/g, '').substring(0, 14);
+        const today = now.toISOString().slice(0, 10).replace(/-/g, '');
+        const time = now.toTimeString().slice(0, 8).replace(/:/g, '');
+
+        const param = { user_id, hashedPw, name, email, birth, creatDTM, coverSet, today, time };
+        return insertUserInfo(param);
+
+    } catch (error) {
+        console.log("error : ", error);
     }
-    if (!frPWD || frPWD.length < 2 || frPWD.length > 20) {
-        return res.status(400).json({ message: "Password는 2글자 이상 20글자 이하이어야 합니다." });
+    return false;
+}
+
+/**
+ * 로그인
+ */
+async function handleLogin(req, res, username, password) {
+
+    // 테스트용 계정
+    if (username === 'admin' && password === '1234') {
+        req.session.user = {
+            id: "admin",
+            name: "관리자",
+            email: "admin@mail.com",
+            birth: "19990101",
+            status: 1,
+        };
+        return res.status(200).json({ message: "로그인 성공!", redirect: "/main" });
     }
 
     try {
-        const pool = await sql.connect(dbConfig);
-        const request = pool.request();
-        request.input("a_id", sql.VarChar(20), frID);
-        request.input("a_pass", sql.VarChar(20), frPWD);
-        request.input("con_ip", sql.VarChar(15), req.ip);
+        // 1. DB에서 사용자 정보 조회
+        const user = await getUserInfo(username);
+        if (user == null)
+            return res.status(401).json({ message: "존재하지 않는 계정입니다." });
 
-        const result = await request.execute("SP_LOGIN");        
-        if (result.recordset.length > 0) {
-            const user = result.recordset[0];
+        // 2. 비밀번호 비교
+        if (await chkPw(password, user.password)) {
+
+            // session에 사용자 정보 저장
             req.session.user = {
-                seq: user.Seq,
-                id: user.Staff_Id,
-                name: user.Staff_Name,
-                division: user.Staff_Division,
-                part: user.Staff_Part,
-                email: user.Staff_Email,
-                key: user.Staff_key,
+                id: user.user_id,
+                name: user.name,
+                email: user.email,
+                birth: user.birth,
+                status: user.status,
             };
-            // console.log(req.session.user);
-            return res.status(200).json({ message: "Login successful", redirect: "/dashboard" });
-        } else {
-            return res.status(401).json({ message: "Invalid ID or Password. Please try again." });
+            console.log(req.session.user);
+
+            // 출석체크
+
+            return res.status(200).json({ message: "로그인 성공!", redirect: "/main" });
         }
+
+        return res.status(401).json({ message: "비밀번호가 일치하지 않습니다." });
+
     } catch (err) {
         console.error("Login error:", err);
-        return res.status(500).json({ message: "Login failed. Please try again later." });
-    } finally {
-        sql.close();
-    } */
+        return res.status(500).json({ message: "서버오류발생 다시 한번 시도해 주세요." });
+    }
 }
 
-module.exports = { handleLogin };
+/**
+ * 비밀번호 비교
+ */
+async function chkPw(plainPassword, storedHashedPassword) {
+    const match = await bcrypt.compare(plainPassword, storedHashedPassword);
+    return match;
+}
+
+module.exports = { chkUserId, registerUser, handleLogin };

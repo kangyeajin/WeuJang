@@ -1,35 +1,35 @@
 const express = require("express");
 const router = express.Router();
-const { testMethod, testMethod2 } = require("../controllers/infoController");
-const { handleLogin } = require('../controllers/authController');
 
-router.use(express.json());
+router.use(express.urlencoded({ extended: true }))
+router.use(express.json())
+
+/* 화면별 api */
+// 화면에서 사용할 api의 라우터를 아래에 추가해주세요
+
+// /user/.. 경로의 사용자 관련 기능 라우터
+router.use('/user', require('./auth'));
+
 
 /* 화면 이동 라우터 */
+// get방식의 페이지 이동관련 라우터를 아래에 추가해주세요
 
-// favicon.ico 호출 차단
-router.get("/favicon.ico", function (req, res) {});
-
-router.get("/", (req, res) => {
-  res.render("login", { layout: false });
-});
-
-// 로그인 처리
-router.post('/login', async (req, res) => {
-  const { username, password } = req.body;
-  console.log(username + " | " + password);
-
-  // DB에서 회원 아이디/비밀번호 조회 및 로그인 체크 
-  await handleLogin(req, res, username, password);
-});
-
-// 로그아웃
-router.get("/logout", (req, res) => {
-  req.session.destroy((err) => {
-      if (err) return res.send("Error logging out.");
+// 로그인 화면
+router.get("/", function (req, res) {
+  if (req.session.user) {
+    req.session.destroy(function (err) {// 세션이 남아있는 경우 제거한다.
+      if (err) {
+        console.error("세션 제거 중 에러:", err);
+        return res.send("Error logging out.");
+      }
       res.clearCookie("connect.sid");
-      res.redirect("/");
-  });
+
+      // 세션 제거와 쿠키 삭제가 완료된 후에 렌더링
+      return res.render("login", { layout: false});
+    });
+  } else {
+    res.render("login", { layout: false});
+  }
 });
 
 // main페이지 body 세팅
@@ -66,38 +66,19 @@ router.get("/cards_text", (req, res) => {
   });
 });
 
-// 동적 페이지 렌더링 예시
+// favicon.ico 호출 차단
+router.get("/favicon.ico", function (req, res) { });
+
+// layout을 사용하지 않는 화면(회원가입, 아이디/비밀번호 조회)
+// **이동할 페이지와 경로의 이름이 동일해야한다.
 router.get("/:page", async (req, res) => {
   try {
-
     var pageData = req.params.page;
-
     console.log(`${pageData} 화면으로 이동`);
-    res.render(`partials/${pageData}`); //페이지 이동
-
-    // res.json({pagename : pageData});
+    res.render(`${pageData}`, { layout: false });
   } catch (err) {
     res.status(500).send("Internal Server Error");
   }
 });
 
-/* api 라우터 */
-// get/post/동적페이징 렌더링 기본 예시
-router.get("/users", async (req, res) => {
-  try {
-    const data = await testMethod();
-    res.json(data);
-  } catch (error) {
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-});
-
-router.post("/users", async (req, res) => {
-  try {
-    const data = await testMethod2(req);
-    res.json(data);
-  } catch (error) {
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-});
 module.exports = router;

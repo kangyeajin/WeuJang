@@ -2,10 +2,10 @@
 
 ### < 프로젝트 실행 방법 >
 1. 터미널에서 프로젝트 폴더로 이동 
-- cd ..\WeuJang\
+  - cd ..\WeuJang\
 2. 모듈 설치 
-- npm install
-- npm install express-ejs-layouts
+  - npm install
+  - npm install express-ejs-layouts
 3. 실행 
   * 개발환경 : npm run dev (nodemon으로 실행)
   * 운영환경 : npm run start 
@@ -16,9 +16,9 @@ node.js 버전 : v20.16.0<br>
 npm 버전 : 10.8.1<br>
 5001번 포트 사용(http://localhost:5001/)<br>
 
-* 기본설치패키지 : npm install dotenv express express-session body-parser express-rate-limit mssql path
+* 기본설치패키지 : npm install dotenv express express-session body-parser express-rate-limit mssql path express-ejs-layouts bcrypt csrf
 
-### 프로젝트 구조
+### < 프로젝트 구조 >
 ```js
  WeuJang/
  ├── controllers/ # 컨트롤러 (비즈니스 로직)
