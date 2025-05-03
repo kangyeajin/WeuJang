@@ -17,7 +17,8 @@
   </head>
 
   <body>
-    <%- include('common/header') %> <%- include('common/nav') %>
+    <%- include('common/header') %> 
+    <%- include('common/nav') %>
 
     <div class="container" id="container">
       <!-- 메인 콘텐츠 -->
@@ -26,7 +27,11 @@
         <div class="cover" id="cover"></div>
       </main>
 
+      <!-- 메인화면에서만 푸터 사용 -->
+      <% if (typeof page !== 'undefined' && page === 'main') { %>
       <%- include('common/footer') %>
+      <% } else { } %>
+
     </div>
   </body>
 

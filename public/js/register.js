@@ -60,34 +60,34 @@ userIdInput.addEventListener('input', () => {
 
 // 회원가입 버튼
 document.getElementById('registerForm').addEventListener('submit', async function (e) {
-    e.preventDefault(); // 폼의 기본 동작(페이지 이동) 막기
+  e.preventDefault(); // 폼의 기본 동작(페이지 이동) 막기
 
-    const formData = new FormData(this);
-    // console.log(Object.fromEntries(formData.entries()));
-    const jsonData = {};
-    formData.forEach((value, key) => {
-        jsonData[key] = value;
+  const formData = new FormData(this);
+  // console.log(Object.fromEntries(formData.entries()));
+  const jsonData = {};
+  formData.forEach((value, key) => {
+    jsonData[key] = value;
+  });
+
+  try {
+    const response = await fetch('/user/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(jsonData)
     });
 
-    try {
-      const response = await fetch('/user/register', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(jsonData)
-      });
+    const result = await response.text();
 
-      const result = await response.text();
-
-      if (!response.ok) {
-        alert(result); // 오류 메시지
-      } else {
-        alert('회원가입 성공');
-        window.location.href = '/'; // 로그인 페이지로 이동 (원하는 경로로 수정)
-      }
-    } catch (error) {
-      console.error('예외 발생:', error);
-      alert('네트워크 오류가 발생했습니다.');
+    if (!response.ok) {
+      alert(result); // 오류 메시지
+    } else {
+      alert('회원가입 성공');
+      window.location.href = '/'; // 로그인 페이지로 이동 (원하는 경로로 수정)
     }
-  });
+  } catch (error) {
+    console.error('예외 발생:', error);
+    alert('네트워크 오류가 발생했습니다.');
+  }
+});

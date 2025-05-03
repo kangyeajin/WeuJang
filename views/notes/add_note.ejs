@@ -1,0 +1,16 @@
+<body>
+    <h2>수첩 생성</h2>
+    <form id="addNoteForm" action="/add" method="POST">
+      <!-- <label for="title">제목</label> -->
+      <input class="inputBox" id="title" name="title" type="text" placeholder="제목" required>
+  
+      <label for="template">템플릿</label>
+      <select class="inputBox" id="template" name="template" required>
+        <option value="filp">플립</option>
+        <option value="text">텍스트 박스</option>
+        <option value="split">분할</option>
+      </select>
+  
+      <button class="btn" type="submit">생성</button>
+    </form>
+  </body>

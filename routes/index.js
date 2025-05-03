@@ -6,6 +6,8 @@ const { getNoteLists } = require("../controllers/noteController");
 // 사용자 관련 기능
 router.use("/user", require("./auth"));
 
+// 노트 관련 기능
+router.use("/note", require("./note"))
 /* 페이지 라우터 */
 
 // 로그인 화면
@@ -32,6 +34,7 @@ router.get("/main", async (req, res) => {
 
     const noteList = await getNoteLists(userId);
     res.render("notes/notes", {
+      page: "main",
       layout: "main",
       title: "외우장",
       cssFile: "/css/notes/notes.css",
@@ -48,6 +51,7 @@ const cardPages = [
   { path: "cards_split", css: "cards_split.css" },
   { path: "cards_filp", css: "cards_filp.css", js: "cards_filp.js" },
   { path: "cards_text", css: "cards_text.css" },
+  { path: "add_note", css: "add_note.css", js: "add_note.js" },
 ];
 
 cardPages.forEach(({ path, css, js }) => {

@@ -4,7 +4,7 @@ const pool = require("../dbconfig.js");
 /**
  * 사용자 노트 정보 조회
  * @param {string} user_id 사용자 id
- * @returns {string}
+ * @returns {Promise<Array>} recordset 반환
  */
 async function getUserNoteLists(user_id) {
   try {
@@ -24,6 +24,34 @@ async function getUserNoteLists(user_id) {
   }
 }
 
+/**
+ * 노트 생성
+ * @param param 사용자 입력 데이터
+ * @returns {boolean} 성공여부 반환
+ */
+async function insertNoteInfo(param) {
+  try {
+    const { user_id, title, template, ENTDT, ENTTM } = param;
+
+    // 현재 최대 sort 값 가져오기
+    const [rows] = await pool.query("SELECT MAX(sort) AS maxSort FROM sys.note");
+    const nextSort = (rows[0].maxSort || 0) + 1;
+
+    const [result] = await pool.query(
+      `INSERT INTO sys.note (user_id, title, template, sort, ENTDT, ENTTM)
+             VALUES (?, ?, ?, ?, ?, ?)`,
+      [user_id, title, template, nextSort, ENTDT, ENTTM]
+    );
+
+    if (result.affectedRows < 0) return false;
+    return true;
+  } catch (err) {
+    console.error("노트 생성 중 오류:", err);
+    throw err;
+  }
+}
+
 module.exports = {
   getUserNoteLists,
+  insertNoteInfo,
 };

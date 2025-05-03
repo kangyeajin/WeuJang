@@ -42,13 +42,15 @@ body {
   border-radius: 5px;
   font-size: 1rem;
   cursor: pointer;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 약한 그림자 효과 */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  /* 약한 그림자 효과 */
   transition: background-color 0.2s, box-shadow 0.2s;
 }
 
 .login-box button:hover {
   background-color: #f0f0f0;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* 호버 시 조금 더 진한 그림자 */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  /* 호버 시 조금 더 진한 그림자 */
 }
 
 /* 기본적으로 input에는 시스템 폰트 적용 */

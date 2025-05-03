@@ -25,25 +25,25 @@ app.set("views", path.join(__dirname, "views"));
 
 // 미들웨어 설정
 app.use(
-    helmet({
-      frameguard: false,
-    })
-  );
-  app.use(cookieParser(process.env.COOKIE_SECRET));
-  app.use(express.static(path.join(__dirname, "public")));
-  app.use(
-    session({
-      secure: true, // https 환경에서만 session 정보를 주고받음
-      secret: process.env.COOKIE_SECRET,
-      resave: false, // 세션이 수정될 때만 다시 저장
-      saveUninitialized: true, // 처음부터 세션 생성
-      cookie: {
-        maxAge: 1000 * 60 * 120 , //세션 만료 시간 설정 - 120분
-        httpOnly: true, //자바스크립트를 통한 세션 쿠키 사용 불가
-      },
-      rolling: true, // 새로고침 시 만료시간 갱신
-    })
-  );
+  helmet({
+    frameguard: false,
+  })
+);
+app.use(cookieParser(process.env.COOKIE_SECRET));
+app.use(express.static(path.join(__dirname, "public")));
+app.use(
+  session({
+    secure: true, // https 환경에서만 session 정보를 주고받음
+    secret: process.env.COOKIE_SECRET,
+    resave: false, // 세션이 수정될 때만 다시 저장
+    saveUninitialized: true, // 처음부터 세션 생성
+    cookie: {
+      maxAge: 1000 * 60 * 120, //세션 만료 시간 설정 - 120분
+      httpOnly: true, //자바스크립트를 통한 세션 쿠키 사용 불가
+    },
+    rolling: true, // 새로고침 시 만료시간 갱신
+  })
+);
 
 
 const PORT = parseInt(process.env.PORT);

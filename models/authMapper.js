@@ -30,8 +30,13 @@ async function getUserInfo(user_id) {
  * @returns {int} 0 : 사용가능 / 그외 : 사용 불가
  */
 async function searchSameUserId(user_id) {
-  const [rows] = await pool.query('SELECT user_id FROM sys.USER WHERE user_id = ?', [user_id]);
-  return parseInt(rows.length);
+  try {
+    const [rows] = await pool.query('SELECT user_id FROM sys.USER WHERE user_id = ?', [user_id]);
+    return parseInt(rows.length);
+  } catch (err) {
+    console.error('아이디 중복여부 확인 중 오류:', err);
+    throw err;
+  }
 };
 
 /**
@@ -39,16 +44,21 @@ async function searchSameUserId(user_id) {
  * @param param 사용자 입력 데이터
  * @returns {boolean} 성공여부 반환
  */
-async function insertUserInfo(param){
-  const { user_id, hashedPw, name, email, birth, creatDTM, coverSet, today, time } = param;
-  const [result] = await pool.query(
-    `INSERT INTO sys.USER (
+async function insertUserInfo(param) {
+  try {
+    const { user_id, hashedPw, name, email, birth, creatDTM, coverSet, today, time } = param;
+    const [result] = await pool.query(
+      `INSERT INTO sys.USER (
       user_id, password, name, email, birth, creatDTM, STATUS, coverSet, ENTDT, ENTTM
       ) VALUES (?, ?, ?, ?, ?, ?, '1', ?, ?, ?)`,
-   [user_id, hashedPw, name, email, birth, creatDTM, coverSet, today, time]);
-  
-  if(result.affectedRows < 0) return false;
-  return true;
+      [user_id, hashedPw, name, email, birth, creatDTM, coverSet, today, time]);
+
+    if (result.affectedRows < 0) return false;
+    return true;
+  } catch (err) {
+    console.error('유저 정보 등록 중 오류:', err);
+    throw err;
+  }
 };
 
 module.exports = {
