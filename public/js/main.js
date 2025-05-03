@@ -4,3 +4,7 @@ const sideMenu = document.getElementById("sideMenu");
 menuToggle.addEventListener("click", () => {
   sideMenu.classList.toggle("open");
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+  console.log(result);
+});

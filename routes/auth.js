@@ -1,47 +1,52 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const { chkUserId, registerUser, handleLogin } = require('../controllers/authController');
+const {
+  chkUserId,
+  registerUser,
+  handleLogin,
+} = require("../controllers/authController");
 
-router.use(express.urlencoded({ extended: true }))
-router.use(express.json())
+router.use(express.urlencoded({ extended: true }));
+router.use(express.json());
 
 /* 로그인, 로그아웃, 회원가입 등 사용자 인증 관련 기능 */
 
 // 로그인
-router.post('/login', async (req, res) => {
-    const { username, password } = req.body;
-    console.log("사용자 입력 정보 :" , username , "/" , password);
-    await handleLogin(req, res, username, password);
+router.post("/login", async (req, res) => {
+  const { username, password } = req.body;
+  console.log("사용자 입력 정보 :", username, "/", password);
+  await handleLogin(req, res, username, password);
 });
 
 // 로그아웃
 router.get("/logout", (req, res) => {
-    // console.log(req.session.user);
-    req.session.destroy((err) => {
-        if (err) return res.send("로그아웃 실패!");
-        res.clearCookie("connect.sid");
-        res.redirect("/");
-    });
+  // console.log(req.session.user);
+  req.session.destroy((err) => {
+    if (err) return res.send("로그아웃 실패!");
+    res.clearCookie("connect.sid");
+    res.redirect("/");
+  });
 });
 
 // 회원가입
-router.post('/register', async (req, res) => {
-    if (await registerUser(req.body))
-        res.send('회원가입이 완료되었습니다.');
-    else
-        res.status(500).send('회원가입 중 오류가 발생했습니다.\r\n다시 시도해주세요.');
+router.post("/register", async (req, res) => {
+  if (await registerUser(req.body)) res.send("회원가입이 완료되었습니다.");
+  else
+    res
+      .status(500)
+      .send("회원가입 중 오류가 발생했습니다.\r\n다시 시도해주세요.");
 });
 
 // 사용가능 아이디 확인
-router.get('/chkUserId', async (req, res) => {
-    const { user_id } = req.query;
-    try {
-        const chk = await chkUserId(user_id);
-        res.json({ available: chk === 0 });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ available: false });
-    }
+router.get("/chkUserId", async (req, res) => {
+  const { user_id } = req.query;
+  try {
+    const chk = await chkUserId(user_id);
+    res.json({ available: chk === 0 });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ available: false });
+  }
 });
 
 module.exports = router;

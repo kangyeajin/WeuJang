@@ -12,17 +12,14 @@
     <link rel="stylesheet" href="/css/styles.css" />
     <link rel="stylesheet" href="/css/main.css" />
     <% if (typeof cssFile !== 'undefined') { %>
-      <link rel="stylesheet" href="<%= cssFile %>" />
+    <link rel="stylesheet" href="<%= cssFile %>" />
     <% } %>
   </head>
 
   <body>
-    <%- include('common/header') %>
-    <%- include('common/nav') %>
-
+    <%- include('common/header') %> <%- include('common/nav') %>
 
     <div class="container" id="container">
-
       <!-- 메인 콘텐츠 -->
       <main class="main">
         <%- body %>
@@ -36,6 +33,6 @@
   <script defer src="/js/main.js"></script>
   <script defer src="/js/cover/cover.js"></script>
   <% if (typeof jsFile !== 'undefined') { %>
-    <script src="<%= jsFile %>"></script>
+  <script src="<%= jsFile %>"></script>
   <% } %>
 </html>

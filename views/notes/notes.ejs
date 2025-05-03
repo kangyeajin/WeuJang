@@ -1,30 +1,22 @@
+<h1><%= title %></h1>
+<link rel="stylesheet" href="<%= cssFile %>" />
+
+<ul>
+  <% notes.forEach(note => { %>
+  <li>
+    <h3><%= note.title %></h3>
+    <p><%= note.content %></p>
+  </li>
+  <% }) %>
+</ul>
 
 <div class="folder-grid">
-    <!-- 예시 폴더 15개 -->
-    <div class="folder-item">
-        <a href="/cards_split" class="folder-link">
-            <img src="/images/folder.jpg" alt="폴더" />
-        </a>
-    </div>
-    <div class="folder-item">
-        <a href="/cards_filp" class="folder-link">
-            <img src="/images/folder.jpg" alt="폴더" />
-        </a>
-    </div>
-    <div class="folder-item">
-        <a href="/cards_text" class="folder-link">
-            <img src="/images/folder.jpg" alt="폴더" />
-        </a>
-    </div>
-    <div class="folder-item">
+  <% notes.forEach(note => { %>
+  <div id="<%= note.note_id %>" class="folder-item">
+    <a href="/cards_<%= note.template %>" class="folder-link">
       <img src="/images/folder.jpg" alt="폴더" />
-    </div>
-    <div class="folder-item">
-      <img src="/images/folder.jpg" alt="폴더" />
-    </div>
-    <div class="folder-item">
-      <img src="/images/folder.jpg" alt="폴더" />
-    </div>
-    <!-- 아래 항목은 반복해서 넣으면 됩니다 -->
-    <!-- ... 반복 ... -->
+    </a>
+    <%= note.title %>
   </div>
+  <% }) %>
+</div>
