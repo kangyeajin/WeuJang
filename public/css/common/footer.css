@@ -1,28 +1,58 @@
+.fab-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+}
 
+.fab-menu {
+  position: absolute;
+  bottom: 70px;
+  right: 0;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  display: none;
+  flex-direction: column;
+  padding: 10px 0;
+  min-width: 140px;
+}
+
+.fab-menu a {
+  padding: 10px 16px;
+  text-decoration: none;
+  color: #333;
+  display: block;
+  white-space: nowrap;
+}
+
+.fab-menu a:hover {
+  background-color: #f0f0f0;
+}
 
 .add-button {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    background-color: black;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid #ccc;
-    z-index: 1000;
-    cursor: pointer;
-    transition: background-color 0.2s;
-  }
-  
-  .add-button:hover {
-    background-color: #7c7c7c;
-  }
-  
-  .add-button img {
-    width: 45px;
-    height: 45px;
-  }
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: black;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.add-button:hover {
+  background-color: #7c7c7c;
+}
+
+.add-button img {
+  width: 45px;
+  height: 45px;
+}
+
+.add-button.active {
+  background-color: #7c7c7c;
+}
