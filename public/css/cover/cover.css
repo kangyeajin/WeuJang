@@ -3,13 +3,15 @@
     position: absolute;
     top: 0;
     left: 0;
-    width: 80%;
+    width: 55%;
     height: 80%;
-    background-color: rgba(255, 255, 255, 0.9); /* 투명한 흰색 */
+    background-color: #ff0000e0; /* 반투명 빨간색 */
     cursor: move;
     z-index: 10;
     user-select: none;
     display: none; /* 처음에는 숨겨놓기 */
+    left: 132px; 
+    top: 86px;
   }
   
   /* 가림판 위치를 조정할 수 있도록 추가 */

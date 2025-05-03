@@ -34,7 +34,7 @@
   /* 답 부분 */
   .note .answer {
     font-size: 1rem;
-    color: #555;
+    color: #ff4e00d4; /* 답변 색상 */
   }
   
   /* 문제와 답 사이의 구분선 */
