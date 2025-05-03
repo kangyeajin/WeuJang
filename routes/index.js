@@ -44,7 +44,7 @@ router.get("/main", async (req, res) => {
     layout: "main", // main.ejs를 레이아웃으로 사용
     title: "외우장",
     cssFile: "/css/notes/notes.css",
-    notes: noteList,
+    notes: noteList || [],
   });
 });
 
