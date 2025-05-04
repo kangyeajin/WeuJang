@@ -1,10 +1,14 @@
 let currentCardIndex = 0;
-const cards = [
-  { question: "문제 1", answer: "답 1" },
-  { question: "문제 2", answer: "답 2" },
-  { question: "문제 3", answer: "답 3" },
-  // 더 많은 문제와 답을 추가
-];
+
+// HTML 엔티티 디코딩 함수
+function decodeHtml(html) {
+  var txt = document.createElement('textarea');
+  txt.innerHTML = html;
+  return txt.value;
+}
+// cards 데이터를 가져와서 디코딩 후 JSON으로 파싱
+const jsonData = decodeHtml(document.getElementById('cards').textContent);
+const cards = JSON.parse(jsonData);
 
 const questionElement = document.getElementById('question');
 const answerElement = document.getElementById('answer');

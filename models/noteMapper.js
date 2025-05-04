@@ -51,7 +51,31 @@ async function insertNoteInfo(param) {
   }
 }
 
+/**
+ * 노트별 문제 정보 조회
+ * @param {string} note_id 노트 id
+ * @returns {Promise<Array>} recordset 반환
+ */
+async function getUserCardLists(note_id) {
+  try {
+    const [rows] = await pool.query(
+      "SELECT card_id, note_id, question, answer, hint, star, ENTDT, ENTTM, UPDDT, UPDTM FROM sys.card WHERE note_id = ?",
+      [note_id]
+    );
+
+    if (rows.length > 0) {
+      return rows;
+    } else {
+      return null; // 해당 ID 없음
+    }
+  } catch (err) {
+    console.error("[getUserNoteLists]문제 정보 조회 중 오류:", err);
+    throw err;
+  }
+}
+
 module.exports = {
   getUserNoteLists,
   insertNoteInfo,
+  getUserCardLists,
 };

@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { getNoteLists } = require("../controllers/noteController");
+const { getNoteLists, getCardLists } = require("../controllers/noteController");
 
 /* API 라우터 */
 // 사용자 관련 기능
@@ -48,18 +48,23 @@ router.get("/main", async (req, res) => {
 
 // 카드 형식 페이지들
 const cardPages = [
-  { path: "cards_split", css: "cards_split.css" },
+  { path: "cards_split", css: "cards_split.css", js: "cards_split.js"  },
   { path: "cards_filp", css: "cards_filp.css", js: "cards_filp.js" },
-  { path: "cards_text", css: "cards_text.css" },
+  { path: "cards_text", css: "cards_text.css", js: "cards_text.js"  },
   { path: "add_note", css: "add_note.css", js: "add_note.js" },
 ];
 
 cardPages.forEach(({ path, css, js }) => {
-  router.get(`/${path}`, (req, res) => {
+  router.get(`/${path}`, async (req, res) => {
+    const noteId = req.query.note_id; // 쿼리 파라미터에서 note_id를 가져옴
+    if (!noteId) return res.redirect("/");
+
+    const cardList = await getCardLists(noteId);
     res.render(`notes/${path}`, {
       layout: "main",
       title: "외우장",
       cssFile: `/css/notes/${css}`,
+      cards: cardList || [],
       ...(js ? { jsFile: `/js/notes/${js}` } : {}),
     });
   });

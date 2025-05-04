@@ -1,4 +1,4 @@
-const { getUserNoteLists, insertNoteInfo } = require("../models/noteMapper");
+const { getUserNoteLists, insertNoteInfo, getUserCardLists } = require("../models/noteMapper");
 
 /**
  * 사용자 노트 리스트 조회
@@ -27,4 +27,11 @@ async function createNote(req) {
   return false;
 }
 
-module.exports = { getNoteLists, createNote };
+/**
+ * 노트별 카드 리스트 조회
+ */
+async function getCardLists(note_id) {
+  return await getUserCardLists(note_id);
+}
+
+module.exports = { getNoteLists, createNote, getCardLists };

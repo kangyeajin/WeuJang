@@ -1,23 +1,12 @@
 <section class="note-container">
-    <div class="note">
-      <div class="left">
-        <!-- <h3>문제</h3> -->
-        <ul>
-          <li>문제 1</li>
-          <li>문제 2</li>
-          <li>문제 3</li>
-          <!-- 문제 내용 추가 -->
-        </ul>
-      </div>
-  
-      <div class="right">
-        <!-- <h3>답</h3> -->
-        <ul>
-          <li>답 1</li>
-          <li>답 2</li>
-          <li>답 3</li>
-          <!-- 답 내용 추가 -->
-        </ul>
-      </div>
-    </div>
+  <ul class="note-list">
+    <!-- <li class="note-row">
+      <div class="left">1. 어떤 모듈에서 반환한 값을 다른 모듈에서 참조해서 사용하는 경우의 결합도</div>
+      <div class="right">외부 결합도(External)</div>
+    </li> -->
+  </ul>
   </section>
+
+  <script id="cards" type="application/json">
+    <%= JSON.stringify(cards || []) %>
+  </script>

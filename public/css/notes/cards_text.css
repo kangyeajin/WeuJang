@@ -29,12 +29,16 @@
     font-size: 1.2rem;
     font-weight: bold;
     margin-bottom: 10px;
+    /* flex: 1;
+    text-indent: -0.8em;
+    padding: 0 0 0 1em; */
   }
   
   /* 답 부분 */
   .note .answer {
     font-size: 1rem;
     color: #ff4e00d4; /* 답변 색상 */
+    /* padding: 0 0 0 0.5em; */
   }
   
   /* 문제와 답 사이의 구분선 */
