@@ -1,5 +1,6 @@
 const { getUserNoteLists, insertNoteInfo, getUserCardLists, insertCard } = require("../models/noteMapper");
 const { clean } = require('../utils/sanitize');
+const { getDate } = require('../utils/date');
 
 /**
  * 사용자 노트 리스트 조회
@@ -53,16 +54,6 @@ async function createCard(req) {
     console.log("error : ", error);
   }
   return false;
-}
-
-/**
- * 현재 DT(YYYYMMDD)와 TM(HHMMSS)
- */
-function getDate() {
-  const today = new Date();
-  const DT = today.toISOString().slice(0, 10).replace(/-/g, "");
-  const TM = today.toTimeString().slice(0, 8).replace(/:/g, "");
-  return { DT, TM }
 }
 
 module.exports = { getNoteLists, createNote, getCardLists, createCard };

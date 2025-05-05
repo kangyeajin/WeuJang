@@ -46,12 +46,12 @@ async function searchSameUserId(user_id) {
  */
 async function insertUserInfo(param) {
   try {
-    const { user_id, hashedPw, name, email, birth, creatDTM, coverSet, today, time } = param;
+    const { user_id, hashedPw, name, email, birth, creatDTM, coverSet, ENTDT, ENTTM } = param;
     const [result] = await pool.query(
       `INSERT INTO sys.USER (
       user_id, password, name, email, birth, creatDTM, STATUS, coverSet, ENTDT, ENTTM
       ) VALUES (?, ?, ?, ?, ?, ?, '1', ?, ?, ?)`,
-      [user_id, hashedPw, name, email, birth, creatDTM, coverSet, today, time]);
+      [user_id, hashedPw, name, email, birth, creatDTM, coverSet, ENTDT, ENTTM]);
 
     if (result.affectedRows < 0) return false;
     return true;

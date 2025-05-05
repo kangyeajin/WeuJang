@@ -1,4 +1,5 @@
 const { getUserInfo, searchSameUserId, insertUserInfo } = require("../models/authMapper");
+const { getDate } = require('../utils/date');
 
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
@@ -16,19 +17,15 @@ async function chkUserId(user_id) {
 async function registerUser(req) {
     try {
         const { user_id, password, name, email, birth, coverSet } = req;
+        const { DT: ENTDT, TM: ENTTM } = getDate();
+        const creatDTM = `${ENTDT}${ENTTM}`;
 
         // 비밀번호 형식 체크
 
         // 비밀번호 암호화
         const hashedPw = await bcrypt.hash(password, saltRounds);
 
-        // 날짜값 자동 생성여부 확인필요
-        const now = new Date();
-        const creatDTM = now.toISOString().replace(/[-:T.Z]/g, '').substring(0, 14);
-        const today = now.toISOString().slice(0, 10).replace(/-/g, '');
-        const time = now.toTimeString().slice(0, 8).replace(/:/g, '');
-
-        const param = { user_id, hashedPw, name, email, birth, creatDTM, coverSet, today, time };
+        const param = { user_id, hashedPw, name, email, birth, creatDTM, coverSet, ENTDT, ENTTM };
         return insertUserInfo(param);
 
     } catch (error) {
