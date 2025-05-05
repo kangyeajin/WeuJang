@@ -48,10 +48,9 @@ router.get("/main", async (req, res) => {
 
 // 카드 형식 페이지들
 const cardPages = [
-  { path: "cards_split", css: "cards_split.css", js: "cards_split.js"  },
+  { path: "cards_split", css: "cards_split.css", js: "cards_split.js" },
   { path: "cards_filp", css: "cards_filp.css", js: "cards_filp.js" },
-  { path: "cards_text", css: "cards_text.css", js: "cards_text.js"  },
-  { path: "add_note", css: "add_note.css", js: "add_note.js" },
+  { path: "cards_text", css: "cards_text.css", js: "cards_text.js" },
 ];
 
 cardPages.forEach(({ path, css, js }) => {
@@ -69,6 +68,33 @@ cardPages.forEach(({ path, css, js }) => {
     });
   });
 });
+
+/**
+ * add_note와 add_card cardList를 사용하지 않으므로 임시로 분리해줌
+ * 코드 리펙토링 필요
+ */
+router.get(`/add_note`, async (req, res) => {
+  res.render(`notes/add_note`, {
+    layout: "main",
+    title: "외우장",
+    cssFile: `/css/notes/add_note.css`,
+    jsFile: `/js/notes/add_note.js`,
+  });
+});
+
+router.get(`/add_card`, async (req, res) => {
+  const userId = req.session.user.id;
+  const noteList = await getNoteLists(userId);
+
+  res.render(`notes/add_card`, {
+    layout: "main",
+    title: "외우장",
+    notes: noteList || [],
+    cssFile: `/css/notes/add_card.css`,
+    jsFile: `/js/notes/add_card.js`,
+  });
+});
+
 
 // favicon.ico 무시
 router.get("/favicon.ico", (req, res) => res.sendStatus(204));

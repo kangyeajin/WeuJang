@@ -74,8 +74,31 @@ async function getUserCardLists(note_id) {
   }
 }
 
+/**
+ * 문제 등록
+ * @param param 사용자 입력 데이터
+ * @returns {boolean} 성공여부 반환
+ */
+async function insertCard(param) {
+  try {
+    const { note_id, cleanQuestion, cleanAnswer, cleanHint, star, ENTDT, ENTTM } = param;
+    const [result] = await pool.query(
+      `INSERT INTO card (note_id, question, answer, hint, star, ENTDT, ENTTM)
+      VALUES (?, ?, ?, ?, ?, ?, ?)`,
+      [note_id, cleanQuestion, cleanAnswer, cleanHint, star, ENTDT, ENTTM]
+    );
+
+    if (result.affectedRows < 0) return false;
+    return true;
+  } catch (err) {
+    console.error("문제 등록 중 오류:", err);
+    throw err;
+  }
+}
+
 module.exports = {
   getUserNoteLists,
   insertNoteInfo,
   getUserCardLists,
+  insertCard,
 };

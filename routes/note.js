@@ -3,7 +3,7 @@ const router = express.Router();
 const {
     getUserNoteLists,
     createNote,
-
+    createCard,
 } = require("../controllers/noteController");
 
 router.use(express.urlencoded({ extended: true }));
@@ -31,6 +31,21 @@ router.post("/add", async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).send("서버 오류");
+    }
+});
+
+// 카드 등록
+router.post('/add_card', async (req, res) => {
+    try {
+        if (await createCard(req.body)) {
+            res.send("카드가 등록되었습니다.");
+        }
+        else {
+            res.status(500).send("카드 등록 중 오류가 발생했습니다.\r\n다시 시도해주세요.");
+        }
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('서버 오류');
     }
 });
 

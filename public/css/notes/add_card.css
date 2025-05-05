@@ -1,0 +1,23 @@
+form {
+    max-width: 400px;
+    margin: auto;
+}
+
+h2 {
+    text-align: center;
+}
+
+.star {
+    font-size: 2rem;
+    color: lightgray;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.star.selected {
+    color: gold;
+}
+
+.star.hovered {
+    color: gold;
+}

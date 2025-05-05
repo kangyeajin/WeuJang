@@ -1,4 +1,4 @@
-// 회원가입 버튼
+// 수첩 등록 버튼
 document.getElementById('addNoteForm').addEventListener('submit', async function (e) {
     e.preventDefault(); // 폼의 기본 동작(페이지 이동) 막기
 
