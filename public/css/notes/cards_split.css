@@ -71,6 +71,17 @@ li {
   color: #ff4e00d4;
 }
 
+
+/* 메타 정보 (별, 힌트)를 좌우 배치 */
+.meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%; /* left의 너비에 맞추기 */
+  box-sizing: border-box;
+  padding: 0 1.2rem;
+}
+
 /* 반응형 처리 */
 @media (max-width: 768px) {
   .note-container {
@@ -102,5 +113,44 @@ li {
 
   .right {
     font-size: 1rem;
+  }
+}
+
+/* 힌트 팝업 */
+.hint-popup {
+  position: absolute;
+  background-color: #fff;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  padding: 10px;
+  z-index: 9999;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  max-width: 90vw; /* 모바일 대응 */
+  width: 100%;
+  box-sizing: border-box;
+  word-break: break-word;
+  font-size: 1rem;
+}
+
+.hint-btn {
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+/* 모바일 대응 */
+@media (max-width: 768px) {
+  .hint-popup {
+    font-size: 0.95rem;
+    padding: 8px;
+    border-radius: 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hint-popup {
+    font-size: 0.9rem;
+    padding: 6px;
+    border-radius: 5px;
+    max-width: 95vw;
   }
 }

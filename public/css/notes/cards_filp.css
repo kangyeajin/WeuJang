@@ -1,36 +1,61 @@
 /* 카드 전체 감싸는 컨테이너 */
 .card-container {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  height: 70vh; /* 카드가 더 커졌으니 약간 더 높게 */
+  height: auto;
   perspective: 1000px;
-  overflow: hidden; /* 스크롤 방지 */
+  padding: 1rem;
+  box-sizing: border-box;
 }
 
-/* 개별 카드 */
-.card {
-  width: 100%;
-  max-width: 700px; /* 카드 가로폭 증가 */
-  aspect-ratio: 4 / 2.2; /* 카드 비율 조정: 더 넓고 높게 */
-  background-color: #f1f1f1;
-  border-radius: 10px;
+/* 카드 위 메타 정보 */
+.meta {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  position: relative;
-  transform-style: preserve-3d;
-  transition: transform 0.6s;
+  width: 100%;
+  max-width: 700px;
+  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
+  padding: 0 0.5rem;
+  box-sizing: border-box;
+}
+
+#star {
+  color: gold;
+}
+
+#hint-btn {
   cursor: pointer;
 }
 
-/* 카드 앞/뒤면 공통 */
+/* 카드 본체 */
+.card {
+  width: 100%;
+  max-width: 700px;
+  height: auto;
+  aspect-ratio: 4 / 2.2;
+  background-color: #f1f1f1;
+  border-radius: 10px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform-style: preserve-3d;
+  transition: transform 0.6s;
+  cursor: pointer;
+  /* ✅ overflow 제거 또는 overflow: visible로 변경 */
+  overflow: visible;
+}
+
+/* 앞/뒷면 공통 */
 .card-front, .card-back {
   position: absolute;
   width: 100%;
   height: 100%;
   padding: 1.2rem;
-  font-size: 1.5rem; /* 글자 크기 증가 */
+  font-size: 1.5rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -39,8 +64,7 @@
   box-sizing: border-box;
 }
 
-.card-front{
-  flex: 1;
+.card-front {
   text-indent: -0.8rem;
 }
 
@@ -48,22 +72,22 @@
   padding: 0 0.8rem;
 }
 
-/* 카드 뒷면 회전 */
 .card-back {
   background-color: #fff;
   transform: rotateY(180deg);
 }
 
-/* 회전 효과 */
+/* 회전 */
 .card.rotate {
   transform: rotateY(180deg);
 }
 
-/* 좌우 네비게이션 버튼 */
+/* 네비게이션 버튼 */
 .navigation {
   display: flex;
   justify-content: center;
-  margin: 0.5rem 0;
+  margin: 1rem 0;
+  gap: 2rem;
 }
 
 button {
@@ -74,15 +98,40 @@ button {
   border: 1px solid #ccc;
   background-color: #eee;
   transition: background-color 0.3s;
-  margin: 0 30px;
 }
 
 button:hover {
   background-color: #ddd;
 }
 
-/* 모바일/태블릿 반응형 */
+/* 힌트 팝업 */
+.hint-popup {
+  position: absolute;
+  background-color: #fff;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  padding: 10px;
+  z-index: 9999;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  max-width: 90vw;
+  width: 100%;
+  box-sizing: border-box;
+  word-break: break-word;
+  font-size: 1rem;
+  display: none;
+}
+
+/* 반응형 768px 이하 */
 @media (max-width: 768px) {
+  .meta {
+    font-size: 1rem;
+    padding: 0 0.5rem;
+  }
+
+  #star, #hint-btn {
+    font-size: 1rem;
+  }
+
   .card {
     max-width: 90%;
     font-size: 1.2rem;
@@ -90,10 +139,32 @@ button:hover {
 
   .card-front, .card-back {
     font-size: 1.2rem;
+    padding: 1rem;
+  }
+
+  .navigation button {
+    font-size: 0.95rem;
+    padding: 8px 16px;
+  }
+
+  .hint-popup {
+    font-size: 0.95rem;
+    padding: 8px;
+    border-radius: 6px;
   }
 }
 
+/* 반응형 480px 이하 */
 @media (max-width: 480px) {
+  .meta {
+    font-size: 0.9rem;
+    padding: 0 0.4rem;
+  }
+
+  #star, #hint-btn {
+    font-size: 0.9rem;
+  }
+
   .card {
     max-width: 95%;
     aspect-ratio: 5 / 3;
@@ -104,8 +175,14 @@ button:hover {
     padding: 0.8rem;
   }
 
-  button {
+  .navigation button {
     font-size: 0.9rem;
-    padding: 8px 16px;
+    padding: 8px 12px;
+  }
+
+  .hint-popup {
+    font-size: 0.9rem;
+    padding: 6px;
+    border-radius: 5px;
   }
 }

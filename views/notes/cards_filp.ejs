@@ -1,7 +1,13 @@
-<div class="card-container">
+<div class="card-container" id="divCardContainer">
+  <div class="meta">
+    <span id="star">⭐⭐</span>
+    <span class="hint-btn"  id="hint-btn" data-hint="">❓</span>
+  </div>
   <div class="card" id="flashcard">
     <div class="card-front">
-      <p id="question">문제 내용</p>
+      <p id="question">
+        문제 내용
+      </p>
     </div>
     <div class="card-back">
       <p id="answer">답 내용</p>
@@ -12,4 +18,8 @@
 <div class="navigation">
   <button id="pre-button">&lt;</button>
   <button id="next-button">&gt;</button>
+</div>
+
+<div id="hint-popup" class="hint-popup" style="display: none;">
+  <div class="hint-content"></div>
 </div>

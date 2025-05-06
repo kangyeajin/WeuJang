@@ -48,6 +48,8 @@ const answerElement = document.getElementById('answer');
 const nextButton = document.getElementById('next-button');
 const preButton = document.getElementById('pre-button');
 const flashcard = document.getElementById('flashcard');
+const star = document.getElementById('star');
+const hintBtn = document.getElementById('hint-btn');
 
 // 카드 정보 업데이트 함수
 function updateCard(index) {
@@ -61,6 +63,9 @@ function updateCard(index) {
   if (index >= cards.length) {
     index = 0; // 마지막 문제에 도달하면 첫 번째 문제로 돌아갑니다.
   }
+  
+  star.textContent = '⭐'.repeat(cards[index].star || 0);
+  hintBtn.setAttribute('data-hint', cards[index].hint);
   questionElement.textContent = cards[index].num +'. '+cards[index].question;
   answerElement.textContent = cards[index].answer;
   currentCardIndex = index;
@@ -97,4 +102,31 @@ flashcard.addEventListener('touchend', (e) => {
 
 flashcard.addEventListener('click', () => {
   flashcard.classList.toggle('rotate');
+});
+
+// 힌트 팝업
+document.addEventListener('click', function (e) {
+  const popup = document.getElementById('hint-popup');
+  const popupContent = popup.querySelector('.hint-content');
+
+  if (e.target.classList.contains('hint-btn')) {
+    const hintText = e.target.getAttribute('data-hint');
+    const flashcard = document.getElementById('flashcard');
+
+    // 팝업 내용 설정
+    popupContent.textContent = hintText;
+
+    // 위치 및 크기 설정
+    const rect = flashcard.getBoundingClientRect();
+    popup.style.top = `${window.scrollY + rect.top}px`;
+    popup.style.left = `${rect.left}px`;
+    popup.style.width = `${rect.width}px`;
+
+    popup.style.display = popup.style.display == 'block' ? 'none' : 'block';
+  } else {
+    // 팝업 닫기
+    if (!popup.contains(e.target)) {
+      popup.style.display = 'none';
+    }
+  }
 });

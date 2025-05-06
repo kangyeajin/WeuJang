@@ -25,8 +25,19 @@ fetch(`/api/cards?note_id=${noteId}&page=${page}`)
       return;
     }
     for (let i = 0; i < cards.length; i++) {
+      // 별 개수만큼 이모지 생성
+      const stars = '⭐'.repeat(cards[i].star || 0);
+      // hint 값이 있으면 ❓ 표시, 없으면 빈 문자열
+      const hint = cards[i].hint ? '❓' : '';
+
       html += `<div class="note">
-        <p class="question">${cards[i].num}. ${cards[i].question}</p>
+        <div class="question">
+          <div class="meta">
+            <span id="star">${stars}</span>
+            <span class="hint-btn" data-hint="${cards[i].hint || ''}">${hint}</span>
+          </div>
+          ${cards[i].num}. ${cards[i].question}
+        </div>
         <div class="divider"></div>
         <p class="answer">${cards[i].answer}</p>
       </div>`;
@@ -54,3 +65,30 @@ function handleScroll() {
     getCard();
   }
 }
+
+// 힌트 팝업
+document.addEventListener('click', function (e) {
+  const popup = document.getElementById('hint-popup');
+  const popupContent = popup.querySelector('.hint-content');
+
+  if (e.target.classList.contains('hint-btn')) {
+    const hintText = e.target.getAttribute('data-hint');
+    const leftBox = e.target.closest('.note').querySelector('.question');
+
+    // 팝업 내용 설정
+    popupContent.textContent = hintText;
+
+    // 위치 및 크기 설정
+    const rect = leftBox.getBoundingClientRect();
+    popup.style.top = `${window.scrollY + rect.top + 35}px`;
+    popup.style.left = `${rect.left}px`;
+    popup.style.width = `${rect.width}px`;
+
+    popup.style.display = popup.style.display == 'block' ? 'none' : 'block';
+  } else {
+    // 팝업 닫기
+    if (!popup.contains(e.target)) {
+      popup.style.display = 'none';
+    }
+  }
+});
