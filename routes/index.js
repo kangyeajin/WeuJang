@@ -55,18 +55,24 @@ const cardPages = [
 
 cardPages.forEach(({ path, css, js }) => {
   router.get(`/${path}`, async (req, res) => {
-    const noteId = req.query.note_id; // 쿼리 파라미터에서 note_id를 가져옴
-    if (!noteId) return res.redirect("/");
 
-    const cardList = await getCardLists(noteId);
     res.render(`notes/${path}`, {
       layout: "main",
       title: "외우장",
       cssFile: `/css/notes/${css}`,
-      cards: cardList || [],
       ...(js ? { jsFile: `/js/notes/${js}` } : {}),
     });
   });
+});
+
+// 카드 리스트 API
+router.get("/api/cards", async (req, res) => {
+  const noteId = req.query.note_id;
+  const page = parseInt(req.query.page) || 1;
+  if (!noteId) return res.status(400).json({ error: "note_id가 없습니다." });
+
+  const cardList = await getCardLists(noteId, page);
+  res.json({ cards: cardList || [] });
 });
 
 /**

@@ -27,8 +27,8 @@ async function createNote(req) {
 /**
  * 노트별 카드 리스트 조회
  */
-async function getCardLists(note_id) {
-  return await getUserCardLists(note_id);
+async function getCardLists(note_id, page) {
+  return await getUserCardLists(note_id,page, 30);
 }
 
 /**

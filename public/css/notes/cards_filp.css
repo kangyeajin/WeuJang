@@ -39,6 +39,15 @@
   box-sizing: border-box;
 }
 
+.card-front{
+  flex: 1;
+  text-indent: -0.8rem;
+}
+
+#question {
+  padding: 0 0.8rem;
+}
+
 /* 카드 뒷면 회전 */
 .card-back {
   background-color: #fff;

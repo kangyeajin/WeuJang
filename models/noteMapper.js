@@ -54,13 +54,24 @@ async function insertNoteInfo(param) {
 /**
  * 노트별 문제 정보 조회
  * @param {string} note_id 노트 id
+ * @param {string} page 페이지 번호
+ * @param {string} page limit 페이지당 30개씩 조회
  * @returns {Promise<Array>} recordset 반환
  */
-async function getUserCardLists(note_id) {
+async function getUserCardLists(note_id, page, limit) {
   try {
+    const offset = (page - 1) * limit;  // 페이지 마다 시작 위치 계산
+    const rownumStart = offset; // 예: page = 2 → offset = 30 → rownumStart = 30
+    
     const [rows] = await pool.query(
-      "SELECT card_id, note_id, question, answer, hint, star, ENTDT, ENTTM, UPDDT, UPDTM FROM sys.card WHERE note_id = ?",
-      [note_id]
+      `SELECT 
+     @rownum := @rownum + 1 AS num,
+     c.card_id, c.note_id, c.question, c.answer, c.hint, c.star,
+     c.ENTDT, c.ENTTM, c.UPDDT, c.UPDTM
+   FROM 
+     (SELECT * FROM sys.card WHERE note_id = ? LIMIT ? OFFSET ?) c,
+     (SELECT @rownum := ?) r`,
+      [note_id, limit, offset, rownumStart]
     );
 
     if (rows.length > 0) {
