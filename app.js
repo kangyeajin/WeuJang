@@ -2,7 +2,7 @@ require("dotenv").config(); // .env 파일을 로드
 
 const express = require("express");
 const session = require("express-session");
-const helmet = require("helmet");
+// const helmet = require("helmet");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const rateLimit = require("express-rate-limit");
@@ -15,7 +15,11 @@ const expressLayouts = require("express-ejs-layouts");
 app.use(expressLayouts);
 app.set("layout", "main");
 
-app.use(cors());
+// app.use(cors()); /* 운영환경에서 사용 예정 */
+app.use((req, res, next) => {
+  res.setHeader("Content-Security-Policy", "default-src 'self'; form-action 'self' https://192.168.0.52:5001");
+  next();
+});
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -23,17 +27,21 @@ app.use(express.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
-// 미들웨어 설정
-app.use(
+/*[25.05.07] 개발환경에서 helmet 사용 X
+ helmet : 웹 취약성으로 부터 웹서버를 보호하는 역할의 미들웨어
+ 운영환경에서 helmet의 속성 설정을 변경해 사용할 예정*/
+/* app.use(
   helmet({
     frameguard: false,
   })
-);
+); */
+
+// 미들웨어 설정
 app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(
   session({
-    secure: true, // https 환경에서만 session 정보를 주고받음
+    secure: false, // https 환경에서만 session 정보를 주고받음
     secret: process.env.COOKIE_SECRET,
     resave: false, // 세션이 수정될 때만 다시 저장
     saveUninitialized: true, // 처음부터 세션 생성
@@ -47,7 +55,7 @@ app.use(
 
 
 const PORT = parseInt(process.env.PORT);
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
 
