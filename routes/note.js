@@ -1,13 +1,19 @@
 const express = require("express");
 const router = express.Router();
+const multer = require('multer');
+const xlsx = require('xlsx');
 const {
-    getUserNoteLists,
+    getNoteLists,
     createNote,
-    createCard,
+    addCard,
+    importCardsFromExcel,
 } = require("../controllers/noteController");
 
 router.use(express.urlencoded({ extended: true }));
 router.use(express.json());
+
+// 메모리 저장 설정
+const upload = multer({ storage: multer.memoryStorage() });
 
 // 회원가입
 router.post("/register", async (req, res) => {
@@ -37,7 +43,7 @@ router.post("/add", async (req, res) => {
 // 카드 등록
 router.post('/add_card', async (req, res) => {
     try {
-        if (await createCard(req.body)) {
+        if (await addCard(req.body)) {
             res.send("카드가 등록되었습니다.");
         }
         else {
@@ -49,4 +55,18 @@ router.post('/add_card', async (req, res) => {
     }
 });
 
+router.post('/upload', upload.single('excelFile'), async (req, res) => {
+    try {
+        if (await importCardsFromExcel(req)) {
+            res.send("카드가 등록되었습니다.");
+        }
+        else {
+            res.status(500).send("카드 등록 중 오류가 발생했습니다.\r\n다시 시도해주세요.");
+        }
+    } catch (error) {
+      console.error(error);
+      res.status(400).send('엑셀 처리 중 오류 발생');
+    }
+  });
+  
 module.exports = router;
