@@ -80,9 +80,10 @@ async function importCardsFromExcel(req) {
 
       // 필수값 검증
       if (!note_id || !question || !answer) {
-        // 로그만 남기고 continue 또는 전체 실패 처리
-        console.warn(`누락된 필수 값 (note_id: ${note_id}, question: ${question}, answer: ${answer})`);
-        continue; // 또는 return res.status(400).send('...');
+        // 전체 실패 처리
+        return res.status(400).send('누락된 값이 존재합니다. 파일을 확인해주세요.');
+        // console.send(`누락된 필수 값 (note_id: ${note_id}, question: ${question}, answer: ${answer})`);
+        // continue;
       }
 
       values.push([

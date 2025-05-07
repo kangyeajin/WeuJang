@@ -53,6 +53,11 @@ app.use(
   })
 );
 
+// CSP에 Nonce 방식 사용
+app.use((req, res, next) => {
+  res.setHeader("Content-Security-Policy", "style-src 'self' 'nonce-abc123'");
+  next();
+});
 
 const PORT = parseInt(process.env.PORT);
 app.listen(PORT, '0.0.0.0', () => {

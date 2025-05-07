@@ -1,7 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const multer = require('multer');
-const xlsx = require('xlsx');
+const path = require('path');
+const fs = require('fs');
+
 const {
     getNoteLists,
     createNote,
@@ -55,6 +57,7 @@ router.post('/add_card', async (req, res) => {
     }
 });
 
+// 카드 일괄 등록
 router.post('/upload', upload.single('excelFile'), async (req, res) => {
     try {
         if (await importCardsFromExcel(req)) {
@@ -64,9 +67,29 @@ router.post('/upload', upload.single('excelFile'), async (req, res) => {
             res.status(500).send("카드 등록 중 오류가 발생했습니다.\r\n다시 시도해주세요.");
         }
     } catch (error) {
-      console.error(error);
-      res.status(400).send('엑셀 처리 중 오류 발생');
+        console.error(error);
+        res.status(400).send('엑셀 처리 중 오류 발생');
     }
-  });
-  
+});
+
+// 엑셀 샘플 파일 다운로드 
+router.get('/download_sample', (req, res) => {
+    const filePath = path.join(__dirname, '..', 'resources', 'sample.xlsx');
+
+    // 1. 파일 존재 확인
+    fs.access(filePath, fs.constants.F_OK, (err) => {
+        if (err) {
+            console.error('샘플 파일이 존재하지 않음:', err);
+            return res.status(404).send('샘플 파일을 찾을 수 없습니다.');
+        }
+
+        // 2. 다운로드 처리
+        res.download(filePath, '샘플파일.xlsx', (downloadErr) => {
+            if (downloadErr) {
+                console.error('다운로드 중 오류:', downloadErr);
+                return res.status(500).send('파일 다운로드 중 오류가 발생했습니다.');
+            }
+        });
+    });
+});
 module.exports = router;

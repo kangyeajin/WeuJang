@@ -38,6 +38,6 @@
   <script defer src="/js/main.js"></script>
   <script defer src="/js/cover/cover.js"></script>
   <% if (typeof jsFile !== 'undefined') { %>
-  <script src="<%= jsFile %>"></script>
+  <script nonce="abc123" src="<%= jsFile %>"></script>
   <% } %>
 </html>
