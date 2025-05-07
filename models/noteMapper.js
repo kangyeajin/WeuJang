@@ -62,7 +62,7 @@ async function getUserCardLists(note_id, page, limit) {
   try {
     const offset = (page - 1) * limit;  // 페이지 마다 시작 위치 계산
     const rownumStart = offset; // 예: page = 2 → offset = 30 → rownumStart = 30
-    
+
     const [rows] = await pool.query(
       `SELECT 
      @rownum := @rownum + 1 AS num,
@@ -107,9 +107,29 @@ async function insertCard(param) {
   }
 }
 
+/**
+ * 문제 일괄 등록
+ * @param {Map} param 사용자 입력 데이터
+ * @returns {boolean} 성공여부 반환
+ */
+async function insertCards(param) {
+  try {
+  const [result] = await pool.query(
+    `INSERT INTO card (note_id, question, answer, hint, star, ENTDT, ENTTM)
+    VALUES ? `, [param]);
+
+    if (result.affectedRows < 0) return false;
+      return true;
+  } catch (err) {
+    console.error("문제 등록 중 오류:", err);
+    throw err;
+  }
+}
+
 module.exports = {
   getUserNoteLists,
   insertNoteInfo,
   getUserCardLists,
   insertCard,
+  insertCards,
 };

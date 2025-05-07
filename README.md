@@ -15,7 +15,7 @@ node.js 버전 : v20.16.0<br>
 npm 버전 : 10.8.1<br>
 5001번 포트 사용(http://localhost:5001/)<br>
 
-* 기본설치패키지 : npm install dotenv express express-session body-parser express-rate-limit mssql path express-ejs-layouts bcrypt csrf sanitize-html
+* 기본설치패키지 : npm install dotenv express express-session body-parser express-rate-limit mssql path express-ejs-layouts bcrypt csrf sanitize-html multer xlsx
 
 ### < 프로젝트 구조 >
 ```js

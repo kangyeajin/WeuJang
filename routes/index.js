@@ -101,6 +101,18 @@ router.get(`/add_card`, async (req, res) => {
   });
 });
 
+router.get(`/upload_cards`, async (req, res) => {
+  const userId = req.session.user.id;
+  const noteList = await getNoteLists(userId);
+
+  res.render(`notes/upload_cards`, {
+    layout: "main",
+    title: "외우장",
+    notes: noteList || [],
+    cssFile: `/css/notes/upload_cards.css`,
+    jsFile: `/js/notes/upload_cards.js`,
+  });
+});
 
 // favicon.ico 무시
 router.get("/favicon.ico", (req, res) => res.sendStatus(204));
