@@ -94,6 +94,7 @@
   box-sizing: border-box;
   word-break: break-word;
   font-size: 1rem;
+  display: none;
 }
 
 .hint-btn {

@@ -67,7 +67,7 @@ async function getUserCardLists(note_id, page, limit) {
       `SELECT 
      @rownum := @rownum + 1 AS num,
      c.card_id, c.note_id, c.question, c.answer, c.hint, c.star,
-     c.ENTDT, c.ENTTM, c.UPDDT, c.UPDTM
+     c.ENTDT, c.ENTTM, c.UPDDT, c.UPDTM, c.wrongCnt
    FROM 
      (SELECT * FROM sys.card WHERE note_id = ? LIMIT ? OFFSET ?) c,
      (SELECT @rownum := ?) r`,
@@ -126,10 +126,41 @@ async function insertCards(param) {
   }
 }
 
+/**
+ * 틀린 횟수 업데이트
+ * @param param 사용자 입력 데이터
+ * @returns {boolean} 성공여부 반환
+ */
+async function updateWrongCnt(param) {
+  try {
+    const { card_id, answer } = param;
+    console.log("updateWrongCnt", card_id, answer);
+    const [result] = await pool.query(
+      `UPDATE card SET wrongCnt  = wrongCnt + ? WHERE card_id = ?`,
+      [answer, card_id]
+    );
+
+    if (result.affectedRows < 1) return false;
+
+    // 업데이트된 wrongCnt 값을 다시 조회
+    const [rows] = await pool.query(
+      `SELECT wrongCnt FROM card WHERE card_id = ?`,
+      [card_id]
+    );
+
+    // 조회된 값 반환
+    return rows[0]?.wrongCnt ?? false;
+  } catch (err) {
+    console.error("틀린 횟수 업데이트 중 오류:", err);
+    throw err;
+  }
+}
+
 module.exports = {
   getUserNoteLists,
   insertNoteInfo,
   getUserCardLists,
   insertCard,
   insertCards,
+  updateWrongCnt,
 };

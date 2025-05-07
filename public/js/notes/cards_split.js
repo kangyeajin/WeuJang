@@ -36,7 +36,14 @@ async function getCard() {
                         <span class="hint-btn" data-hint="${cards[i].hint || ''}">${hint}</span>
                       </div>
                     ${cards[i].num}. ${cards[i].question}</div>
-                    <div class="right">${cards[i].answer}</div>
+                    <div class="right">
+                      <div class="answer-actions">
+                        <button class="wrong-btn" onclick="setWrongCnt(1, ${cards[i].card_id})" >❌</button>
+                        <span class="counter" id="wrongCnt_${cards[i].card_id}">${cards[i].wrongCnt}</span>
+                        <button class="correct-btn" onclick="setWrongCnt(-1, ${cards[i].card_id})" >✅</button>
+                      </div>
+                      ${cards[i].answer}
+                    </div>
                    </li>`;
         }
         noteList.innerHTML = html;
@@ -89,3 +96,82 @@ document.addEventListener('click', function (e) {
     }
   }
 });
+
+// 맞음,틀림 버튼
+const messageTooltip = document.getElementById('message-tooltip');
+const wrongBtns = document.querySelectorAll('.wrong-btn');
+const correctBtns = document.querySelectorAll('.correct-btn');
+
+// PC에서 마우스 호버 시
+wrongBtns.forEach(btn => {
+  btn.addEventListener('mouseenter', () => {
+    showMessage(btn, '틀렸어요');
+  });
+});
+
+correctBtns.forEach(btn => {
+  btn.addEventListener('mouseenter', () => {
+    showMessage(btn, '맞았어요');
+  });
+});
+
+// 모바일 터치 시
+wrongBtns.forEach(btn => {
+  btn.addEventListener('touchstart', () => {
+    showMessage(btn, '틀렸어요');
+  });
+});
+
+correctBtns.forEach(btn => {
+  btn.addEventListener('touchstart', () => {
+    showMessage(btn, '맞았어요');
+  });
+});
+
+// 메시지를 화면에 표시하는 함수
+function showMessage(button, message) {
+  // 버튼의 위치 가져오기
+  const rect = button.getBoundingClientRect();
+  
+  // 말풍선 내용 설정
+  messageTooltip.textContent = message;
+  
+  // 말풍선 위치 설정 (버튼 위로 고정)
+  messageTooltip.style.left = `${rect.left + window.scrollX + (rect.width / 2) - (messageTooltip.offsetWidth / 2)}px`;
+  messageTooltip.style.top = `${rect.top + window.scrollY - messageTooltip.offsetHeight - 10}px`;
+
+  // 말풍선 표시
+  messageTooltip.classList.add('show');
+
+  // 잠시 후 말풍선 사라지기
+  setTimeout(() => {
+    messageTooltip.classList.remove('show');
+  }, 1500);  // 1.5초 후 사라짐
+}
+
+async function setWrongCnt(answer, card_id) {
+  try {
+    const wrongCnt = document.getElementById("wrongCnt_"+card_id).textContent;
+    if(wrongCnt == "0" && answer == "-1"){return;}
+    const jsonData = { card_id, answer };
+    const response = await fetch('/note/wrongCnt', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(jsonData)
+    });
+
+    const result = await response.text();
+
+    if (!response.ok) {
+        alert(result); // 오류 메시지
+    } else {
+      //처리 성공 후 갯수 업데이트
+      document.getElementById("wrongCnt_"+card_id).textContent = result;
+    }
+      }catch (error) {console.error('답변 처리 실패:', error);} 
+      finally {
+        loading = false;
+      }
+}

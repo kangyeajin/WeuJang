@@ -1,4 +1,4 @@
-const { getUserNoteLists, insertNoteInfo, getUserCardLists, insertCard, insertCards, } = require("../models/noteMapper");
+const { getUserNoteLists, insertNoteInfo, getUserCardLists, insertCard, insertCards, updateWrongCnt, } = require("../models/noteMapper");
 const { clean } = require('../utils/sanitize');
 const { getDate } = require('../utils/date');
 const xlsx = require('xlsx');
@@ -104,5 +104,25 @@ async function importCardsFromExcel(req) {
   return false;
 }
 
+/**
+ * 틀린갯수 카운트
+ */
+async function setWrongCnt(req) {
+  try {
+    const { card_id, answer } = req;
+    // 기본 입력 검증
+    if (!card_id || !answer) {
+      return res.status(400).send('필수 입력값이 누락되었습니다.');
+    }
+    const param = { card_id, answer};
 
-module.exports = { getNoteLists, createNote, getCardLists, addCard, importCardsFromExcel };
+    return updateWrongCnt(param);
+  } catch (error) {
+    console.log("error : ", error);
+  }
+  return false;
+}
+
+
+
+module.exports = { getNoteLists, createNote, getCardLists, addCard, importCardsFromExcel, setWrongCnt};

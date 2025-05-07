@@ -9,6 +9,7 @@ const {
     createNote,
     addCard,
     importCardsFromExcel,
+    setWrongCnt,
 } = require("../controllers/noteController");
 
 router.use(express.urlencoded({ extended: true }));
@@ -73,7 +74,7 @@ router.post('/upload', upload.single('excelFile'), async (req, res) => {
 });
 
 // 엑셀 샘플 파일 다운로드 
-router.get('/download_sample', (req, res) => {
+router.get('/download_sample', async (req, res) => {
     const filePath = path.join(__dirname, '..', 'resources', 'sample.xlsx');
 
     // 1. 파일 존재 확인
@@ -92,4 +93,21 @@ router.get('/download_sample', (req, res) => {
         });
     });
 });
+
+// 틀린갯수 처리
+router.post('/wrongCnt', async (req, res) => {
+    try {
+        const result=await setWrongCnt(req.body)
+        if (result) {
+            res.send(result.toString());
+        }
+        else {
+            res.status(500).send("처리 중 오류가 발생했습니다.\r\n다시 시도해주세요.");
+        }
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('서버 오류');
+    }
+});
+
 module.exports = router;
