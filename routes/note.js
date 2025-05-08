@@ -98,7 +98,7 @@ router.get('/download_sample', async (req, res) => {
 router.post('/wrongCnt', async (req, res) => {
     try {
         const result=await setWrongCnt(req.body)
-        if (result) {
+        if (result == 0 || result) {
             res.send(result.toString());
         }
         else {

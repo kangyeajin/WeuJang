@@ -109,12 +109,12 @@ async function importCardsFromExcel(req) {
  */
 async function setWrongCnt(req) {
   try {
-    const { card_id, answer } = req;
+    const { card_id, wrongCnt } = req;
     // 기본 입력 검증
-    if (!card_id || !answer) {
+    if (!card_id) {
       return res.status(400).send('필수 입력값이 누락되었습니다.');
     }
-    const param = { card_id, answer};
+    const param = { card_id, wrongCnt};
 
     return updateWrongCnt(param);
   } catch (error) {

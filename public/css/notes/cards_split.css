@@ -69,6 +69,7 @@ li {
 .right{
   font-size: 1rem;
   color: #ff4e00d4;
+  padding-top: 35px;
 }
 
 
@@ -79,7 +80,18 @@ li {
   align-items: center;
   width: 100%; /* left의 너비에 맞추기 */
   box-sizing: border-box;
-  padding: 0 1.2rem;
+  padding: 0 1.2rem 0 0;
+}
+
+.spanHeart {
+  display: flex;
+  gap: 2px; /* 이미지 사이 간격 */
+  align-items: center;
+}
+
+.img-heart{
+  width: 25px;
+  height: 25px;
 }
 
 /* 반응형 처리 */
@@ -156,112 +168,35 @@ li {
   }
 }
 
-/* 틀림,맞음 버튼 */
-.answer-actions {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 10px;
-}
-
-.answer-actions button {
-  font-size: 1.2rem;
-  padding: 4px 10px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  background-color: #f2f2f2;
-  transition: background-color 0.2s ease-in-out;
-}
-
-.answer-actions button:hover {
-  background-color: #ddd;
-}
-
-.answer-actions .wrong-btn {
-  background-color: #ffe5e5;
-  color: #d8000c;
-}
-
-.answer-actions .correct-btn {
-  background-color: #e6f7e6;
-  color: #006400;
-}
-
-.answer-actions .counter {
-  font-weight: bold;
-  min-width: 20px;
-  text-align: center;
-  font-size: 1.1rem;
-  color: #555;
-}
-
-/* 모바일 대응 */
-@media (max-width: 480px) {
-  .answer-actions button {
-    font-size: 1rem;
-    padding: 3px 8px;
-  }
-
-  .answer-actions .counter {
-    font-size: 1rem;
-  }
-}
-
-/* 말풍선 메시지 */
-.message-tooltip {
+.index-sticker {
   position: absolute;
-  background-color: #333;
-  color: #fff;
+  top: 11px;
+  left: -17px;
+  background-color: #fffdc1;
+  color: #333;
+  border: 2px solid #f0c040;
   padding: 6px 12px;
-  border-radius: 6px;
-  font-size: 1rem;
-  display: none;
-  white-space: nowrap;
-  z-index: 9999;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  opacity: 0;
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  font-weight: bold;
+  font-size: 0.9rem;
+  transform: rotate(-3deg);
+  z-index: 1;
+}
+.note-row {
+  position: relative;
+  padding: 15px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
 }
 
-/* 마우스 호버/터치에 따라 말풍선이 보여짐 */
-.message-tooltip.show {
-  display: block;
-  opacity: 1;
-  transform: translateY(-10px);
+.settings-icon {
+  position: absolute;
+  top: 13px;
+  right: 10px;
 }
 
-/* 버튼 스타일 */
-.answer-actions button {
-  font-size: 1.2rem;
-  padding: 4px 10px;
-  border: none;
+.settings-icon img {
+  width: 24px;
+  height: 24px;
   border-radius: 6px;
   cursor: pointer;
-  background-color: #f2f2f2;
-  transition: background-color 0.2s ease-in-out;
-}
-
-.answer-actions button:hover {
-  background-color: #ddd;
-}
-
-/* 틀림 버튼 */
-.answer-actions .wrong-btn {
-  background-color: #ffe5e5;
-  color: #d8000c;
-}
-
-/* 맞음 버튼 */
-.answer-actions .correct-btn {
-  background-color: #e6f7e6;
-  color: #006400;
-}
-
-/* 모바일 대응 */
-@media (max-width: 480px) {
-  .answer-actions button {
-    font-size: 1rem;
-    padding: 3px 8px;
-  }
 }

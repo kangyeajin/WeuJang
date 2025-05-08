@@ -133,11 +133,10 @@ async function insertCards(param) {
  */
 async function updateWrongCnt(param) {
   try {
-    const { card_id, answer } = param;
-    console.log("updateWrongCnt", card_id, answer);
+    const { card_id, wrongCnt } = param;
     const [result] = await pool.query(
-      `UPDATE card SET wrongCnt  = wrongCnt + ? WHERE card_id = ?`,
-      [answer, card_id]
+      `UPDATE card SET wrongCnt  = ? WHERE card_id = ?`,
+      [wrongCnt, card_id]
     );
 
     if (result.affectedRows < 1) return false;
@@ -149,7 +148,7 @@ async function updateWrongCnt(param) {
     );
 
     // 조회된 값 반환
-    return rows[0]?.wrongCnt ?? false;
+    return (rows[0]?.wrongCnt !== undefined && rows[0]?.wrongCnt !== null) ? rows[0].wrongCnt : false;
   } catch (err) {
     console.error("틀린 횟수 업데이트 중 오류:", err);
     throw err;

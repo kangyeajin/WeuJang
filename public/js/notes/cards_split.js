@@ -24,23 +24,29 @@ async function getCard() {
           return;
         }
         for (let i = 0; i < cards.length; i++) {
-          // 별 개수만큼 이모지 생성
-          const stars = '⭐'.repeat(cards[i].star || 0);
           // hint 값이 있으면 ❓ 표시, 없으면 빈 문자열
           const hint = cards[i].hint ? '❓' : '';
-    
+          var heart_fivefg = false;
+
           html += `<li class="note-row">
                     <div class="left">
                       <div class="meta">
-                        <span id="star">${stars}</span>
+                        <span class="spanHeart" id="heart_${cards[i].card_id}" onclick="setWrongCnt(${cards[i].card_id})" >
+                        <input type="hidden" value="${cards[i].wrongCnt}" id="wrongCnt_${cards[i].card_id}"></input>`;
+                        for (let j = 0; j < cards[i].wrongCnt; j++){
+          html += `       <img src="/images/heart.png" alt="틀림" class="img-heart"/>`
+                          if(j >= 4){ heart_fivefg= true; break;}
+                        }
+                        if(!heart_fivefg){
+          html += `       <img src="/images/heart-empty.png" alt="틀림" class="img-heart"/>`;
+                        }
+          html += `     </span>
                         <span class="hint-btn" data-hint="${cards[i].hint || ''}">${hint}</span>
                       </div>
                     ${cards[i].num}. ${cards[i].question}</div>
                     <div class="right">
-                      <div class="answer-actions">
-                        <button class="wrong-btn" onclick="setWrongCnt(1, ${cards[i].card_id})" >❌</button>
-                        <span class="counter" id="wrongCnt_${cards[i].card_id}">${cards[i].wrongCnt}</span>
-                        <button class="correct-btn" onclick="setWrongCnt(-1, ${cards[i].card_id})" >✅</button>
+                      <div class="settings-icon">
+                        <img src="/images/dots.png" alt="설정" />
                       </div>
                       ${cards[i].answer}
                     </div>
@@ -97,63 +103,13 @@ document.addEventListener('click', function (e) {
   }
 });
 
-// 맞음,틀림 버튼
-const messageTooltip = document.getElementById('message-tooltip');
-const wrongBtns = document.querySelectorAll('.wrong-btn');
-const correctBtns = document.querySelectorAll('.correct-btn');
 
-// PC에서 마우스 호버 시
-wrongBtns.forEach(btn => {
-  btn.addEventListener('mouseenter', () => {
-    showMessage(btn, '틀렸어요');
-  });
-});
-
-correctBtns.forEach(btn => {
-  btn.addEventListener('mouseenter', () => {
-    showMessage(btn, '맞았어요');
-  });
-});
-
-// 모바일 터치 시
-wrongBtns.forEach(btn => {
-  btn.addEventListener('touchstart', () => {
-    showMessage(btn, '틀렸어요');
-  });
-});
-
-correctBtns.forEach(btn => {
-  btn.addEventListener('touchstart', () => {
-    showMessage(btn, '맞았어요');
-  });
-});
-
-// 메시지를 화면에 표시하는 함수
-function showMessage(button, message) {
-  // 버튼의 위치 가져오기
-  const rect = button.getBoundingClientRect();
-  
-  // 말풍선 내용 설정
-  messageTooltip.textContent = message;
-  
-  // 말풍선 위치 설정 (버튼 위로 고정)
-  messageTooltip.style.left = `${rect.left + window.scrollX + (rect.width / 2) - (messageTooltip.offsetWidth / 2)}px`;
-  messageTooltip.style.top = `${rect.top + window.scrollY - messageTooltip.offsetHeight - 10}px`;
-
-  // 말풍선 표시
-  messageTooltip.classList.add('show');
-
-  // 잠시 후 말풍선 사라지기
-  setTimeout(() => {
-    messageTooltip.classList.remove('show');
-  }, 1500);  // 1.5초 후 사라짐
-}
-
-async function setWrongCnt(answer, card_id) {
+async function setWrongCnt(card_id) {
   try {
-    const wrongCnt = document.getElementById("wrongCnt_"+card_id).textContent;
-    if(wrongCnt == "0" && answer == "-1"){return;}
-    const jsonData = { card_id, answer };
+    var wrongCnt = document.getElementById("wrongCnt_"+card_id).value;
+    if(wrongCnt == 5){wrongCnt = 0;}else {wrongCnt = ++wrongCnt;}
+    const jsonData = { card_id, wrongCnt };
+    console.log(JSON.stringify(jsonData));
     const response = await fetch('/note/wrongCnt', {
         method: 'POST',
         headers: {
@@ -167,8 +123,17 @@ async function setWrongCnt(answer, card_id) {
     if (!response.ok) {
         alert(result); // 오류 메시지
     } else {
+      var html = "";
+      var heart_fivefg = false;
       //처리 성공 후 갯수 업데이트
-      document.getElementById("wrongCnt_"+card_id).textContent = result;
+      html += `<input type="hidden" value="${result}" id="wrongCnt_${card_id}"></input>`;
+      for (let j = 0; j < result; j++){
+        html += `<img src="/images/heart.png" alt="틀림" class="img-heart"/>`
+          if(j >= 4){ heart_fivefg= true; break;}
+      }
+      if(!heart_fivefg){
+        html += `<img src="/images/heart-empty.png" alt="틀림" class="img-heart"/>`}
+      document.getElementById("heart_"+card_id).innerHTML = html;
     }
       }catch (error) {console.error('답변 처리 실패:', error);} 
       finally {
