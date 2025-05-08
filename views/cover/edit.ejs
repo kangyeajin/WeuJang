@@ -1,36 +1,37 @@
 <div id="edit">
     <!-- 좌측: 설정 영역 -->
-    <div id="cover-editor">
+    <form id="coverEditForm">
+    
         <h2>가림판 설정</h2>
         <label>이미지 업로드:
-            <input class="inputBox" type="file" id="imageUpload">
+            <input class="inputBox" id="imageUpload" type="file">
         </label>
         <button class="btn" id="deleteImageBtn">이미지 삭제</button>
 
         <label>배경색:</label>
-        <input type="color" id="colorPicker" value="#ffffff">
+        <input id="colorPicker" type="color" value="#ffffff">
         <br>
 
         <label>투명도:</label>
-        <input type="range" id="opacitySlider" min="0" max="1" step="0.01" value="1">
+        <input id="opacitySlider" type="range" min="0" max="1" step="0.01" value="1">
         <br>
 
         <label>문구 입력:</label>
-        <textarea class="inputBox" id="textInput" name="question" placeholder="문구를 입력하세요"></textarea><br />
+        <textarea class="inputBox" id="textInput" name="question" placeholder="문구를 입력하세요"></textarea><br>
 
         <label>문구 크기:</label>
-        <input type="number" id="textSize" min="10" max="100" value="20">
+        <input id="textSize" type="number" min="10" max="100" value="20">
         <br>
 
         <label>문구 색상:</label>
-        <input type="color" id="textColor" value="#000000">
+        <input id="textColor" type="color" value="#000000">
         <br>
 
-        <button id="saveBtn">설정 저장</button>
-    </div>
-
+        <button class="btn" id="saveBtn" type="submit">설정 저장</button>
+    </form>
     <!-- 우측: 임시 가림판 -->
     <!-- <h3>가림판 미리보기</h3> -->
+    <h2>answer</h2>
     <div id="coverPreview">
         <img id="previewImage">
         <div id="previewText"></div>
