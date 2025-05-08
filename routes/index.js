@@ -1,3 +1,6 @@
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
 const express = require("express");
 const router = express.Router();
 const { getNoteLists, getCardLists } = require("../controllers/noteController");
@@ -8,6 +11,9 @@ router.use("/user", require("./auth"));
 
 // 노트 관련 기능
 router.use("/note", require("./note"))
+
+// 가림판 관련 기능
+router.use("/cover", require("./cover"))
 /* 페이지 라우터 */
 
 // 로그인 화면
@@ -111,6 +117,16 @@ router.get(`/upload_cards`, async (req, res) => {
     notes: noteList || [],
     cssFile: `/css/notes/upload_cards.css`,
     jsFile: `/js/notes/upload_cards.js`,
+  });
+});
+
+/* 가림판 화면 이동 */
+router.get(`/edit`, async (req, res) => {
+  res.render(`cover/edit`, {
+    layout: "main",
+    title: "가림판 꾸미기",
+    cssFile: `/css/cover/edit.css`,
+    jsFile: `/js/cover/edit.js`,
   });
 });
 

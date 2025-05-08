@@ -39,6 +39,7 @@ app.set("views", path.join(__dirname, "views"));
 // 미들웨어 설정
 app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(express.static(path.join(__dirname, "public")));
+app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
 app.use(
   session({
     secure: false, // https 환경에서만 session 정보를 주고받음

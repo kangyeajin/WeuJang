@@ -1,0 +1,52 @@
+form {
+    max-width: 400px;
+    margin: auto;
+}
+
+h2 {
+    text-align: center;
+}
+
+#coverPreview {
+    margin-top: 2rem;
+    width: 30rem;
+    height: 35rem;
+    position: relative;
+    overflow: hidden;
+    background-color: white;
+}
+
+#previewImage {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+}
+
+#previewText {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 20px;
+    color: #000;
+    text-align: center;
+    white-space: pre-wrap;
+    z-index: 2;
+}
+
+#edit {
+    max-width: 800px;
+    margin: auto;
+    display: flex;
+    gap: 20px;
+}
+
+#cover-editor {
+    display: inline-block;
+    width: 20rem;
+    text-align: left;
+}
