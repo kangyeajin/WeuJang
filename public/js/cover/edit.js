@@ -13,7 +13,7 @@ document.getElementById("imageUpload").addEventListener("change", async (e) => {
     formData.append("image", file);
 
     try {
-        const res = await fetch("/cover/upload", {
+        const res = await fetch("/cover/upload-image", {
             method: "POST",
             body: formData
         });
@@ -22,6 +22,7 @@ document.getElementById("imageUpload").addEventListener("change", async (e) => {
 
         if (data.url) {
             previewImage.src = data.url; // 임시 가림판에 바로 반영
+            previewImage.style.display = "block";
         } else {
             alert("이미지 업로드에 실패했습니다.");
         }
@@ -34,19 +35,19 @@ document.getElementById("imageUpload").addEventListener("change", async (e) => {
 // 배경 이미지 삭제
 document.getElementById("deleteImageBtn").addEventListener("click", async () => {
 
-    // // DB에 저장된 이미지가 있다면 서버에도 삭제 요청 (선택사항)
-    // if (previewImage.src.startsWith(window.location.origin + "/uploads/")) {
-    //   const filename = previewImage.src.split("/uploads/")[1];
-    //   try {
-    //     await fetch("/api/delete-uploaded-image", {
-    //       method: "POST",
-    //       headers: { "Content-Type": "application/json" },
-    //       body: JSON.stringify({ filename })
-    //     });
-    //   } catch (err) {
-    //     console.error("이미지 삭제 실패:", err);
-    //   }
-    // }
+    // DB에 저장된 이미지가 있다면 서버에도 삭제 요청 (선택사항)
+    if (previewImage.src.startsWith(window.location.origin + "/uploads/")) {
+      const filename = previewImage.src.split("/uploads/")[1];
+      try {
+        await fetch("/cover/delete-image", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ filename })
+        });
+      } catch (err) {
+        console.error("이미지 삭제 실패:", err);
+      }
+    }
 
     // 이미지 src 제거 및 아이콘 제거
     previewImage.src = "";

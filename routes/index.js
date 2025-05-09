@@ -120,16 +120,6 @@ router.get(`/upload_cards`, async (req, res) => {
   });
 });
 
-/* 가림판 화면 이동 */
-router.get(`/edit`, async (req, res) => {
-  res.render(`cover/edit`, {
-    layout: "main",
-    title: "가림판 꾸미기",
-    cssFile: `/css/cover/edit.css`,
-    jsFile: `/js/cover/edit.js`,
-  });
-});
-
 // favicon.ico 무시
 router.get("/favicon.ico", (req, res) => res.sendStatus(204));
 

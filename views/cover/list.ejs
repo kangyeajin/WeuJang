@@ -1,0 +1,13 @@
+<body>
+  <h2>가림판 선택</h2>
+  <form id="coverSelectForm">
+    <label>가림판 선택:</label>
+    <select class="inputBox" name="cover_id" required>
+        <option value="default" selected>기본설정</option>
+      <% covers.forEach(cover => { %>
+        <option value="<%= cover.cover_id %>"><%= cover.title %></option>
+      <% }) %>
+    </select><br/>
+    <button class="btn" type="submit">설정</button>
+  </form>
+</body>

@@ -2,14 +2,14 @@
 const pool = require("../dbconfig.js");
 
 /**
- * 사용자 노트 정보 조회
+ * 사용자별 가림판 목록 조회
  * @param {string} user_id 사용자 id
  * @returns {Promise<Array>} recordset 반환
  */
-async function getUserNoteLists(user_id) {
+async function getUserCoverLists(user_id) {
   try {
     const [rows] = await pool.query(
-      "SELECT note_id, user_id, title, template, bookmark, sort, randomfg, ENTDT, ENTTM, UPDDT, UPDTM FROM sys.note WHERE user_id = ? ORDER BY sort",
+      "SELECT cover_id, title FROM sys.cover WHERE user_id = ? ORDER BY cover_id",
       [user_id]
     );
 
@@ -19,10 +19,36 @@ async function getUserNoteLists(user_id) {
       return null; // 해당 ID 없음
     }
   } catch (err) {
-    console.error("사용자 노트 정보 조회 중 오류:", err);
+    console.error("사용자 가림판 정보 조회 중 오류:", err);
     throw err;
   }
 }
+
+/**
+ * 가림판 설정 정보 조회
+ * @param {string} cover_id 가림판 id
+ * @returns {Promise<Array>} recordset 반환
+ */
+async function getCoverInfo(cover_id) {
+  try {
+    const [rows] = await pool.query(
+      `SELECT cover_id, title, Img, color, opacity, text, text_size, text_color, ENTDT, ENTTM, UPDDT, UPDTM 
+        FROM sys.cover
+        WHERE cover_id = ? `,
+      [cover_id]
+    );
+
+    if (rows.length > 0) {
+      return rows[0];
+    } else {
+      return null;
+    }
+  } catch (err) {
+    console.error("사용자 가림판 정보 조회 중 오류:", err);
+    throw err;
+  }
+}
+
 
 /**
  * 가림판 설정 저장
@@ -49,5 +75,7 @@ async function insertCoverInfo(param) {
 }
 
 module.exports = {
+  getUserCoverLists,
+  getCoverInfo,
   insertCoverInfo,
 };
