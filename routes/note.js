@@ -11,7 +11,8 @@ const {
     importCardsFromExcel,
     setWrongCnt,
     getNoteInfo,
-    getNoteBookMarkList,
+    getCardBookMarkList,
+    setCardBookMarkUpd,
 } = require("../controllers/noteController");
 
 router.use(express.urlencoded({ extended: true }));
@@ -100,12 +101,7 @@ router.get('/download_sample', async (req, res) => {
 router.post('/wrongCnt', async (req, res) => {
     try {
         const result=await setWrongCnt(req.body)
-        if (result == 0 || result) {
-            res.send(result.toString());
-        }
-        else {
-            res.status(500).send("처리 중 오류가 발생했습니다.\r\n다시 시도해주세요.");
-        }
+        res.send(result.toString());
     } catch (err) {
         console.error(err);
         res.status(500).send('서버 오류');
@@ -127,13 +123,27 @@ router.post('/get_note', async (req, res) => {
 });
 
 // 노트 북마크 내역 조회
-router.post('/get_noteBookmark', async (req, res) => {
+router.post('/get_cardBookmark', async (req, res) => {
     try {
         const userId = req.session.user?.id;
         if (!userId) return res.redirect("/");
         req.body.user_id = userId;
-        const result = await getNoteBookMarkList(req.body)
+        const result = await getCardBookMarkList(req.body)
         res.send(result);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('서버 오류');
+    }
+});
+
+// 노트 북마크 변경
+router.post('/set_cardBookmark', async (req, res) => {
+    try {
+        const userId = req.session.user?.id;
+        if (!userId) return res.redirect("/");
+        //req.body.user_id = userId;
+        const result = await setCardBookMarkUpd(req.body)
+        res.send(result.toString());
     } catch (err) {
         console.error(err);
         res.status(500).send('서버 오류');

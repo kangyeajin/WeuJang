@@ -129,7 +129,7 @@ async function insertCards(param) {
 /**
  * 틀린 횟수 업데이트
  * @param param 사용자 입력 데이터
- * @returns {boolean} 성공여부 반환
+ * @returns {wrongCnt} 틀린 횟수
  */
 async function updateWrongCnt(param) {
   try {
@@ -148,7 +148,7 @@ async function updateWrongCnt(param) {
     );
 
     // 조회된 값 반환
-    return (rows[0]?.wrongCnt !== undefined && rows[0]?.wrongCnt !== null) ? rows[0].wrongCnt : false;
+    return rows[0].wrongCnt;
   } catch (err) {
     console.error("틀린 횟수 업데이트 중 오류:", err);
     throw err;
@@ -182,12 +182,12 @@ async function getUserNoteInfo(param) {
 }
 
 /**
- * 노트 북마크 내역 조회
+ * 카드 북마크 내역 조회
  * @param {string} user_id 사용자 id
  * @param {string} note_id 노트 id
  * @returns {Promise<Array>} recordset 반환
  */
-async function getNoteBookMark(param) {
+async function getCardBookMark(param) {
   try {
     const { user_id, note_id } = param;
     const [rows] = await pool.query(
@@ -209,6 +209,37 @@ async function getNoteBookMark(param) {
   }
 }
 
+/**
+ * 노트 북마크 업데이트
+ * @param {string} card_id 카드 id
+ * @param {string} user_id 사용자 id
+ * @param {string} bookmark 북마크여부
+ * @returns {bookmark} 북마크 설정값 반환
+ */
+async function setCardBookMark(param) {
+  try {
+    const { card_id, bookmark } = param;
+    const [result] = await pool.query(
+      `UPDATE card SET bookmark  = ? WHERE card_id = ?`,
+      [ bookmark, card_id ]
+    );
+
+    if (result.affectedRows < 1) return false;
+
+    // 업데이트된 bookmark 값을 다시 조회
+    const [rows] = await pool.query(
+      `SELECT bookmark FROM card WHERE card_id = ?`,
+      [card_id]
+    );
+
+    // 조회된 값 반환
+    return rows[0].bookmark;
+  } catch (err) {
+    console.error("북마크 업데이트 중 오류:", err);
+    throw err;
+  }
+}
+
 module.exports = {
   getUserNoteLists,
   insertNoteInfo,
@@ -217,5 +248,6 @@ module.exports = {
   insertCards,
   updateWrongCnt,
   getUserNoteInfo,
-  getNoteBookMark,
+  getCardBookMark,
+  setCardBookMark,
 };
