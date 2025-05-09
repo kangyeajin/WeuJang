@@ -1,4 +1,15 @@
-form {
+#edit {
+    max-width: 900px;
+    margin: auto;
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+#coverEditForm {
+    display: inline-block;
+    width: 20rem;
+    text-align: left;
     max-width: 400px;
     margin: auto;
 }
@@ -14,6 +25,8 @@ h2 {
     position: relative;
     overflow: hidden;
     background-color: white;
+    opacity: 0.87;
+    background-color: #ff0000;
 }
 
 #previewImage {
@@ -23,10 +36,10 @@ h2 {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    z-index: 1;
+    /* z-index: 1; */
 }
 
-#previewText {
+#decorationText {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -39,15 +52,15 @@ h2 {
     z-index: 2;
 }
 
-#edit {
-    max-width: 800px;
-    margin: auto;
-    display: flex;
-    gap: 20px;
+#previewText {
+    position: absolute;
+    margin-top: 5rem;
+    margin-left: 30rem;
+    font-size: 20px;
+    color: #ff4e00d4;
+    z-index: 0;
 }
 
-#coverEditForm {
-    display: inline-block;
-    width: 20rem;
-    text-align: left;
+#sample-question {
+    color: black;
 }

@@ -56,3 +56,17 @@ input[type="password"] {
 input[type="password"]::placeholder {
   font-family: "Cafe24Ssurround", sans-serif;
 }
+
+/* cover css */
+#coverText {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    transform: translate(-50%, -50%);
+    font-size: 20px;
+    color: #000;
+    text-align: center;
+    white-space: pre-wrap;
+    z-index: 2;
+}

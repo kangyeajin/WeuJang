@@ -1,3 +1,10 @@
+
+const coverPreview = document.getElementById("coverPreview");//가림판 미리보기 화면
+const previewText = document.getElementById('previewText');//문제, 답 미리보기 화면
+const previewImage = document.getElementById('previewImage');//배경 이미지 
+const decorationText = document.getElementById('decorationText');//꾸밈 문구
+
+// 배경 이미지 업로드
 document.getElementById("imageUpload").addEventListener("change", async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -14,8 +21,7 @@ document.getElementById("imageUpload").addEventListener("change", async (e) => {
         const data = await res.json();
 
         if (data.url) {
-            const previewImg = document.getElementById("previewImage");
-            previewImg.src = data.url; // 임시 가림판에 바로 반영
+            previewImage.src = data.url; // 임시 가림판에 바로 반영
         } else {
             alert("이미지 업로드에 실패했습니다.");
         }
@@ -25,8 +31,8 @@ document.getElementById("imageUpload").addEventListener("change", async (e) => {
     }
 });
 
+// 배경 이미지 삭제
 document.getElementById("deleteImageBtn").addEventListener("click", async () => {
-    const previewImage = document.getElementById("previewImage");
 
     // // DB에 저장된 이미지가 있다면 서버에도 삭제 요청 (선택사항)
     // if (previewImage.src.startsWith(window.location.origin + "/uploads/")) {
@@ -48,37 +54,62 @@ document.getElementById("deleteImageBtn").addEventListener("click", async () => 
     document.getElementById("imageUpload").value = ''; // file value 초기화
 });
 
-document.getElementById("colorPicker").addEventListener("input", (e) => {
-    document.getElementById("coverPreview").style.backgroundColor = e.target.value;
+// 가림판 배경 색상 변경
+document.getElementById('coverBackgroundColor').addEventListener("input", (e) => {
+    coverPreview.style.backgroundColor = e.target.value;
 });
 
-document.getElementById("opacitySlider").addEventListener("input", (e) => {
-    document.getElementById("coverPreview").style.opacity = e.target.value;
+// 가림판 투명도 변경
+document.getElementById('coverOpacity').addEventListener("input", (e) => {
+    coverPreview.style.opacity = e.target.value;
 });
 
-document.getElementById("textInput").addEventListener("input", (e) => {
-    document.getElementById("previewText").textContent = e.target.value;
+// 문구 변경
+document.getElementById('textInput').addEventListener("input", (e) => {
+    decorationText.textContent = e.target.value;
 });
 
-document.getElementById("textSize").addEventListener("input", (e) => {
-    document.getElementById("previewText").style.fontSize = e.target.value + "px";
+// 문구 크기 변경
+document.getElementById('textSize').addEventListener("input", (e) => {
+    decorationText.style.fontSize = e.target.value + "px";
 });
 
-document.getElementById("textColor").addEventListener("input", (e) => {
-    document.getElementById("previewText").style.color = e.target.value;
+// 문구 색상 변경
+document.getElementById('textColor').addEventListener("input", (e) => {
+    decorationText.style.color = e.target.value;
 });
+
+// 문제 색상 변경
+document.getElementById('questionColor').addEventListener("input", (e) => {
+    document.getElementById('sample-question').style.color = e.target.value;
+});
+
+// 답 색상 변경
+document.getElementById('answerColor').addEventListener("input", (e) => {
+    document.getElementById('sample-answer').style.color = e.target.value;
+});
+
+// 답 투명도 변경
+document.getElementById('answerOpacity').addEventListener("input", (e) => {
+    document.getElementById('sample-answer').style.opacity = e.target.value;
+});
+
 
 document.getElementById("saveBtn").addEventListener("click", async () => {
     const settings = {
-        background_image_url: document.getElementById("previewImage").src,
-        background_color: document.getElementById("colorPicker").value,
-        opacity: parseFloat(document.getElementById("opacitySlider").value),
-        text_content: document.getElementById("textInput").value,
-        text_size: parseInt(document.getElementById("textSize").value),
-        text_color: document.getElementById("textColor").value
+        title : document.getElementById("cover-title").value,
+        imgUrl: document.getElementById("previewImage").src,
+        backgroundColor: document.getElementById("coverBackgroundColor").value,
+        backgroundOpacity: parseFloat(document.getElementById("coverOpacity").value),
+        text: document.getElementById("textInput").value,
+        textSize: parseInt(document.getElementById("textSize").value),
+        textColor: document.getElementById("textColor").value,
+        questionColor: document.getElementById("questionColor").value,
+        answerColor: document.getElementById("answerColor").value,
+        answerOpacity: parseInt(document.getElementById("answerOpacity").value),
     };
 
-    await fetch("/api/save-cover-settings", {
+    await fetch("/cover/saveSettings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(settings)

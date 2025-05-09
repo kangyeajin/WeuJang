@@ -1,6 +1,6 @@
 <div id="edit">
     <!-- 좌측: 설정 영역 -->
-    <form id="coverEditForm">
+    <div id="coverEditForm">
     
         <h2>가림판 설정</h2>
         <label>이미지 업로드:
@@ -9,11 +9,11 @@
         <button class="btn" id="deleteImageBtn">이미지 삭제</button>
 
         <label>배경색:</label>
-        <input id="colorPicker" type="color" value="#ffffff">
+        <input id="coverBackgroundColor" type="color" value="#ff0000">
         <br>
 
         <label>투명도:</label>
-        <input id="opacitySlider" type="range" min="0" max="1" step="0.01" value="1">
+        <input id="coverOpacity" type="range" min="0" max="1" step="0.01" value="0.87">
         <br>
 
         <label>문구 입력:</label>
@@ -27,13 +27,29 @@
         <input id="textColor" type="color" value="#000000">
         <br>
 
-        <button class="btn" id="saveBtn" type="submit">설정 저장</button>
-    </form>
+        <label>문제 색상:</label>
+        <input id="questionColor" type="color" value="#000000">
+        <br>
+
+        <label>답 색상:</label>
+        <input id="answerColor" type="color" value="#000000">
+        <br>
+
+        <label>답 투명도:</label>
+        <input id="answerOpacity" type="range" min="0" max="1" step="0.01" value="0">
+        <br>
+
+        <label>가림판 설정명:
+            <input class="inputBox" id="cover-title" type="text">
+        </label>
+        <button class="btn" id="saveBtn">설정 저장</button>
+    </div>
+
     <!-- 우측: 임시 가림판 -->
     <!-- <h3>가림판 미리보기</h3> -->
-    <h2>answer</h2>
+    <div id="previewText"><a id="sample-question">실제 표시될 답 :</a> <a id="sample-answer">answer</a></div>
     <div id="coverPreview">
         <img id="previewImage">
-        <div id="previewText"></div>
+        <div id="decorationText"></div>
     </div>
 </div>

@@ -4,7 +4,8 @@
     left: 0;
     width: 55%;
     height: 80%;
-    background-color: #ff0000e0; /* 반투명 빨간색 */
+    opacity: 0.87;
+    background-color: #ff0000;
     cursor: grab;
     transition: opacity 0.2s;
     display: none; /* 처음에는 숨겨놓기 */
