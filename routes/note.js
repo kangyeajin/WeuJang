@@ -10,6 +10,8 @@ const {
     addCard,
     importCardsFromExcel,
     setWrongCnt,
+    getNoteInfo,
+    getNoteBookMarkList,
 } = require("../controllers/noteController");
 
 router.use(express.urlencoded({ extended: true }));
@@ -104,6 +106,34 @@ router.post('/wrongCnt', async (req, res) => {
         else {
             res.status(500).send("처리 중 오류가 발생했습니다.\r\n다시 시도해주세요.");
         }
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('서버 오류');
+    }
+});
+
+// 노트 조회
+router.post('/get_note', async (req, res) => {
+    try {
+        const userId = req.session.user?.id;
+        if (!userId) return res.redirect("/");
+        req.body.user_id = userId;
+        const result = await getNoteInfo(req.body)
+        res.send(result);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('서버 오류');
+    }
+});
+
+// 노트 북마크 내역 조회
+router.post('/get_noteBookmark', async (req, res) => {
+    try {
+        const userId = req.session.user?.id;
+        if (!userId) return res.redirect("/");
+        req.body.user_id = userId;
+        const result = await getNoteBookMarkList(req.body)
+        res.send(result);
     } catch (err) {
         console.error(err);
         res.status(500).send('서버 오류');

@@ -67,7 +67,7 @@ async function getUserCardLists(note_id, page, limit) {
       `SELECT 
      @rownum := @rownum + 1 AS num,
      c.card_id, c.note_id, c.question, c.answer, c.hint, c.star,
-     c.ENTDT, c.ENTTM, c.UPDDT, c.UPDTM, c.wrongCnt
+     c.ENTDT, c.ENTTM, c.UPDDT, c.UPDTM, c.wrongCnt, c.bookmark
    FROM 
      (SELECT * FROM sys.card WHERE note_id = ? LIMIT ? OFFSET ?) c,
      (SELECT @rownum := ?) r`,
@@ -155,6 +155,60 @@ async function updateWrongCnt(param) {
   }
 }
 
+/**
+ * 사용자 노트 정보 조회
+ * @param {string} user_id 사용자 id
+ * @param {string} note_id 노트 id
+ * @returns {Promise<Array>} recordset 반환
+ */
+async function getUserNoteInfo(param) {
+  try {
+    const { user_id, note_id } = param;
+    const [rows] = await pool.query(
+      `SELECT note_id, user_id, title, template, bookmark, sort, randomfg, ENTDT, ENTTM, UPDDT, UPDTM FROM sys.note 
+      WHERE user_id = ? and note_id = ? ORDER BY sort`,
+      [user_id, note_id]
+    );
+
+    if (rows.length > 0) {
+      return rows;
+    } else {
+      return null; // 해당 ID 없음
+    }
+  } catch (err) {
+    console.error("사용자 노트 정보 조회 중 오류:", err);
+    throw err;
+  }
+}
+
+/**
+ * 노트 북마크 내역 조회
+ * @param {string} user_id 사용자 id
+ * @param {string} note_id 노트 id
+ * @returns {Promise<Array>} recordset 반환
+ */
+async function getNoteBookMark(param) {
+  try {
+    const { user_id, note_id } = param;
+    const [rows] = await pool.query(
+      `SELECT a.card_id,a.note_id, a.question, a.answer, a.hint, a.star, a.ENTDT, a.ENTTM,a.bookmark 
+        FROM sys.card a
+        left join sys.note b on a.note_id = b.note_id
+      WHERE b.user_id = ? and a.note_id = ? and a.bookmark = 1 `,
+      [user_id, note_id]
+    );
+
+    if (rows.length > 0) {
+      return rows;
+    } else {
+      return null; // 해당 ID 없음
+    }
+  } catch (err) {
+    console.error("노트 북마크 내역 조회 중 오류:", err);
+    throw err;
+  }
+}
+
 module.exports = {
   getUserNoteLists,
   insertNoteInfo,
@@ -162,4 +216,6 @@ module.exports = {
   insertCard,
   insertCards,
   updateWrongCnt,
+  getUserNoteInfo,
+  getNoteBookMark,
 };

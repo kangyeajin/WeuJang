@@ -8,9 +8,12 @@ let html = "";
 
 document.addEventListener('DOMContentLoaded', function() {
   window.addEventListener("scroll", handleScroll); // 스크롤 이벤트 등록
+  getNoteInfo(noteId);  //노트 제목
+  getNoteBookmarkList(noteId); //북마크 목록
   getCard();  // DOM이 로드된 후 자동 실행
 });
 
+//카드 목록 가져오기
 async function getCard() {
   if (loading || done) return;
   loading = true; // 로딩 상태 설정
@@ -28,9 +31,11 @@ async function getCard() {
           const hint = cards[i].hint ? '❓' : '';
           var heart_fivefg = false;
 
-          html += `<li class="note-row">
-                    <div class="left">
-                      <div class="meta">
+          html += `<li class="note-row" data-index="${cards[i].card_id}" >
+                    <div class="left">`
+                    if(cards[i].bookmark == '1'){
+          html += `  <div class="index-sticker"></div>`}
+          html += `   <div class="meta">
                         <span class="spanHeart" id="heart_${cards[i].card_id}" onclick="setWrongCnt(${cards[i].card_id})" >
                         <input type="hidden" value="${cards[i].wrongCnt}" id="wrongCnt_${cards[i].card_id}"></input>`;
                         for (let j = 0; j < cards[i].wrongCnt; j++){
@@ -103,13 +108,13 @@ document.addEventListener('click', function (e) {
   }
 });
 
-
+// 하트표시 클릭 이벤트
 async function setWrongCnt(card_id) {
   try {
     var wrongCnt = document.getElementById("wrongCnt_"+card_id).value;
     if(wrongCnt == 5){wrongCnt = 0;}else {wrongCnt = ++wrongCnt;}
     const jsonData = { card_id, wrongCnt };
-    console.log(JSON.stringify(jsonData));
+    
     const response = await fetch('/note/wrongCnt', {
         method: 'POST',
         headers: {
@@ -139,4 +144,78 @@ async function setWrongCnt(card_id) {
       finally {
         loading = false;
       }
+}
+
+//노트 제목 세팅
+async function getNoteInfo(noteId) {
+  try {
+    const note_id = noteId;
+        const jsonData = { note_id };
+        
+        const response = await fetch('/note/get_note', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(jsonData)
+        });
+
+        const result = await response.text();
+
+        const data = JSON.parse(result);
+
+        if (!response.ok) {
+            alert(result); // 오류 메시지
+        } else {
+          var html = "";
+          document.getElementById("note_title").textContent = data[0].title;
+        }
+      }catch (error) {console.error('제목 세팅 실패:', error);} 
+      finally {
+        loading = false;
+      }
+}
+
+
+//노트 북마크 목록
+async function getNoteBookmarkList(noteId) {
+  try {
+    const note_id = noteId;
+        const jsonData = { note_id };
+        
+        const response = await fetch('/note/get_noteBookmark', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(jsonData)
+        });
+
+        const result = await response.text();
+        
+        var data = '';
+        if(result){
+          data = JSON.parse(result)
+        }
+        
+        if (!response.ok) {
+            alert(result); // 오류 메시지
+        } else {
+          var html = "";
+          for (let i = 0; i < data.length; i++) {
+            html += `<span class="sticker" onclick="scrollToSticker(${data[i].card_id})">뭐넣지?</span>`;
+          }
+          document.getElementById("index-sticker-list").innerHTML = html;
+        }
+      }catch (error) {console.error('북마크 목록 세팅 실패:', error);} 
+      finally {
+        loading = false;
+      }
+}
+
+function scrollToSticker(index) {
+  const sticker = document.querySelector(`[data-index="${index}"]`);
+  if (sticker) {
+    sticker.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
 }

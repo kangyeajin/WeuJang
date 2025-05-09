@@ -171,11 +171,11 @@ li {
 .index-sticker {
   position: absolute;
   top: 11px;
-  left: -17px;
-  background-color: #fffdc1;
+  left: -25px;
+  background-color: #FFFDBF;
   color: #333;
   border: 2px solid #f0c040;
-  padding: 6px 12px;
+  padding: 9px 18px;
   font-weight: bold;
   font-size: 0.9rem;
   transform: rotate(-3deg);
@@ -199,4 +199,32 @@ li {
   height: 24px;
   border-radius: 6px;
   cursor: pointer;
+}
+
+.note-summary {
+  position: sticky;
+  top: 0;
+  background: white;
+  padding: 10px 20px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.index-stickers {
+  margin-top: 5px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.sticker {
+  background-color: #fffdc1;
+  border: 2px solid #f0c040;
+  padding: 3px 8px;
+  font-weight: bold;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.sticker:hover {
+  background-color: #f9e682;
 }
