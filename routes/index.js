@@ -18,6 +18,8 @@ router.use("/cover", require("./cover"))
 
 // 로그인 화면
 router.get("/", (req, res) => {
+  const userId = req.query.user_id || '';
+
   if (req.session.user) {
     req.session.destroy((err) => {
       if (err) {
@@ -25,10 +27,10 @@ router.get("/", (req, res) => {
         return res.send("Error logging out.");
       }
       res.clearCookie("connect.sid");
-      return res.render("login", { layout: false });
+      return res.render("login", { layout: false, userId: userId });
     });
   } else {
-    res.render("login", { layout: false });
+    res.render("login", { layout: false, userId: userId });
   }
 });
 

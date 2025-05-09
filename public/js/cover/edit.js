@@ -37,16 +37,16 @@ document.getElementById("deleteImageBtn").addEventListener("click", async () => 
 
     // DB에 저장된 이미지가 있다면 서버에도 삭제 요청 (선택사항)
     if (previewImage.src.startsWith(window.location.origin + "/uploads/")) {
-      const filename = previewImage.src.split("/uploads/")[1];
-      try {
-        await fetch("/cover/delete-image", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ filename })
-        });
-      } catch (err) {
-        console.error("이미지 삭제 실패:", err);
-      }
+        const filename = previewImage.src.split("/uploads/")[1];
+        try {
+            await fetch("/cover/delete-image", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ filename })
+            });
+        } catch (err) {
+            console.error("이미지 삭제 실패:", err);
+        }
     }
 
     // 이미지 src 제거 및 아이콘 제거
@@ -98,7 +98,7 @@ document.getElementById('answerOpacity').addEventListener("input", (e) => {
 
 document.getElementById("saveBtn").addEventListener("click", async () => {
     const settings = {
-        title : document.getElementById("cover-title").value,
+        title: document.getElementById("cover-title").value,
         imgUrl: document.getElementById("previewImage").src,
         backgroundColor: document.getElementById("coverBackgroundColor").value,
         backgroundOpacity: parseFloat(document.getElementById("coverOpacity").value),

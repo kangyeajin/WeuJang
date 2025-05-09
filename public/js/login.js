@@ -1,5 +1,5 @@
 document.getElementById('loginForm').addEventListener('submit', async function (e) {
-    e.preventDefault(); // 폼 기본 동작(페이지 이동) 방지
+    e.preventDefault();
 
     const formData = new FormData(this);
     const jsonData = {};
@@ -14,8 +14,8 @@ document.getElementById('loginForm').addEventListener('submit', async function (
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(jsonData)
-          });
-    
+        });
+
         const data = await response.json();
 
         // 로그인 시 사용자가 선택한 가림판을 가져와 localStorage에 설정 정보 저장
@@ -25,7 +25,7 @@ document.getElementById('loginForm').addEventListener('submit', async function (
         if (response.status === 200) {
             window.location.href = data.redirect;
         }
-        else{
+        else {
             alert(data.message);
         }
 

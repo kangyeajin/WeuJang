@@ -16,16 +16,14 @@ async function chkUserId(user_id) {
  */
 async function registerUser(req) {
     try {
-        const { user_id, password, name, email, birth, coverSet } = req;
+        const { user_id, password, name, email, birth } = req;
         const { DT: ENTDT, TM: ENTTM } = getDate();
         const creatDTM = `${ENTDT}${ENTTM}`;
-
-        // 비밀번호 형식 체크
 
         // 비밀번호 암호화
         const hashedPw = await bcrypt.hash(password, saltRounds);
 
-        const param = { user_id, hashedPw, name, email, birth, creatDTM, coverSet, ENTDT, ENTTM };
+        const param = { user_id, hashedPw, name, email, birth, creatDTM, ENTDT, ENTTM };
         return insertUserInfo(param);
 
     } catch (error) {
