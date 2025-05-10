@@ -14,6 +14,7 @@ const {
     getCardBookMarkList,
     setCardBookMarkUpd,
     delCard,
+    updCard
 } = require("../controllers/noteController");
 
 router.use(express.urlencoded({ extended: true }));
@@ -158,7 +159,21 @@ router.post('/del_card', async (req, res) => {
         if (!userId) return res.redirect("/");
         
         const result = await delCard(req.body)
-        res.send(result.toString());
+        res.send(result);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('서버 오류');
+    }
+});
+
+// 카드 수정
+router.post('/upd_card', async (req, res) => {
+    try {
+        const userId = req.session.user?.id;
+        if (!userId) return res.redirect("/");
+        
+        const result = await updCard(req.body)
+        res.send(result);
     } catch (err) {
         console.error(err);
         res.status(500).send('서버 오류');
