@@ -263,6 +263,37 @@ async function deleteCard(param) {
   }
 }
 
+/**
+ * 카드 수정
+ * @param {string} card_id 카드 id
+ * @param {string} question 문제
+ * @param {string} answer 답
+ * @returns {bookmark} 북마크 설정값 반환
+ */
+async function updateCard(param) {
+  try {
+    const { card_id, question, answer, hint, UPDDT, UPDTM } = param;
+    const [result] = await pool.query(
+      `update card set question= ?, answer= ?, hint = ?, UPDDT= ?, UPDTM= ? where card_id = ?`,
+      [ question, answer, hint, UPDDT, UPDTM, card_id ]
+    );
+
+    if (result.affectedRows < 1) return false;
+
+    // 업데이트된 bookmark 값을 다시 조회
+    const [rows] = await pool.query(
+      `SELECT note_id, question, answer, hint, star FROM card WHERE card_id = ?`,
+      [card_id]
+    );
+
+    // 조회된 값 반환
+    return rows;
+  } catch (err) {
+    console.error("카드 수정 중 오류:", err);
+    throw err;
+  }
+}
+
 module.exports = {
   getUserNoteLists,
   insertNoteInfo,
@@ -274,4 +305,5 @@ module.exports = {
   getCardBookMark,
   setCardBookMark,
   deleteCard,
+  updateCard,
 };

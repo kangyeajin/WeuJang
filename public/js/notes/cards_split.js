@@ -27,8 +27,6 @@ async function getCard() {
           return;
         }
         for (let i = 0; i < cards.length; i++) {
-          // hint 값이 있으면 ❓ 표시, 없으면 빈 문자열
-          const hint = cards[i].hint ? '❓' : '';
           var heart_fivefg = false;
 
           html += `<li class="note-row" data-index="${cards[i].card_id}" >
@@ -36,6 +34,7 @@ async function getCard() {
                         <input type="hidden" value="${cards[i].bookmark}" id="txtBookmark_${cards[i].card_id}"></input>
                     <div class="left"> 
                     <span id="spanBookmark_${cards[i].card_id}">`
+                    // 북마크표시
                     if(cards[i].bookmark == '1'){
           html += `  <div class="index-sticker" id="index-sticker_${cards[i].card_id}"></div> `
                     } else {
@@ -44,6 +43,7 @@ async function getCard() {
           html += `   </span>
                       <div class="meta">
                         <span class="spanHeart" id="heart_${cards[i].card_id}" onclick="setWrongCnt(${cards[i].card_id})" >`;
+                        // 하트(틀린갯수)표시
                         for (let j = 0; j < cards[i].wrongCnt; j++){
           html += `       <img src="/images/heart.png" alt="틀림" class="img-heart"/>`
                           if(j >= 4){ heart_fivefg= true; break;}
@@ -51,21 +51,31 @@ async function getCard() {
                         if(!heart_fivefg){
           html += `       <img src="/images/heart-empty.png" alt="틀림" class="img-heart"/>`;
                         }
-          html += `     </span>
-                        <span class="hint-btn" data-hint="${cards[i].hint || ''}">${hint}</span>
-                      </div>
-                    ${cards[i].num}. ${cards[i].question}</div>
+          html += `     </span>`
+                  // 힌트 표시
+                    if(cards[i].hint){
+          html += `  <span class="hint-btn" id="spanHint_${cards[i].card_id}" data-hint="${cards[i].hint}">❓</span>`
+                    } else {
+          html += `  <span class="hint-btn hidden" id="spanHint_${cards[i].card_id}" data-hint="">❓</span>`
+                    } 
+          html += `    </div>
+                    ${cards[i].num}. <span id='spanTextLeft_${cards[i].card_id}'>${cards[i].question}</span>
+                    </div>
                     <div class="right">
                       <div class="settings-icon">
                         <img id="dots-button_${cards[i].card_id}" src="/images/dots.png" alt="설정" />
                           <!-- 팝업 메뉴 -->
                           <div class="dots-menu" id="dots-menu_${cards[i].card_id}">
-                            <p>문제 편집</p>
+                            <p onclick="editCard(${cards[i].card_id},'${cards[i].question}','${cards[i].answer}')">문제 편집</p>
                             <p onclick="delCard(${cards[i].card_id})">문제 삭제</p>
                             <p onclick="setBookmark(${cards[i].card_id})">북마크 적용</p>
                           </div>
                       </div>
-                      ${cards[i].answer}
+                      <span id='spanTextRigth_${cards[i].card_id}'>${cards[i].answer}</span>
+                      <div id="answer-actions_${cards[i].card_id}" class="answer-actions">
+                        <button class="edit-save-btn hidden" onclick="cardEditSave(${cards[i].card_id})">저장</button>
+                        <button class="edit-cancel-btn hidden" onclick="cardEditCancel(${cards[i].card_id})">취소</button>
+                      </div>
                     </div>
                    </li>`;
         }
@@ -251,13 +261,21 @@ async function getNoteBookmarkList(noteId) {
 // 북마크 바로가기 클릭 이벤트
 async function scrollToSticker(cardId) {
   let sticker = document.querySelector(`[data-index="${cardId}"]`);
+  let maxTries = 10;
+  let tries = 0;
 
   // 카드가 화면에 없으면 계속 로딩 시도
-  while (!sticker) {
+  while (!sticker && tries < maxTries) {
+    tries++;
     page++;
     await getCard(); // 다음 페이지 로드
     await new Promise(resolve => setTimeout(resolve, 100));
     sticker = document.querySelector(`[data-index="${cardId}"]`);
+  }
+
+  if (!sticker) {
+    console.warn(`cardId ${cardId} 를 찾을 수 없습니다.`);
+    return; // 실패 시 종료
   }
 
   // 화면에 나타났으면 스크롤 이동
@@ -304,7 +322,7 @@ async function delCard(card_id) {
   try {
     const confirmDelete = confirm("문제를 삭제하시겠습니까?");
     if (!confirmDelete) return; // 취소 시 함수 종료
-    
+
     const jsonData = { card_id };
         
     const response = await fetch('/note/del_card', {
@@ -324,4 +342,115 @@ async function delCard(card_id) {
       getNoteBookmarkList(noteId); //북마크 목록 재조회
     }
   }catch (error) {console.error('문제 삭제 실패:', error);} 
+}
+
+//문제 편집
+function editCard(cardId) {
+  try{
+    var leftQuestion = document.getElementById("spanTextLeft_"+cardId);
+    var rigthQnswer = document.getElementById("spanTextRigth_"+cardId);
+    var hint = document.getElementById("spanHint_"+cardId);
+    const hintText = hint.dataset.hint;
+
+    const row = document.querySelector(`[data-index="${cardId}"]`);
+    if (!row) return;
+    // 원본 question/answer를 row에 임시 저장
+    row.dataset.originalQuestion = leftQuestion.textContent;
+    row.dataset.originalAnswer = rigthQnswer.textContent;
+    row.dataset.originalHint = hintText;
+
+    // 문제 편집 textarea 생성
+    leftQuestion.innerHTML=`<textarea class="edit-textarea2 full-width">${leftQuestion.textContent}</textarea>
+                            <div class="edit-wrapper">
+                            <span>❓</span><textarea class="edit-textarea2 textHint">${hintText}</textarea>
+                            </div>`;
+    rigthQnswer.innerHTML=`<textarea class="edit-textarea full-width">${rigthQnswer.textContent}</textarea>`;
+
+    // 버튼 보이기
+    document.querySelector(`#answer-actions_${cardId} .edit-save-btn`).classList.remove("hidden");
+    document.querySelector(`#answer-actions_${cardId} .edit-cancel-btn`).classList.remove("hidden");
+
+    // 힌트 표기
+    if(hintText != ''){
+      hint.classList.remove("hidden");
+    } else {
+      hint.classList.add("hidden");
+    }
+
+    return;
+
+  }catch (error) {console.error('문제 편집 실패:', error);}
+}
+
+//문제 편집 저장
+async function cardEditSave(cardId) {
+  try {
+    const newQuestion= document.querySelector(`#spanTextLeft_${cardId} textarea`).value;
+    const newAnswer= document.querySelector(`#spanTextRigth_${cardId} textarea`).value;
+    const newHint= document.querySelector(`#spanTextLeft_${cardId} .edit-wrapper textarea`).value;
+    
+    const confirmDelete = confirm("변경된 내용을 저장하시겠습니까?");
+    if (!confirmDelete) return; // 취소 시 함수 종료
+
+    if(!cardId || !newQuestion || !newAnswer) {
+      alert("문제와 답변을 입력하세요.");
+      return;
+    }
+    const bodyData = {
+      card_id: cardId,
+      question: newQuestion,
+      answer: newAnswer,
+      hint: newHint,
+    };
+    
+    const response = await fetch("/note/upd_card", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(bodyData),
+    });
+
+    const result = await response.text();
+    
+    if (!response.ok) return alert(result);
+
+    var data='';
+    if(result){
+      data = JSON.parse(result);
+    }
+
+    document.getElementById("spanTextLeft_" + cardId).innerHTML = data[0].question;
+    document.getElementById("spanTextRigth_" + cardId).innerHTML = data[0].answer;
+    document.getElementById("spanHint_" + cardId).dataset.hint = data[0].hint;
+      if(data[0].hint != ''){
+        document.getElementById("spanHint_" + cardId).classList.remove("hidden");
+      }
+      else {
+        document.getElementById("spanHint_" + cardId).classList.add("hidden");
+      }
+
+    document.querySelector(`#answer-actions_${cardId} .edit-save-btn`).classList.add("hidden");
+    document.querySelector(`#answer-actions_${cardId} .edit-cancel-btn`).classList.add("hidden");
+    
+  } catch (err) {
+    console.error("수정 실패", err);
+    alert("수정 중 오류 발생");
+  }
+}
+
+//문제 편집 취소
+function cardEditCancel(cardId) {
+  const row = document.querySelector(`[data-index="${cardId}"]`);
+  if (!row) return;
+  const confirmDelete = confirm("편집을 취소하시겠습니까?\n편집 내용은 저장되지 않습니다.");
+  if (!confirmDelete) return; // 취소 시 함수 종료
+
+  const originalQuestion = row.dataset.originalQuestion || '';
+  const originalAnswer = row.dataset.originalAnswer || '';
+
+  // 다시 복원
+  document.getElementById("spanTextLeft_" + cardId).innerHTML = originalQuestion;
+  document.getElementById("spanTextRigth_" + cardId).innerHTML = originalAnswer;
+
+  document.querySelector(`#answer-actions_${cardId} .edit-save-btn`).classList.add("hidden");
+  document.querySelector(`#answer-actions_${cardId} .edit-cancel-btn`).classList.add("hidden");
 }
