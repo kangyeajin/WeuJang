@@ -8,7 +8,6 @@
   margin-left: 200px;
 }
 
-
 /* 사이드 메뉴 */
 .side-menu {
   position: fixed;
@@ -75,4 +74,13 @@
   &:hover {
     color: blue;
   }
+}
+
+/* 홈 버튼 */
+.goMain {
+  display: block;
+}
+
+.side-menu.open .goMain {
+  display: none;
 }
