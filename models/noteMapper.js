@@ -240,6 +240,29 @@ async function setCardBookMark(param) {
   }
 }
 
+/**
+ * 카드 삭제
+ * @param {string} card_id 카드 id
+ * @returns {bookmark} 북마크 설정값 반환
+ */
+async function deleteCard(param) {
+  try {
+    const { card_id } = param;
+    const [result] = await pool.query(
+      `delete from card where card_id = ?`,
+      [ card_id ]
+    );
+
+    if (result.affectedRows < 1) return false;
+
+    // 조회된 값 반환
+    return true;
+  } catch (err) {
+    console.error("카드 삭제 중 오류:", err);
+    throw err;
+  }
+}
+
 module.exports = {
   getUserNoteLists,
   insertNoteInfo,
@@ -250,4 +273,5 @@ module.exports = {
   getUserNoteInfo,
   getCardBookMark,
   setCardBookMark,
+  deleteCard,
 };

@@ -61,7 +61,7 @@ async function getCard() {
                           <!-- 팝업 메뉴 -->
                           <div class="dots-menu" id="dots-menu_${cards[i].card_id}">
                             <p>문제 편집</p>
-                            <p>문제 삭제</p>
+                            <p onclick="delCard(${cards[i].card_id})">문제 삭제</p>
                             <p onclick="setBookmark(${cards[i].card_id})">북마크 적용</p>
                           </div>
                       </div>
@@ -248,12 +248,23 @@ async function getNoteBookmarkList(noteId) {
       }
 }
 
-//북마크 바로가기 클릭이벤트
-function scrollToSticker(index) {
-  const sticker = document.querySelector(`[data-index="${index}"]`);
-  if (sticker) {
-    sticker.scrollIntoView({ behavior: 'smooth', block: 'center' });
+// 북마크 바로가기 클릭 이벤트
+async function scrollToSticker(cardId) {
+  let sticker = document.querySelector(`[data-index="${cardId}"]`);
+
+  // 카드가 화면에 없으면 계속 로딩 시도
+  while (!sticker) {
+    page++;
+    await getCard(); // 다음 페이지 로드
+    await new Promise(resolve => setTimeout(resolve, 100));
+    sticker = document.querySelector(`[data-index="${cardId}"]`);
   }
+
+  // 화면에 나타났으면 스크롤 이동
+  sticker.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  sticker.classList.add('highlight'); // 강조 효과 추가
+  setTimeout(() => sticker.classList.remove('highlight'), 2000); // 2초 후 강조 효과 제거
+
 }
 
 //(설정 팝업)북마크 적용
@@ -282,8 +293,35 @@ async function setBookmark(card_id) {
             html = `<div class="index-sticker" id="index-sticker_${card_id}"></div>`
           }
           document.getElementById("spanBookmark_"+card_id).innerHTML = html;
-          
+
           getNoteBookmarkList(noteId); //북마크 목록 재조회
         }
       }catch (error) {console.error('북마크 적용 실패:', error);} 
+}
+
+//문제 삭제
+async function delCard(card_id) {
+  try {
+    const confirmDelete = confirm("문제를 삭제하시겠습니까?");
+    if (!confirmDelete) return; // 취소 시 함수 종료
+    
+    const jsonData = { card_id };
+        
+    const response = await fetch('/note/del_card', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(jsonData)
+    });
+
+    const result = await response.text();
+
+    if (!response.ok) {
+        alert(result); // 오류 메시지
+    } else {
+      document.querySelector(`[data-index="${card_id}"]`).remove(); // 카드 삭제
+      getNoteBookmarkList(noteId); //북마크 목록 재조회
+    }
+  }catch (error) {console.error('문제 삭제 실패:', error);} 
 }

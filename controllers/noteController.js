@@ -1,4 +1,5 @@
-const { getUserNoteLists, insertNoteInfo, getUserCardLists, insertCard, insertCards, updateWrongCnt, getUserNoteInfo,getCardBookMark, setCardBookMark,} = require("../models/noteMapper");
+const { getUserNoteLists, insertNoteInfo, getUserCardLists, insertCard, insertCards, 
+  updateWrongCnt, getUserNoteInfo,getCardBookMark, setCardBookMark, deleteCard} = require("../models/noteMapper");
 const { clean } = require('../utils/sanitize');
 const { getDate } = require('../utils/date');
 const xlsx = require('xlsx');
@@ -180,5 +181,26 @@ async function setCardBookMarkUpd(req) {
   return false;
 }
 
+/**
+ * 카드 삭제
+ */
+async function delCard(req) {
+  try {
+    const { card_id, bookmark } = req;
+    // 기본 입력 검증
+    if (!card_id) {
+      return res.status(400).send('필수 입력값이 누락되었습니다.');
+    }
+    const param = { card_id, bookmark};
+
+    return deleteCard(param);
+  } catch (error) {
+    console.log("error : ", error);
+  }
+  return false;
+}
+
+
+
 module.exports = { getNoteLists, createNote, getCardLists, addCard, 
-  importCardsFromExcel, setWrongCnt, getNoteInfo, getCardBookMarkList, setCardBookMarkUpd};
+  importCardsFromExcel, setWrongCnt, getNoteInfo, getCardBookMarkList, setCardBookMarkUpd, delCard};

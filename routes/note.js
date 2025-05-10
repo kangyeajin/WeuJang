@@ -13,6 +13,7 @@ const {
     getNoteInfo,
     getCardBookMarkList,
     setCardBookMarkUpd,
+    delCard,
 } = require("../controllers/noteController");
 
 router.use(express.urlencoded({ extended: true }));
@@ -143,6 +144,20 @@ router.post('/set_cardBookmark', async (req, res) => {
         if (!userId) return res.redirect("/");
         //req.body.user_id = userId;
         const result = await setCardBookMarkUpd(req.body)
+        res.send(result.toString());
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('서버 오류');
+    }
+});
+
+// 카드 삭제
+router.post('/del_card', async (req, res) => {
+    try {
+        const userId = req.session.user?.id;
+        if (!userId) return res.redirect("/");
+        
+        const result = await delCard(req.body)
         res.send(result.toString());
     } catch (err) {
         console.error(err);
