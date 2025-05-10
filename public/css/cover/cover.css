@@ -1,20 +1,22 @@
   #cover {
-    position: absolute; /* 또는 fixed, 구조에 따라 조정 */
+    position: absolute;
+    /* 또는 fixed, 구조에 따라 조정 */
     top: 0;
     left: 0;
     width: 55%;
-    height: 80%;
+    height: 90%;
     opacity: 0.87;
     background-color: #ff0000;
     cursor: grab;
     transition: opacity 0.2s;
-    display: none; /* 처음에는 숨겨놓기 */
+    /* 처음에는 숨겨놓기 */
+    display: none;
   }
-  
+
   #cover.dragging {
     cursor: grabbing;
   }
-  
+
   #cover.show {
     display: block;
   }

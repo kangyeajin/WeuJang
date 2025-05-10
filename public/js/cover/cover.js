@@ -52,6 +52,10 @@ document.addEventListener("touchend", () => {
 // 토글
 document.getElementById('coverfg').addEventListener('click', function () {
   if (!cover.classList.contains('show')) {
+    const toggleOn = `
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 16 16"><!-- Icon from Bootstrap Icons by The Bootstrap Authors - https://github.com/twbs/icons/blob/main/LICENSE.md --><g fill="currentColor"><path d="M7 5H3a3 3 0 0 0 0 6h4a5 5 0 0 1-.584-1H3a2 2 0 1 1 0-4h3.416q.235-.537.584-1"/><path d="M16 8A5 5 0 1 1 6 8a5 5 0 0 1 10 0"/></g></svg>        
+          `;
+    document.getElementById('coverfg').innerHTML = toggleOn;
 
     // 사용자가 선택한 가림판 css 적용
     const coverPanel = document.getElementById("cover");
@@ -64,12 +68,12 @@ document.getElementById('coverfg').addEventListener('click', function () {
       //배경 색상,투명도 
       coverPanel.style.backgroundColor = saved.color;
       coverPanel.style.opacity = saved.opacity;
-      
+
       //배경문구 
       backText.textContent = saved.text;
       backText.style.color = saved.text_color;
-      backText.style.fontSize = saved.text_size + "px";      
-      
+      backText.style.fontSize = saved.text_size + "px";
+
       //배경이미지
       if (!saved.Img) {
         backImage.src = "";
@@ -91,6 +95,10 @@ document.getElementById('coverfg').addEventListener('click', function () {
       cover.style.top = `${y + 50}px`;
     });
   } else {
+    const toggleOff = `
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 16 16"><!-- Icon from Bootstrap Icons by The Bootstrap Authors - https://github.com/twbs/icons/blob/main/LICENSE.md --><g fill="currentColor"><path d="M9 11c.628-.836 1-1.874 1-3a4.98 4.98 0 0 0-1-3h4a3 3 0 1 1 0 6z"/><path d="M5 12a4 4 0 1 1 0-8a4 4 0 0 1 0 8m0 1A5 5 0 1 0 5 3a5 5 0 0 0 0 10"/></g></svg>
+        `;
+    document.getElementById('coverfg').innerHTML = toggleOff;
     cover.classList.remove('show');
   }
 });

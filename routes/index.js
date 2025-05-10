@@ -97,7 +97,7 @@ router.get(`/add_note`, async (req, res) => {
 });
 
 router.get(`/add_card`, async (req, res) => {
-  const userId = req.session.user.id;
+  const userId = req.session.user?.id;
   const noteList = await getNoteLists(userId);
 
   res.render(`notes/add_card`, {

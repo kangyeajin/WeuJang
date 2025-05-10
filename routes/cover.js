@@ -39,20 +39,17 @@ router.get(`/list`, async (req, res) => {
 });
 
 // 이미지 파일 저장 위치
-// const storage = multer.diskStorage({
-//     destination: (req, file, cb) => cb(null, 'public/uploads'),
-//     filename: (req, file, cb) => cb(null, Date.now() + '-' + file.originalname)
-// });
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, 'public/uploads'),
-  filename: (req, file, cb) => {
-    const ext = path.extname(file.originalname); // 확장자 추출
-    const baseName = path.basename(file.originalname, ext);
-    
-    // 파일명을 안전한 형태로 변환 (영문 + 타임스탬프)
-    const safeName = baseName.replace(/[^a-z0-9]/gi, '_'); // 한글 등 제거
-    cb(null, `${Date.now()}-${safeName}${ext}`);
-  }
+    destination: (req, file, cb) => cb(null, 'public/uploads'),
+    filename: (req, file, cb) => {
+        const user_id = req.session.user?.id || "admin";
+        const ext = path.extname(file.originalname); // 확장자 추출
+        const baseName = path.basename(file.originalname, ext);
+
+        // 파일명을 안전한 형태로 변환 (영문 + 타임스탬프)
+        const safeName = baseName.replace(/[^a-z0-9]/gi, '_'); // 한글 등 제거
+        cb(null, `${Date.now()}-${user_id}-${safeName}${ext}`);
+    }
 });
 
 const upload = multer({ storage });
@@ -61,8 +58,12 @@ const upload = multer({ storage });
 router.post('/upload-image', upload.single('image'), (req, res) => {
     if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
 
+    // 도메인 등록 전까지는 개발 서버의 IP 주소 및 포트 포함한 http://121.166.19.3:5001/uploads/_.jpg 형식으로 DB에 저장되도록 함
+    const protocol = req.protocol;
+    const host = req.headers.host;
     // 반환할 URL (프론트에서 접근 가능한 경로)
-    const imageUrl = `/uploads/${req.file.filename}`;
+    const imageUrl = `${protocol}://${host}/uploads/${req.file.filename}`;
+
     res.json({ url: imageUrl });
 });
 
