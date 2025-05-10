@@ -92,11 +92,11 @@ async function getUserCardLists(note_id, page, limit) {
  */
 async function insertCard(param) {
   try {
-    const { note_id, cleanQuestion, cleanAnswer, cleanHint, star, ENTDT, ENTTM } = param;
+    const { note_id, cleanQuestion, cleanAnswer, cleanHint, ENTDT, ENTTM } = param;
     const [result] = await pool.query(
-      `INSERT INTO card (note_id, question, answer, hint, star, ENTDT, ENTTM)
-      VALUES (?, ?, ?, ?, ?, ?, ?)`,
-      [note_id, cleanQuestion, cleanAnswer, cleanHint, star, ENTDT, ENTTM]
+      `INSERT INTO card (note_id, question, answer, hint, ENTDT, ENTTM)
+      VALUES (?, ?, ?, ?, ?, ?)`,
+      [note_id, cleanQuestion, cleanAnswer, cleanHint, ENTDT, ENTTM]
     );
 
     if (result.affectedRows < 0) return false;
@@ -114,12 +114,12 @@ async function insertCard(param) {
  */
 async function insertCards(param) {
   try {
-  const [result] = await pool.query(
-    `INSERT INTO card (note_id, question, answer, hint, star, ENTDT, ENTTM)
+    const [result] = await pool.query(
+      `INSERT INTO card (note_id, question, answer, hint, star, ENTDT, ENTTM)
     VALUES ? `, [param]);
 
     if (result.affectedRows < 0) return false;
-      return true;
+    return true;
   } catch (err) {
     console.error("문제 등록 중 오류:", err);
     throw err;
@@ -221,7 +221,7 @@ async function setCardBookMark(param) {
     const { card_id, bookmark } = param;
     const [result] = await pool.query(
       `UPDATE card SET bookmark  = ? WHERE card_id = ?`,
-      [ bookmark, card_id ]
+      [bookmark, card_id]
     );
 
     if (result.affectedRows < 1) return false;
@@ -250,7 +250,7 @@ async function deleteCard(param) {
     const { card_id } = param;
     const [result] = await pool.query(
       `delete from card where card_id = ?`,
-      [ card_id ]
+      [card_id]
     );
 
     if (result.affectedRows < 1) return false;
@@ -275,7 +275,7 @@ async function updateCard(param) {
     const { card_id, question, answer, hint, UPDDT, UPDTM } = param;
     const [result] = await pool.query(
       `update card set question= ?, answer= ?, hint = ?, UPDDT= ?, UPDTM= ? where card_id = ?`,
-      [ question, answer, hint, UPDDT, UPDTM, card_id ]
+      [question, answer, hint, UPDDT, UPDTM, card_id]
     );
 
     if (result.affectedRows < 1) return false;

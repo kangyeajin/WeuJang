@@ -1,29 +1,29 @@
 <body>
   <h2>문제 등록</h2>
   <form id="addCardForm">
-    <label>수첩 선택:</label>
-    <select class="inputBox" name="note_id" required>
-      <% notes.forEach(note => { %>
-        <option value="<%= note.note_id %>"><%= note.title %></option>
-      <% }) %>
-    </select><br/>
-
-    <label>문제:</label>
-    <textarea class="inputBox" name="question" required maxlength="500" rows="4" cols="50" style="resize: vertical;"></textarea><br/>
-
-    <label>정답:</label>
-    <input class="inputBox" type="text" name="answer" required maxlength="500"><br/>
-
-    <label>힌트:</label>
-    <input class="inputBox" type="text" name="hint" maxlength="300"><br/>
-
-    <label>난이도 (별):</label>
-    <div class="inputBox" id="star-rating">
-    <% for (let i = 1; i <= 3; i++) { %>
-        <span class="star" data-value="<%= i %>">&#9733;</span>
-    <% } %>
+    <div class="input-box">
+      <label>수첩 선택:</label>
+      <select class="inputBox" id="note_id" name="note_id" required>
+        <% notes.forEach(note => { %>
+          <option value="<%= note.note_id %>"><%= note.title %></option>
+        <% }) %>
+      </select><br/>
     </div>
-    <input type="hidden" name="star" id="star-value" value="0">
+
+    <div class="input-box">
+      <label>문제:</label>
+      <textarea class="inputBox" name="question" required maxlength="500" rows="4" cols="50" style="resize: vertical;"></textarea><br/>
+    </div>
+
+    <div class="input-box">
+      <label>정답:</label>
+      <input class="inputBox" type="text" name="answer" required maxlength="500"><br/>
+    </div>
+
+    <div class="input-box">
+      <label>힌트:</label>
+      <input class="inputBox" type="text" name="hint" maxlength="300"><br/>
+    </div>
 
     <button class="btn" type="submit">등록</button>
   </form>

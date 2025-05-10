@@ -1,5 +1,5 @@
-const { getUserNoteLists, insertNoteInfo, getUserCardLists, insertCard, insertCards, 
-  updateWrongCnt, getUserNoteInfo,getCardBookMark, setCardBookMark, deleteCard,updateCard} = require("../models/noteMapper");
+const { getUserNoteLists, insertNoteInfo, getUserCardLists, insertCard, insertCards,
+  updateWrongCnt, getUserNoteInfo, getCardBookMark, setCardBookMark, deleteCard, updateCard } = require("../models/noteMapper");
 const { clean } = require('../utils/sanitize');
 const { getDate } = require('../utils/date');
 const xlsx = require('xlsx');
@@ -38,7 +38,7 @@ async function getCardLists(note_id, page) {
  */
 async function addCard(req) {
   try {
-    const { note_id, question, answer, hint, star } = req;
+    const { note_id, question, answer, hint } = req;
 
     // html 태그 제거
     const [cleanQuestion, cleanAnswer, cleanHint] =
@@ -49,7 +49,7 @@ async function addCard(req) {
       return res.status(400).send('필수 입력값이 누락되었습니다.');
     }
     const { DT: ENTDT, TM: ENTTM } = getDate();
-    const param = { note_id, cleanQuestion, cleanAnswer, cleanHint, star, ENTDT, ENTTM };
+    const param = { note_id, cleanQuestion, cleanAnswer, cleanHint, ENTDT, ENTTM };
 
     return insertCard(param);
   } catch (error) {
@@ -115,7 +115,7 @@ async function setWrongCnt(req) {
     if (!card_id) {
       return res.status(400).send('필수 입력값이 누락되었습니다.');
     }
-    const param = { card_id, wrongCnt};
+    const param = { card_id, wrongCnt };
 
     return updateWrongCnt(param);
   } catch (error) {
@@ -134,7 +134,7 @@ async function getNoteInfo(req) {
     if (!user_id || !note_id) {
       return res.status(400).send('필수 입력값이 누락되었습니다.');
     }
-    const param = { user_id, note_id};
+    const param = { user_id, note_id };
 
     return getUserNoteInfo(param);
   } catch (error) {
@@ -153,7 +153,7 @@ async function getCardBookMarkList(req) {
     if (!user_id || !note_id) {
       return res.status(400).send('필수 입력값이 누락되었습니다.');
     }
-    const param = { user_id, note_id};
+    const param = { user_id, note_id };
 
     return getCardBookMark(param);
   } catch (error) {
@@ -172,7 +172,7 @@ async function setCardBookMarkUpd(req) {
     if (!card_id) {
       return res.status(400).send('필수 입력값이 누락되었습니다.');
     }
-    const param = { card_id, bookmark};
+    const param = { card_id, bookmark };
 
     return setCardBookMark(param);
   } catch (error) {
@@ -191,7 +191,7 @@ async function delCard(req) {
     if (!card_id) {
       return res.status(400).send('필수 입력값이 누락되었습니다.');
     }
-    const param = { card_id, bookmark};
+    const param = { card_id, bookmark };
 
     return deleteCard(param);
   } catch (error) {
@@ -211,7 +211,7 @@ async function updCard(req) {
     if (!card_id || !question || !answer) {
       return res.status(400).send('필수 입력값이 누락되었습니다.');
     }
-    const param = { card_id, question, answer, hint, UPDDT, UPDTM};
+    const param = { card_id, question, answer, hint, UPDDT, UPDTM };
 
     return updateCard(param);
   } catch (error) {
@@ -222,5 +222,7 @@ async function updCard(req) {
 
 
 
-module.exports = { getNoteLists, createNote, getCardLists, addCard, 
-  importCardsFromExcel, setWrongCnt, getNoteInfo, getCardBookMarkList, setCardBookMarkUpd, delCard,updCard};
+module.exports = {
+  getNoteLists, createNote, getCardLists, addCard,
+  importCardsFromExcel, setWrongCnt, getNoteInfo, getCardBookMarkList, setCardBookMarkUpd, delCard, updCard
+};
