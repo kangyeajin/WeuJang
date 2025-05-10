@@ -9,7 +9,7 @@ const pool = require("../dbconfig.js");
 async function getUserInfo(user_id) {
   try {
     const [rows] = await pool.query(
-      'SELECT user_id, password, name, email, birth, status FROM sys.USER WHERE user_id = ?',
+      'SELECT user_id, password, name, email, birth, status, cover_id FROM sys.USER WHERE user_id = ?',
       [user_id]
     );
 

@@ -1,4 +1,4 @@
-const { getUserCoverLists, getCoverInfo, insertCoverInfo } = require("../models/coverMapper");
+const { getUserCoverLists, getCoverInfo, insertCoverInfo, updateCoverId } = require("../models/coverMapper");
 const { getDate } = require('../utils/date');
 
 /**
@@ -41,5 +41,19 @@ async function createCover(req) {
   return false;
 }
 
+/**
+ * 사용자의 가림판 기본값 변경
+ */
+async function setUserCoverId(req) {
+  try {
+    const { user_id, cover_id } = req;
+    const { DT: UPDDT, TM: UPDTM } = getDate();
+    const param = { user_id, cover_id, UPDDT, UPDTM };
+    return updateCoverId(param);
+  } catch (error) {
+    console.log("error : ", error);
+  }
+  return false;
+}
 
-module.exports = { getCoverLists, getCoverOption, createCover,};
+module.exports = { getCoverLists, getCoverOption, createCover, setUserCoverId };

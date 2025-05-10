@@ -1,4 +1,5 @@
 const { getUserInfo, searchSameUserId, insertUserInfo } = require("../models/authMapper");
+const { getCoverOption } = require("./coverController");
 const { getDate } = require('../utils/date');
 
 const bcrypt = require('bcrypt');
@@ -37,6 +38,9 @@ async function registerUser(req) {
  */
 async function handleLogin(req, res, username, password) {
 
+    // 가림판 default option 
+    var coverSettings = { opacity: 0.87, color: "#ff0000", text: "", text_size: 0, text_color: "", Img: "" };
+
     // 테스트용 계정
     if (username === 'admin' && password === '1234') {
         req.session.user = {
@@ -45,8 +49,9 @@ async function handleLogin(req, res, username, password) {
             email: "admin@mail.com",
             birth: "19990101",
             status: 1,
+            coverId: -1,
         };
-        return res.status(200).json({ message: "로그인 성공!", redirect: "/main" });
+        return res.status(200).json({ message: "로그인 성공!", redirect: "/main", cover: coverSettings });
     }
 
     try {
@@ -65,14 +70,18 @@ async function handleLogin(req, res, username, password) {
                 email: user.email,
                 birth: user.birth,
                 status: user.status,
+                coverId: user.cover_id,
             };
             console.log(req.session.user);
 
             // 출석체크
 
-            return res.status(200).json({ message: "로그인 성공!", redirect: "/main" });
+            // 가림판 상세 조회
+            if (user.cover_id > -1) {
+                coverSettings = await getCoverOption(user.cover_id);
+            }
+            return res.status(200).json({ message: "로그인 성공!", redirect: "/main", cover: coverSettings });
         }
-
         return res.status(401).json({ message: "비밀번호가 일치하지 않습니다." });
 
     } catch (err) {

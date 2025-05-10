@@ -8,6 +8,7 @@ const {
     getCoverLists,
     getCoverOption,
     createCover,
+    setUserCoverId,
 } = require("../controllers/coverController");
 
 router.use(express.urlencoded({ extended: true }));
@@ -25,14 +26,21 @@ router.get(`/edit`, async (req, res) => {
 
 /* 가림판 목록 화면 이동 */
 router.get(`/list`, async (req, res) => {
-    // req.body.user_id = req.session.user.id;
     // 로긴 귀찮아서 임시로 고정
-    const coverList = await getCoverLists("admin");
+    const user_id = req.session.user?.id || "admin"
+
+    // 현재 사용중인 cover_id 값 가져오기 
+    const cover_id = req.session.user?.coverId || -1;
+    console.log("cover_id : ", cover_id);
+
+    // 가림판 리스트 
+    const coverList = await getCoverLists(user_id);
 
     res.render(`cover/list`, {
         layout: "main",
         title: "가림판 선택",
         covers: coverList || [],
+        selectedCoverId: cover_id,
         cssFile: `/css/cover/list.css`,
         jsFile: `/js/cover/list.js`,
     });
@@ -86,9 +94,8 @@ router.post(`/delete-image`, (req, res) => {
 
 // 가림판 설정 저장
 router.post('/saveSettings', async (req, res) => {
-    // req.body.user_id = req.session.user.id;
     // 로긴 귀찮아서 임시로 고정
-    req.body.user_id = "admin";
+    req.body.user_id = req.session.user?.id || "admin";
     // console.log(req.body);
 
     try {
@@ -106,26 +113,34 @@ router.post('/saveSettings', async (req, res) => {
 
 // 가림판 조회 및 적용
 router.post('/setting', async (req, res) => {
-    const { cover_id } = req.body;
+    const user_id = req.session.user?.id || "admin";
+    const cover_id = req.body.cover_id;
+    console.log({ user_id, cover_id });
     try {
-        // 기본 가림판 설정 적용
-        if (cover_id == "default") {
-            return res.json({ opacity: 0.87, color: "#ff0000", text: "", text_size: 0, text_color: "", Img: "" });
-        }
+        // user 테이블의 기본 가림판(cover_id) 변경
+        if (await setUserCoverId({ user_id, cover_id })) {
 
-        // 사용자가 선택한 가림판 설정 적용
-        const Info = await getCoverOption(cover_id);
-        if (Info != null) {
-            res.json(Info);
-        }
-        else {
-            res.status(500).json({ message: "가림판 설정을 불러오는데 실패했습니다." });
+            //session 수정
+            req.session.user.coverId = req.body.cover_id;
+
+            // 기본 가림판 설정 적용
+            if (cover_id == "-1") {
+                return res.json({ opacity: 0.87, color: "#ff0000", text: "", text_size: 0, text_color: "", Img: "" });
+            }
+
+            // 사용자가 선택한 가림판 설정 적용
+            const Info = await getCoverOption(cover_id);
+            if (Info != null) {
+                res.json(Info);
+            }
+            else {
+                res.status(500).json({ message: "가림판 설정을 불러오는데 실패했습니다." });
+            }
         }
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "서버오류" });
     }
 });
-
 
 module.exports = router;

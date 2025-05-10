@@ -74,8 +74,32 @@ async function insertCoverInfo(param) {
   }
 }
 
+/**
+ * 가림판 설정 저장
+ * @param {string} cover_id 가림판 id
+ * @returns {boolean} 성공여부 반환
+ */
+async function updateCoverId(param) {
+  try {
+    const { user_id, cover_id, UPDDT, UPDTM } = param;
+    const [result] = await pool.query(
+      `UPDATE sys.user 
+        SET cover_id= ? , UPDDT= ? , UPDTM= ? 
+        WHERE user_id= ? `,
+      [cover_id, UPDDT, UPDTM, user_id]
+    );
+
+    if (result.affectedRows < 0) return false;
+    return true;
+  } catch (err) {
+    console.error("가림판 설정 저장 중 오류:", err);
+    throw err;
+  }
+}
+
 module.exports = {
   getUserCoverLists,
   getCoverInfo,
   insertCoverInfo,
+  updateCoverId,
 };

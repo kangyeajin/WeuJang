@@ -1,3 +1,21 @@
+const usedCoverId = document.getElementById('defaultCoverId').value;
+const boxes = document.querySelectorAll('.cover-box');
+const selectedCoverId = document.getElementById('selectedCover');
+
+boxes.forEach(box => {
+    console.log("서버에서 전달받은 커버 아이디 : ", usedCoverId);
+    if (box.dataset.id === usedCoverId) {
+        boxes.forEach(b => b.classList.remove('selected'));
+        box.classList.add('selected');
+        selectedCoverId.value = box.dataset.id;
+    }
+
+    box.addEventListener('click', () => {
+        boxes.forEach(b => b.classList.remove('selected'));
+        box.classList.add('selected');
+        selectedCoverId.value = box.dataset.id;
+    });
+});
 
 // 가림판 선택 버튼
 document.getElementById('coverSelectForm').addEventListener('submit', async function (e) {
@@ -26,6 +44,7 @@ document.getElementById('coverSelectForm').addEventListener('submit', async func
         } else {
             alert('가림판 변경 성공!');
             // localStorage에 설정 정보 저장
+            // console.log(JSON.stringify(data));
             localStorage.setItem("coverSettings", JSON.stringify(data));
             window.location.href = '/main'; // 메인 페이지로 이동
         }
