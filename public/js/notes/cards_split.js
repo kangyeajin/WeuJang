@@ -6,7 +6,7 @@ let loading = false;
 let done = false; // 데이터 끝났는지 여부
 let html = "";
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   window.addEventListener("scroll", handleScroll); // 스크롤 이벤트 등록
   getNoteInfo(noteId);  //노트 제목
   getNoteBookmarkList(noteId); //북마크 목록
@@ -23,9 +23,9 @@ async function getCard() {
       .then(data => {
         const cards = data.cards;
         if (!cards || cards.length === 0) {
-          if(page == 1){
-            document.querySelector('.note-container').innerHTML 
-                = `<div class="no-data">등록된 문제가 없습니다.</div>`;
+          if (page == 1) {
+            document.querySelector('.note-container').innerHTML
+              = `<div class="no-data">등록된 문제가 없습니다.</div>`;
           }
           done = true; // 더 이상 데이터 없음 표시
           return;
@@ -38,30 +38,30 @@ async function getCard() {
                         <input type="hidden" value="${cards[i].bookmark}" id="txtBookmark_${cards[i].card_id}"></input>
                     <div class="left"> 
                     <span id="spanBookmark_${cards[i].card_id}">`
-                    // 북마크표시
-                    if(cards[i].bookmark == '1'){
-          html += `  <div class="index-sticker" id="index-sticker_${cards[i].card_id}"></div> `
-                    } else {
-          html += `  <div class="index-sticker hidden" id="index-sticker_${cards[i].card_id}"></div> `
-                    } 
+          // 북마크표시
+          // if (cards[i].bookmark == '1') {
+          //   html += `  <div class="index-sticker" id="index-sticker_${cards[i].card_id}"></div> `
+          // } else {
+          //   html += `  <div class="index-sticker hidden" id="index-sticker_${cards[i].card_id}"></div> `
+          // }
           html += `   </span>
                       <div class="meta">
                         <span class="spanHeart" id="heart_${cards[i].card_id}" onclick="setWrongCnt(${cards[i].card_id})" >`;
-                        // 하트(틀린갯수)표시
-                        for (let j = 0; j < cards[i].wrongCnt; j++){
-          html += `       <img src="/images/heart.png" alt="틀림" class="img-heart"/>`
-                          if(j >= 4){ heart_fivefg= true; break;}
-                        }
-                        if(!heart_fivefg){
-          html += `       <img src="/images/heart-empty.png" alt="틀림" class="img-heart"/>`;
-                        }
+          // 하트(틀린갯수)표시
+          for (let j = 0; j < cards[i].wrongCnt; j++) {
+            html += `       <img src="/images/heart.png" alt="틀림" class="img-heart"/>`
+            if (j >= 4) { heart_fivefg = true; break; }
+          }
+          if (!heart_fivefg) {
+            html += `       <img src="/images/heart-empty.png" alt="틀림" class="img-heart"/>`;
+          }
           html += `     </span>`
-                  // 힌트 표시
-                    if(cards[i].hint){
-          html += `  <span class="hint-btn" id="spanHint_${cards[i].card_id}" data-hint="${cards[i].hint}">❓</span>`
-                    } else {
-          html += `  <span class="hint-btn hidden" id="spanHint_${cards[i].card_id}" data-hint="">❓</span>`
-                    } 
+          // 힌트 표시
+          if (cards[i].hint) {
+            html += `  <span class="hint-btn" id="spanHint_${cards[i].card_id}" data-hint="${cards[i].hint}">❓</span>`
+          } else {
+            html += `  <span class="hint-btn hidden" id="spanHint_${cards[i].card_id}" data-hint="">❓</span>`
+          }
           html += `    </div>
                     ${cards[i].num}. <span id='spanTextLeft_${cards[i].card_id}'>${cards[i].question}</span>
                     </div>
@@ -88,10 +88,10 @@ async function getCard() {
       .catch(err => {
         console.error("카드 불러오기 실패:", err);
       });
-      }catch (error) {console.error('카드 요청 실패:', error);} 
-      finally {
-        loading = false;
-      }
+  } catch (error) { console.error('카드 요청 실패:', error); }
+  finally {
+    loading = false;
+  }
 }
 
 // 스크롤 이벤트(페이징)
@@ -148,9 +148,9 @@ document.addEventListener('click', function (e) {
 
     // 해당 메뉴만 토글
     targetMenu.style.display = (targetMenu.style.display === "block") ? "none" : "block";
-  } 
+  }
   // 클릭한 곳이 메뉴 내부일 경우는 유지, 그 외엔 닫기
-  else  {
+  else {
     popupMenus.forEach(menu => {
       menu.style.display = "none";
     });
@@ -160,69 +160,70 @@ document.addEventListener('click', function (e) {
 // 하트표시 클릭 이벤트
 async function setWrongCnt(card_id) {
   try {
-    var wrongCnt = document.getElementById("wrongCnt_"+card_id).value;
-    if(wrongCnt >= 5){wrongCnt = 0;}else {wrongCnt = ++wrongCnt;}
+    var wrongCnt = document.getElementById("wrongCnt_" + card_id).value;
+    if (wrongCnt >= 5) { wrongCnt = 0; } else { wrongCnt = ++wrongCnt; }
     const jsonData = { card_id, wrongCnt };
-    
+
     const response = await fetch('/note/wrongCnt', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(jsonData)
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(jsonData)
     });
 
     const result = await response.text();
 
     if (!response.ok) {
-        alert(result); // 오류 메시지
+      alert(result); // 오류 메시지
     } else {
       var html = "";
       var heart_fivefg = false;
       //처리 성공 후 갯수 업데이트
-          document.getElementById("wrongCnt_"+card_id).value = result;
-      for (let j = 0; j < result; j++){
+      document.getElementById("wrongCnt_" + card_id).value = result;
+      for (let j = 0; j < result; j++) {
         html += `<img src="/images/heart.png" alt="틀림" class="img-heart"/>`
-          if(j >= 4){ heart_fivefg= true; break;}
+        if (j >= 4) { heart_fivefg = true; break; }
       }
-      if(!heart_fivefg){
-        html += `<img src="/images/heart-empty.png" alt="틀림" class="img-heart"/>`}
-      document.getElementById("heart_"+card_id).innerHTML = html;
+      if (!heart_fivefg) {
+        html += `<img src="/images/heart-empty.png" alt="틀림" class="img-heart"/>`
+      }
+      document.getElementById("heart_" + card_id).innerHTML = html;
     }
-      }catch (error) {console.error('답변 처리 실패:', error);} 
-      finally {
-        loading = false;
-      }
+  } catch (error) { console.error('답변 처리 실패:', error); }
+  finally {
+    loading = false;
+  }
 }
 
 //노트 제목 세팅
 async function getNoteInfo(noteId) {
   try {
     const note_id = noteId;
-        const jsonData = { note_id };
-        
-        const response = await fetch('/note/get_note', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(jsonData)
-        });
+    const jsonData = { note_id };
 
-        const result = await response.text();
+    const response = await fetch('/note/get_note', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(jsonData)
+    });
 
-        const data = JSON.parse(result);
+    const result = await response.text();
 
-        if (!response.ok) {
-            alert(result); // 오류 메시지
-        } else {
-          var html = "";
-          document.getElementById("note_title").textContent = data[0].title;
-        }
-      }catch (error) {console.error('제목 세팅 실패:', error);} 
-      finally {
-        loading = false;
-      }
+    const data = JSON.parse(result);
+
+    if (!response.ok) {
+      alert(result); // 오류 메시지
+    } else {
+      var html = "";
+      document.getElementById("note_title").textContent = data[0].title;
+    }
+  } catch (error) { console.error('제목 세팅 실패:', error); }
+  finally {
+    loading = false;
+  }
 }
 
 
@@ -230,36 +231,66 @@ async function getNoteInfo(noteId) {
 async function getNoteBookmarkList(noteId) {
   try {
     const note_id = noteId;
-        const jsonData = { note_id };
-        
-        const response = await fetch('/note/get_cardBookmark', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(jsonData)
-        });
+    const jsonData = { note_id };
 
-        const result = await response.text();
-        
-        var data = '';
-        if(result){
-          data = JSON.parse(result)
-        }
-        
-        if (!response.ok) {
-            alert(result); // 오류 메시지
-        } else {
-          var html = "";
-          for (let i = 0; i < data.length; i++) {
-            html += `<span class="sticker" onclick="scrollToSticker(${data[i].card_id})">뭐넣지?</span>`;
-          }
-          document.getElementById("index-sticker-list").innerHTML = html;
-        }
-      }catch (error) {console.error('북마크 목록 세팅 실패:', error);} 
-      finally {
-        loading = false;
+    const response = await fetch('/note/get_cardBookmark', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(jsonData)
+    });
+
+    const result = await response.text();
+
+    var data = '';
+    if (result) {
+      data = JSON.parse(result)
+    }
+
+    if (!response.ok) {
+      alert(result); // 오류 메시지
+    } else {
+      var html = "";
+      for (let i = 0; i < data.length; i++) {
+        html += `<div class="index-sticker${i === 0 ? ' active' : ''}" id="index-sticker_${data[i].card_id}" style="left: 80px; z-index: ${i === 0 ? 5 : -1};"></div>`;
       }
+
+      document.getElementById("index-sticker-list").innerHTML = html;
+
+      // 💡 요소 삽입 후, top 값 자동 설정
+      const stickers = document.querySelectorAll('#index-sticker-list .index-sticker');
+      const baseTop = 134;
+      const gap = 30;
+
+      stickers.forEach((sticker, index) => {
+        sticker.style.zIndex = index === 0 ? "5" : "-1";
+        sticker.style.left = `80px`;
+        sticker.style.top = `${baseTop + index * gap}px`;
+      });
+
+      //       var html = "";
+      //       for (let i = 0; i < data.length; i++) {
+      //         if (i == 0) {
+      //           html += `<div class="index-sticker active" id="index-sticker_${data[i].card_id}" style="
+      //     left: 80px;
+      //     top: 244px;
+      // "></div>`;
+      //         } else {
+      //           html += `
+      // <div class="index-sticker" id="index-sticker_${data[i].card_id}" style="
+      //     left: 80px;
+      //     top: 281px;
+      //     z-index: -1;
+      // "></div>`;
+      //         }
+      //       }
+      //       document.getElementById("index-sticker-list").innerHTML = html;
+    }
+  } catch (error) { console.error('북마크 목록 세팅 실패:', error); }
+  finally {
+    loading = false;
+  }
 }
 
 // 북마크 바로가기 클릭 이벤트
@@ -292,33 +323,33 @@ async function scrollToSticker(cardId) {
 //(설정 팝업)북마크 적용
 async function setBookmark(card_id) {
   try {
-    var bookmark = document.getElementById("txtBookmark_"+card_id).value;
-        if(bookmark == '1'){ bookmark = '0';} else {bookmark = '1';}
-        const jsonData = { card_id, bookmark };
-        
-        const response = await fetch('/note/set_cardBookmark', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(jsonData)
-        });
+    var bookmark = document.getElementById("txtBookmark_" + card_id).value;
+    if (bookmark == '1') { bookmark = '0'; } else { bookmark = '1'; }
+    const jsonData = { card_id, bookmark };
 
-        const result = await response.text();
-        var html = "";
-        if (!response.ok) {
-            alert(result); // 오류 메시지
-        } else {
-          document.getElementById("txtBookmark_"+card_id).value = result;
-          html = `<div class="index-sticker hidden" id="index-sticker_${card_id}"></div>`
-          if (result == 1) {
-            html = `<div class="index-sticker" id="index-sticker_${card_id}"></div>`
-          }
-          document.getElementById("spanBookmark_"+card_id).innerHTML = html;
+    const response = await fetch('/note/set_cardBookmark', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(jsonData)
+    });
 
-          getNoteBookmarkList(noteId); //북마크 목록 재조회
-        }
-      }catch (error) {console.error('북마크 적용 실패:', error);} 
+    const result = await response.text();
+    var html = "";
+    if (!response.ok) {
+      alert(result); // 오류 메시지
+    } else {
+      document.getElementById("txtBookmark_" + card_id).value = result;
+      html = `<div class="index-sticker hidden" id="index-sticker_${card_id}"></div>`
+      if (result == 1) {
+        html = `<div class="index-sticker" id="index-sticker_${card_id}"></div>`
+      }
+      document.getElementById("spanBookmark_" + card_id).innerHTML = html;
+
+      getNoteBookmarkList(noteId); //북마크 목록 재조회
+    }
+  } catch (error) { console.error('북마크 적용 실패:', error); }
 }
 
 //문제 삭제
@@ -328,32 +359,32 @@ async function delCard(card_id) {
     if (!confirmDelete) return; // 취소 시 함수 종료
 
     const jsonData = { card_id };
-        
+
     const response = await fetch('/note/del_card', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(jsonData)
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(jsonData)
     });
 
     const result = await response.text();
 
     if (!response.ok) {
-        alert(result); // 오류 메시지
+      alert(result); // 오류 메시지
     } else {
       document.querySelector(`[data-index="${card_id}"]`).remove(); // 카드 삭제
       getNoteBookmarkList(noteId); //북마크 목록 재조회
     }
-  }catch (error) {console.error('문제 삭제 실패:', error);} 
+  } catch (error) { console.error('문제 삭제 실패:', error); }
 }
 
 //문제 편집
 function editCard(cardId) {
-  try{
-    var leftQuestion = document.getElementById("spanTextLeft_"+cardId);
-    var rigthQnswer = document.getElementById("spanTextRigth_"+cardId);
-    var hint = document.getElementById("spanHint_"+cardId);
+  try {
+    var leftQuestion = document.getElementById("spanTextLeft_" + cardId);
+    var rigthQnswer = document.getElementById("spanTextRigth_" + cardId);
+    var hint = document.getElementById("spanHint_" + cardId);
     const hintText = hint.dataset.hint;
 
     const row = document.querySelector(`[data-index="${cardId}"]`);
@@ -364,43 +395,43 @@ function editCard(cardId) {
     row.dataset.originalHint = hintText;
 
     // 문제 편집 textarea 생성
-    leftQuestion.innerHTML=`<textarea class="edit-textarea2 full-width">${leftQuestion.textContent}</textarea>
+    leftQuestion.innerHTML = `<textarea class="edit-textarea2 full-width">${leftQuestion.textContent}</textarea>
                             <div class="edit-wrapper">
                             <span>❓</span><textarea class="edit-textarea2 textHint">${hintText}</textarea>
                             </div>`;
-    rigthQnswer.innerHTML=`<textarea class="edit-textarea full-width">${rigthQnswer.textContent}</textarea>`;
+    rigthQnswer.innerHTML = `<textarea class="edit-textarea full-width">${rigthQnswer.textContent}</textarea>`;
 
     // 버튼 보이기
     document.querySelector(`#answer-actions_${cardId} .edit-save-btn`).classList.remove("hidden");
     document.querySelector(`#answer-actions_${cardId} .edit-cancel-btn`).classList.remove("hidden");
 
     // 힌트 표기
-    if(hintText != ''){
+    if (hintText != '') {
       hint.classList.remove("hidden");
     } else {
       hint.classList.add("hidden");
     }
-    
+
     // 설정 버튼(점세개) 숨김
     const dotsButton = document.getElementById(`dots-button_${cardId}`);
     dotsButton.classList.add("hidden");
 
     return;
 
-  }catch (error) {console.error('문제 편집 실패:', error);}
+  } catch (error) { console.error('문제 편집 실패:', error); }
 }
 
 //문제 편집 저장
 async function cardEditSave(cardId) {
   try {
-    const newQuestion= document.querySelector(`#spanTextLeft_${cardId} textarea`).value;
-    const newAnswer= document.querySelector(`#spanTextRigth_${cardId} textarea`).value;
-    const newHint= document.querySelector(`#spanTextLeft_${cardId} .edit-wrapper textarea`).value;
-    
+    const newQuestion = document.querySelector(`#spanTextLeft_${cardId} textarea`).value;
+    const newAnswer = document.querySelector(`#spanTextRigth_${cardId} textarea`).value;
+    const newHint = document.querySelector(`#spanTextLeft_${cardId} .edit-wrapper textarea`).value;
+
     const confirmDelete = confirm("변경된 내용을 저장하시겠습니까?");
     if (!confirmDelete) return; // 취소 시 함수 종료
 
-    if(!cardId || !newQuestion || !newAnswer) {
+    if (!cardId || !newQuestion || !newAnswer) {
       alert("문제와 답변을 입력하세요.");
       return;
     }
@@ -410,7 +441,7 @@ async function cardEditSave(cardId) {
       answer: newAnswer,
       hint: newHint,
     };
-    
+
     const response = await fetch("/note/upd_card", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -418,28 +449,28 @@ async function cardEditSave(cardId) {
     });
 
     const result = await response.text();
-    
+
     if (!response.ok) return alert(result);
 
-    var data='';
-    if(result){
+    var data = '';
+    if (result) {
       data = JSON.parse(result);
     }
 
     document.getElementById("spanTextLeft_" + cardId).innerHTML = data[0].question;
     document.getElementById("spanTextRigth_" + cardId).innerHTML = data[0].answer;
     document.getElementById("spanHint_" + cardId).dataset.hint = data[0].hint;
-      if(data[0].hint != ''){
-        document.getElementById("spanHint_" + cardId).classList.remove("hidden");
-      }
-      else {
-        document.getElementById("spanHint_" + cardId).classList.add("hidden");
-      }
+    if (data[0].hint != '') {
+      document.getElementById("spanHint_" + cardId).classList.remove("hidden");
+    }
+    else {
+      document.getElementById("spanHint_" + cardId).classList.add("hidden");
+    }
 
     document.querySelector(`#answer-actions_${cardId} .edit-save-btn`).classList.add("hidden");
     document.querySelector(`#answer-actions_${cardId} .edit-cancel-btn`).classList.add("hidden");
     hint.classList.remove("hidden");
-    
+
   } catch (err) {
     console.error("수정 실패", err);
     alert("수정 중 오류 발생");

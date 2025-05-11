@@ -34,23 +34,21 @@
 .note-row {
   align-items: flex-start;
   margin-bottom: 20px;
-    border: 2px solid #ccc;
-    padding: 15px;
-    border-radius: 8px;
-    cursor: default;
-    position: relative;
-    padding: 15px;
-    border: 2px solid #ccc;
-    border-radius: 8px;
+  padding: 15px;
+  border-radius: 8px;
+  cursor: default;
+  position: relative;
 }
 
 .note-row .left {
   flex: 1;
-  text-indent: -1em; /* 첫 줄은 숫자 포함되게 앞으로 당김 */
+  text-indent: -1em;
+  /* 첫 줄은 숫자 포함되게 앞으로 당김 */
 }
 
 /* 좌우 영역 */
-.left, .right {
+.left,
+.right {
   flex: 1;
   padding: 10px;
 }
@@ -71,7 +69,7 @@ li {
   margin: 10px 0;
 }
 
-.right{
+.right {
   font-size: 1rem;
   color: #ff4e00d4;
   padding-top: 35px;
@@ -83,19 +81,22 @@ li {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%; /* left의 너비에 맞추기 */
+  width: 100%;
+  /* left의 너비에 맞추기 */
   box-sizing: border-box;
-  padding: 0 0.5rem 0 0;;
+  padding: 0 0.5rem 0 0;
+  ;
 }
 
 .spanHeart {
   display: flex;
-  gap: 2px; /* 이미지 사이 간격 */
+  gap: 2px;
+  /* 이미지 사이 간격 */
   align-items: center;
   cursor: pointer;
 }
 
-.img-heart{
+.img-heart {
   width: 25px;
   height: 25px;
 }
@@ -141,8 +142,9 @@ li {
   border: 2px solid #ccc;
   border-radius: 8px;
   padding: 10px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-  max-width: 90vw; /* 모바일 대응 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  max-width: 90vw;
+  /* 모바일 대응 */
   width: 100%;
   box-sizing: border-box;
   word-break: break-word;
@@ -179,7 +181,7 @@ li {
   top: 0;
   background: white;
   padding: 10px 20px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 /* 북마크 표시------------------ */
@@ -199,12 +201,15 @@ li {
   cursor: pointer;
   transition: background 0.2s;
 }
+
 .sticker:hover {
   background-color: #f9e682;
 }
+
 .index-sticker {
   display: block;
 }
+
 .hidden {
   display: none;
 }
@@ -220,18 +225,28 @@ li {
   font-weight: bold;
   font-size: 0.9rem;
   transform: rotate(-3deg);
-  z-index: 1;
+  z-index: -1;
+}
+
+.index-sticker.active {
+  z-index: 0;
 }
 
 .highlight {
-  background-color: #FFFDBF; /* 연한 노란색 */
+  background-color: #FFFDBF;
+  /* 연한 노란색 */
   transition: background-color 0.5s ease;
   animation: highlight-fade 2s forwards;
 }
 
 @keyframes highlight-fade {
-  0%   { background-color: #FFFDBF; }
-  100% { background-color: transparent; }
+  0% {
+    background-color: #FFFDBF;
+  }
+
+  100% {
+    background-color: transparent;
+  }
 }
 
 /* 문제 설정------------------ */
@@ -241,7 +256,7 @@ li {
   right: 26px;
   background: white;
   border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
   display: none;
   flex-direction: column;
   padding: 10px 0;
@@ -286,8 +301,9 @@ li {
   resize: vertical;
   box-sizing: border-box;
   width: 100%;
-  min-height: 135px; 
+  min-height: 135px;
 }
+
 .edit-textarea2 {
   font-size: 1rem;
   padding: 0.6rem;
@@ -298,24 +314,30 @@ li {
   box-sizing: border-box;
   width: 100%;
 }
-.left span .edit-textarea2{
+
+.left span .edit-textarea2 {
   min-height: 85px;
 }
-.left span .textHint{
+
+.left span .textHint {
   min-height: 65px;
 }
+
 .full-width {
   width: 100%;
 }
+
 .edit-wrapper {
   display: flex;
-  align-items: center; 
-  gap: 8px; 
+  align-items: center;
+  gap: 8px;
 }
+
 .edit-wrapper span {
   margin-left: 1.2rem;
 }
-.right .edit-textarea{
+
+.right .edit-textarea {
   margin-top: 1.9rem;
 }
 
@@ -343,6 +365,7 @@ li {
 .edit-save-btn:hover {
   background-color: #0056b3;
 }
+
 .edit-save-btn,
 .edit-cancel-btn {
   margin: 0 4px;
@@ -363,7 +386,7 @@ li {
   color: white;
 }
 
-.answer-actions{
+.answer-actions {
   float: right;
 }
 
@@ -372,4 +395,23 @@ li {
   font-size: 1.1rem;
   color: #999;
   margin-top: 5rem;
+}
+
+.note-list {
+  align-items: flex-start;
+  margin-bottom: 20px;
+  border: 2px solid #ccc;
+  padding: 15px;
+  border-radius: 8px;
+  cursor: default;
+  position: relative;
+  padding: 15px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  max-height: 400px;
+  overflow-y: auto;
+  position: relative;
+  max-height: 400px;
+  overflow-y: auto;
+  background-color: #f9f9f9;
 }
