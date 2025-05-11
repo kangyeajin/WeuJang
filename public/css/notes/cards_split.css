@@ -8,7 +8,7 @@
 
 /* 전체 컨테이너 */
 .note-container {
-  display: flex;
+  /* display: flex; */
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
@@ -85,7 +85,7 @@ li {
   align-items: center;
   width: 100%; /* left의 너비에 맞추기 */
   box-sizing: border-box;
-  padding: 0 1.2rem 0 0;
+  padding: 0 0.5rem 0 0;;
 }
 
 .spanHeart {
@@ -126,11 +126,11 @@ li {
   }
 
   .left {
-    font-size: 1.2rem;
+    font-size: 1rem;
   }
 
   .right {
-    font-size: 1rem;
+    font-size: 0.9rem;
   }
 }
 
@@ -365,4 +365,11 @@ li {
 
 .answer-actions{
   float: right;
+}
+
+.no-data {
+  text-align: center;
+  font-size: 1.1rem;
+  color: #999;
+  margin-top: 5rem;
 }

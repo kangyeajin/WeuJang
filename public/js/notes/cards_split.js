@@ -23,6 +23,10 @@ async function getCard() {
       .then(data => {
         const cards = data.cards;
         if (!cards || cards.length === 0) {
+          if(page == 1){
+            document.querySelector('.note-container').innerHTML 
+                = `<div class="no-data">등록된 문제가 없습니다.</div>`;
+          }
           done = true; // 더 이상 데이터 없음 표시
           return;
         }
@@ -376,6 +380,10 @@ function editCard(cardId) {
     } else {
       hint.classList.add("hidden");
     }
+    
+    // 설정 버튼(점세개) 숨김
+    const dotsButton = document.getElementById(`dots-button_${cardId}`);
+    dotsButton.classList.add("hidden");
 
     return;
 
@@ -430,6 +438,7 @@ async function cardEditSave(cardId) {
 
     document.querySelector(`#answer-actions_${cardId} .edit-save-btn`).classList.add("hidden");
     document.querySelector(`#answer-actions_${cardId} .edit-cancel-btn`).classList.add("hidden");
+    hint.classList.remove("hidden");
     
   } catch (err) {
     console.error("수정 실패", err);
@@ -453,4 +462,7 @@ function cardEditCancel(cardId) {
 
   document.querySelector(`#answer-actions_${cardId} .edit-save-btn`).classList.add("hidden");
   document.querySelector(`#answer-actions_${cardId} .edit-cancel-btn`).classList.add("hidden");
+
+  const dotsButton = document.getElementById(`dots-button_${cardId}`);
+  dotsButton.classList.remove("hidden");
 }
