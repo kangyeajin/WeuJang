@@ -9,6 +9,30 @@ document.getElementById("imageUpload").addEventListener("change", async (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
+    // 기존 이미지 제거 (previewImage가 있다면)
+    if (previewImage) {
+        // DB에 저장된 이미지가 있다면 서버에도 삭제 요청 (선택사항)
+        if (previewImage.src.startsWith(window.location.origin + "/uploads/")) {
+            const filename = previewImage.src.split("/uploads/")[1];
+            try {
+                await fetch("/cover/delete-image", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ filename })
+                });
+            } catch (err) {
+                console.error("이미지 삭제 실패:", err);
+            }
+        }
+
+        // 이미지 src 제거 및 아이콘 제거
+        previewImage.src = "";
+        previewImage.style.display = "none";  // 깨진 아이콘 숨기기
+    }
+
+    // input 초기화 (선택된 파일을 비우고 새로 선택하게끔)
+    document.getElementById("imageUpload").value = ''; // file value 초기화
+
     const formData = new FormData();
     formData.append("image", file);
 
@@ -95,7 +119,7 @@ document.getElementById('answerOpacity').addEventListener("input", (e) => {
     document.getElementById('sample-answer').style.opacity = e.target.value;
 });
 
-
+// 가림판 등록
 document.getElementById("saveBtn").addEventListener("click", async () => {
     const settings = {
         title: document.getElementById("cover-title").value,

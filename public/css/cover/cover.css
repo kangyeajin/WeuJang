@@ -11,6 +11,8 @@
     transition: opacity 0.2s;
     /* 처음에는 숨겨놓기 */
     display: none;
+    /* 화면 최상단에 위치 */
+    z-index: 999;
   }
 
   #cover.dragging {
@@ -19,4 +21,8 @@
 
   #cover.show {
     display: block;
+  }
+
+  #saveBtn {
+    max-width: 600px;
   }
