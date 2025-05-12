@@ -27,15 +27,16 @@ async function getUserCoverLists(user_id) {
 /**
  * 가림판 설정 정보 조회
  * @param {string} cover_id 가림판 id
+ * @param {string} user_id 사용자 id
  * @returns {Promise<Array>} recordset 반환
  */
-async function getCoverInfo(cover_id) {
+async function getCoverInfo(user_id, cover_id) {
   try {
     const [rows] = await pool.query(
       `SELECT cover_id, title, Img, color, opacity, text, text_size, text_color, ENTDT, ENTTM, UPDDT, UPDTM 
         FROM sys.cover
-        WHERE cover_id = ? `,
-      [cover_id]
+        WHERE cover_id = ? and user_id = ? `,
+      [cover_id, user_id]
     );
 
     if (rows.length > 0) {

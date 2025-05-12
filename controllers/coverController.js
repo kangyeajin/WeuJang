@@ -16,9 +16,9 @@ async function getCoverLists(user_id) {
 /**
  * 가림판 상세 조회
  */
-async function getCoverOption(cover_id) {
+async function getCoverOption(user_id, cover_id) {
   try {
-    return getCoverInfo(cover_id);
+    return getCoverInfo(user_id, cover_id);
   } catch (error) {
     console.log("error : ", error);
   }

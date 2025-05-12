@@ -129,7 +129,7 @@ router.post('/setting', async (req, res) => {
             }
 
             // 사용자가 선택한 가림판 설정 적용
-            const Info = await getCoverOption(cover_id);
+            const Info = await getCoverOption(user_id, cover_id);
             if (Info != null) {
                 res.json(Info);
             }
@@ -137,6 +137,10 @@ router.post('/setting', async (req, res) => {
                 res.status(500).json({ message: "가림판 설정을 불러오는데 실패했습니다." });
             }
         }
+        else {
+            res.status(500).json({ message: "가림판 설정에 실패했습니다." });
+        }
+        
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "서버오류" });
