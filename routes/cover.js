@@ -8,17 +8,41 @@ const {
     getCoverLists,
     getCoverOption,
     createCover,
+    updateCover,
     setUserCoverId,
 } = require("../controllers/coverController");
 
 router.use(express.urlencoded({ extended: true }));
 router.use(express.json());
 
+/* 가림판 기본 설정 */
+const defaultCoverOpt = { title:"", opacity: 0.87, color: "#ff0000", text: "", text_size: 16, text_color: "#000000", Img: "" };
+
 /* 가림판 화면 이동 */
 router.get(`/edit`, async (req, res) => {
+
+    console.log(req.query.coverId);
+    const cover_id = req.query?.coverId || '';
+    const user_id = req.session.user?.id || "admin";
+
+    // 기본 가림판 설정 적용 - 생성
+    var coverSettings = defaultCoverOpt;
+    var page = {mode:"create", coverId:cover_id};
+
+    // 사용자가 선택한 가림판 설정 적용 - 편집
+    if(cover_id) {
+        const Info = await getCoverOption(user_id, cover_id);
+        if (Info != null) coverSettings = Info;
+        page.mode = "update";
+    }
+
+    console.log(coverSettings);
+
     res.render(`cover/edit`, {
         layout: "main",
         title: "가림판 꾸미기",
+        cover: coverSettings,
+        page: page,
         cssFile: `/css/cover/edit.css`,
         jsFile: `/js/cover/edit.js`,
     });
@@ -91,28 +115,8 @@ router.post(`/delete-image`, (req, res) => {
     });
 });
 
-
-// 가림판 설정 저장
-router.post('/saveSettings', async (req, res) => {
-    // 로긴 귀찮아서 임시로 고정
-    req.body.user_id = req.session.user?.id || "admin";
-    // console.log(req.body);
-
-    try {
-        if (await createCover(req.body)) {
-            res.send("가림판 설정이 등록되었습니다.");
-        }
-        else {
-            res.status(500).send("가림판 설정 등록 중 오류가 발생했습니다.\r\n다시 시도해주세요.");
-        }
-    } catch (error) {
-        console.error(error);
-        res.status(500).send("서버 오류");
-    }
-});
-
-// 가림판 조회 및 적용
-router.post('/setting', async (req, res) => {
+// 가림판 기본값 변경 및 적용 
+router.post('/change', async (req, res) => {
     const user_id = req.session.user?.id || "admin";
     const cover_id = req.body.cover_id;
     console.log({ user_id, cover_id });
@@ -121,11 +125,11 @@ router.post('/setting', async (req, res) => {
         if (await setUserCoverId({ user_id, cover_id })) {
 
             //session 수정
-            req.session.user.coverId = req.body.cover_id;
+            req.session.user.coverId = cover_id;
 
             // 기본 가림판 설정 적용
             if (cover_id == "-1") {
-                return res.json({ opacity: 0.87, color: "#ff0000", text: "", text_size: 0, text_color: "", Img: "" });
+                return res.json(defaultCoverOpt);
             }
 
             // 사용자가 선택한 가림판 설정 적용
@@ -146,5 +150,66 @@ router.post('/setting', async (req, res) => {
         res.status(500).json({ message: "서버오류" });
     }
 });
+
+// 가림판 조회 및 적용
+router.post('/options', async (req, res) => {
+    const user_id = req.session.user?.id || "admin";
+    const cover_id = req.body.cover_id;
+    console.log({ user_id, cover_id });
+    try {
+        // 기본 가림판 설정 적용
+        if (cover_id == "-1") {
+            return res.json(defaultCoverOpt);
+        }
+        // 가림판 상세 조회
+        const Info = await getCoverOption(user_id, cover_id);
+        if (Info != null) {
+            res.json(Info);
+        }
+        else {
+            res.status(500).json({ message: "가림판 설정을 불러오는데 실패했습니다." });
+        }        
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "서버오류" });
+    }
+});
+
+// 가림판 설정 저장
+router.post('/saveSettings', async (req, res) => {
+    // 로긴 귀찮아서 임시로 고정
+    req.body.user_id = req.session.user?.id || "admin";
+
+    try {
+        if (await createCover(req.body)) {
+            res.send("가림판 설정이 등록되었습니다.");
+        }
+        else {
+            res.status(500).send("가림판 설정 등록 중 오류가 발생했습니다.\r\n다시 시도해주세요.");
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("서버 오류");
+    }
+});
+
+// 가림판 설정 저장
+router.post('/updateSettings', async (req, res) => {
+    // 로긴 귀찮아서 임시로 고정
+    req.body.user_id = req.session.user?.id || "admin";
+
+    try {
+        if (await updateCover(req.body)) {
+            res.send("가림판 설정이 수정되었습니다.");
+        }
+        else {
+            res.status(500).send("가림판 설정 수정 중 오류가 발생했습니다.\r\n다시 시도해주세요.");
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("서버 오류");
+    }
+});
+
 
 module.exports = router;

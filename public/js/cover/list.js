@@ -1,40 +1,51 @@
-const usedCoverId = document.getElementById('defaultCoverId').value;
-const boxes = document.querySelectorAll('.cover-box');
-const selectedCoverId = document.getElementById('selectedCover');
-
-boxes.forEach(box => {
-    console.log("서버에서 전달받은 커버 아이디 : ", usedCoverId);
-    if (box.dataset.id === usedCoverId) {
-        boxes.forEach(b => b.classList.remove('selected'));
-        box.classList.add('selected');
-        selectedCoverId.value = box.dataset.id;
-    }
-
-    box.addEventListener('click', () => {
-        boxes.forEach(b => b.classList.remove('selected'));
-        box.classList.add('selected');
-        selectedCoverId.value = box.dataset.id;
-    });
+window.addEventListener('DOMContentLoaded', () => {
+    const defaultCoverId = document.getElementById('defaultCoverId').value;
+    const selectBox = document.getElementById('coverSelectbox');
+    for (const option of selectBox.options) {
+        if (option.value === defaultCoverId) {
+            option.selected = true;
+            // 선택 변경 후 이벤트 수동 발생
+            selectBox.dispatchEvent(new Event('change'));
+            break;
+        }
+  }
 });
 
-// 가림판 선택 버튼
-document.getElementById('coverSelectForm').addEventListener('submit', async function (e) {
-    e.preventDefault();
-
-    const formData = new FormData(this);
-    console.log(Object.fromEntries(formData.entries()));
-    const jsonData = {};
-    formData.forEach((value, key) => {
-        jsonData[key] = value;
-    });
-
+// 가림판 선택
+async function chageCoverSelect() {
     try {
-        const response = await fetch('/cover/setting', {
+        // 가림판 상세 정보 조회
+        const response = await fetch('/cover/options', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(jsonData)
+            body: JSON.stringify({cover_id: document.getElementsByName("cover_id")[0].value})
+        });
+
+        const data = await response.json();
+        if (!response.ok) {
+            alert(data.message); // 오류 메시지
+        }
+        else {            
+            setCoverOpt(data); // 미리보기 화면 적용
+        }
+
+    } catch (error) {
+        console.error('예외 발생:', error);
+        alert('네트워크 오류가 발생했습니다.');
+    }
+}
+
+// 기본값 설정 
+async function setDefaultCover() {
+    try {
+        const response = await fetch('/cover/change', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({cover_id: document.getElementsByName("cover_id")[0].value})
         });
 
         const data = await response.json();
@@ -44,7 +55,6 @@ document.getElementById('coverSelectForm').addEventListener('submit', async func
         } else {
             alert('가림판 변경 성공!');
             // localStorage에 설정 정보 저장
-            // console.log(JSON.stringify(data));
             localStorage.setItem("coverSettings", JSON.stringify(data));
             window.location.href = '/main'; // 메인 페이지로 이동
         }
@@ -52,4 +62,40 @@ document.getElementById('coverSelectForm').addEventListener('submit', async func
         console.error('예외 발생:', error);
         alert('네트워크 오류가 발생했습니다.');
     }
-});
+}
+
+// 가림판 설정 적용
+function setCoverOpt(data){
+    console.log(data);
+
+    const coverPreview = document.getElementById("coverPreview");//가림판 미리보기 화면
+    const coverImage = document.getElementById("previewImage");
+    const decorationText = document.getElementById('decorationText');//꾸밈 문구
+
+    if(!data.Img){
+        coverImage.src = "";
+        coverImage.style.display = "none";  // 깨진 아이콘 숨기기
+    }
+    else {
+        coverImage.src = data.Img;
+        coverImage.style.display = "block";
+    }
+    coverPreview.style.backgroundColor = data.color;
+    coverPreview.style.opacity = data.opacity;
+    decorationText.textContent = data.text;
+    decorationText.style.fontSize = data.text_size + "px";
+    decorationText.style.color = data.text_color;
+}
+
+// 수정/등록 화면으로 이동
+async function goCoverEdit (btnName) {
+    var cover_id = "";
+    if(btnName == "update") {
+        cover_id = document.getElementsByName("cover_id")[0].value;
+        if(cover_id == '-1') {
+            alert("기본 화면은 편집이 불가능 합니다.");
+            return;
+        }
+    }
+    window.location.href = "/cover/edit?coverId=" + cover_id;
+}

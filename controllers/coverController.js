@@ -1,4 +1,4 @@
-const { getUserCoverLists, getCoverInfo, insertCoverInfo, updateCoverId } = require("../models/coverMapper");
+const { getUserCoverLists, getCoverInfo, insertCoverInfo, updateCoverInfo, updateCoverId } = require("../models/coverMapper");
 const { getDate } = require('../utils/date');
 
 /**
@@ -42,6 +42,21 @@ async function createCover(req) {
 }
 
 /**
+ * 가림판 수정
+ */
+async function updateCover(req) {
+  try {
+    const { cover_id, user_id, title, imgUrl, backgroundColor, backgroundOpacity, text, textSize, textColor } = req;
+    const { DT: UPDDT, TM: UPDTM } = getDate();
+    const param = { cover_id, user_id, title, imgUrl, backgroundColor, backgroundOpacity, text, textSize, textColor, UPDDT, UPDTM };
+    return updateCoverInfo(param);
+  } catch (error) {
+    console.log("error : ", error);
+  }
+  return false;
+}
+
+/**
  * 사용자의 가림판 기본값 변경
  */
 async function setUserCoverId(req) {
@@ -56,4 +71,4 @@ async function setUserCoverId(req) {
   return false;
 }
 
-module.exports = { getCoverLists, getCoverOption, createCover, setUserCoverId };
+module.exports = { getCoverLists, getCoverOption, createCover, updateCover, setUserCoverId };

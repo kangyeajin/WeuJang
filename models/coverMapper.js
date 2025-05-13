@@ -50,7 +50,6 @@ async function getCoverInfo(user_id, cover_id) {
   }
 }
 
-
 /**
  * 가림판 설정 저장
  * @param param 사용자 입력 데이터
@@ -71,6 +70,31 @@ async function insertCoverInfo(param) {
     return true;
   } catch (err) {
     console.error("가림판 설정 저장 중 오류:", err);
+    throw err;
+  }
+}
+
+/**
+ * 가림판 설정 수정
+ * @param param 사용자 입력 데이터
+ * @returns {boolean} 성공여부 반환
+ */
+async function updateCoverInfo(param) {
+  try {
+    const { cover_id, user_id, title, imgUrl, backgroundColor, backgroundOpacity, text, textSize, textColor, UPDDT, UPDTM } = param;
+
+    const [result] = await pool.query(
+      `UPDATE sys.cover 
+      SET title= ?, Img= ?, color= ?, opacity= ?, text= ?, text_size= ?, text_color= ?, UPDDT= ?, UPDTM= ?
+      WHERE cover_id= ? and user_id= ?
+      `,
+      [title, imgUrl, backgroundColor, backgroundOpacity, text, textSize, textColor, UPDDT, UPDTM, cover_id, user_id]
+    );
+
+    if (result.affectedRows < 0) return false;
+    return true;
+  } catch (err) {
+    console.error("가림판 설정 수정 중 오류:", err);
     throw err;
   }
 }
@@ -102,5 +126,6 @@ module.exports = {
   getUserCoverLists,
   getCoverInfo,
   insertCoverInfo,
+  updateCoverInfo,
   updateCoverId,
 };
