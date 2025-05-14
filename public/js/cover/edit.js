@@ -7,7 +7,7 @@ const decorationText = document.getElementById('decorationText');//꾸밈 문구
 
 window.addEventListener('DOMContentLoaded', () => {
     const img = document.getElementById("selectedImgUrl").value;
-    if(!img){
+    if (!img) {
         console.log("img X");
         previewImage.src = "";
         previewImage.style.display = "none";  // 깨진 아이콘 숨기기
@@ -160,7 +160,7 @@ document.getElementById("saveBtn").addEventListener("click", async () => {
 
     var response = null;
 
-    if (mode.value !== "update"){
+    if (mode.value !== "update") {
         response = await fetch("/cover/saveSettings", {
             method: "POST",
             headers: { "Content-Type": "application/json" },

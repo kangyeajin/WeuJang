@@ -12,6 +12,7 @@ h2 {
 
 /* 좌측: 가림판 옵션 설정 */
 #coverEditForm {
+  width: 400px;
   min-width: 200px;
   display: flex;
   flex-direction: column;

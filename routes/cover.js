@@ -16,21 +16,19 @@ router.use(express.urlencoded({ extended: true }));
 router.use(express.json());
 
 /* 가림판 기본 설정 */
-const defaultCoverOpt = { title:"", opacity: 0.87, color: "#ff0000", text: "", text_size: 16, text_color: "#000000", Img: "" };
+const defaultCoverOpt = { title: "", opacity: 0.87, color: "#ff0000", text: "", text_size: 16, text_color: "#000000", Img: "" };
 
 /* 가림판 화면 이동 */
 router.get(`/edit`, async (req, res) => {
-
-    console.log(req.query.coverId);
     const cover_id = req.query?.coverId || '';
     const user_id = req.session.user?.id || "admin";
 
     // 기본 가림판 설정 적용 - 생성
     var coverSettings = defaultCoverOpt;
-    var page = {mode:"create", coverId:cover_id};
+    var page = { mode: "create", coverId: cover_id };
 
     // 사용자가 선택한 가림판 설정 적용 - 편집
-    if(cover_id) {
+    if (cover_id) {
         const Info = await getCoverOption(user_id, cover_id);
         if (Info != null) coverSettings = Info;
         page.mode = "update";
@@ -144,7 +142,7 @@ router.post('/change', async (req, res) => {
         else {
             res.status(500).json({ message: "가림판 설정에 실패했습니다." });
         }
-        
+
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "서버오류" });
@@ -155,7 +153,6 @@ router.post('/change', async (req, res) => {
 router.post('/options', async (req, res) => {
     const user_id = req.session.user?.id || "admin";
     const cover_id = req.body.cover_id;
-    console.log({ user_id, cover_id });
     try {
         // 기본 가림판 설정 적용
         if (cover_id == "-1") {
@@ -168,7 +165,7 @@ router.post('/options', async (req, res) => {
         }
         else {
             res.status(500).json({ message: "가림판 설정을 불러오는데 실패했습니다." });
-        }        
+        }
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "서버오류" });
