@@ -108,7 +108,7 @@ async function deleteCover() {
             alert("기본 커버는 삭제가 불가능 합니다.");
             return;
         }
-        
+
         const response = await fetch('/cover/delete', {
             method: 'POST',
             headers: {
@@ -116,10 +116,18 @@ async function deleteCover() {
             },
             body: JSON.stringify({ cover_id: cover_id })
         });
-        
-        const data = await response.json();
-        alert(data.message);
 
+        const data = await response.json();
+        if (!response.ok) {
+            alert(data.message);
+        } else {
+            alert(data.message);
+
+            const coverImage = document.getElementById("previewImage").src;
+            const filename = coverImage.split("/uploads/")[1];
+            // 서버에 저장된 이미지 삭제 
+            if (filename) await deleteImage(filename);
+        }
     }
     catch (error) {
         console.error('예외 발생:', error);
@@ -127,5 +135,18 @@ async function deleteCover() {
     }
     finally {
         window.location.href = "/cover/list"; //새로고침
+    }
+}
+
+//이미지 삭제
+async function deleteImage(filename) {
+    try {
+        await fetch("/cover/delete-image", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ filename })
+        });
+    } catch (err) {
+        console.error("이미지 삭제 실패:", err);
     }
 }

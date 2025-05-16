@@ -182,15 +182,4 @@ async function deleteImage(filename) {
     } catch (err) {
         console.error("이미지 삭제 실패:", err);
     }
-
-    
-        // if (!response.ok) {
-        //     alert(data.message);
-        // } else {
-        //     // 사용자가 선택한 가림판의 설정을 localStorage에 저장
-        //     console.log(data.cover);
-        //     localStorage.setItem("coverSettings", JSON.stringify(data.cover));
-        //     window.location.href = data.redirect;
-        // }
-
 }

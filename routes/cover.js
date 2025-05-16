@@ -209,13 +209,10 @@ router.post('/delete', async (req, res) => {
     // 로긴 귀찮아서 임시로 고정
     const user_id = req.session.user?.id || "admin";
     const cover_id = req.body.cover_id;
-    console.log({ user_id, cover_id });
     try {
         // 1. 가림판 사용유무 확인
         const usedCoverId = req.session.user?.coverId;
-        if (user_id == usedCoverId) console.log("현재 사용 중인 가림판");
-
-        if(usedCoverChk(user_id, cover_id)) {
+        if (cover_id == usedCoverId && usedCoverChk) {
             return res.status(400).json({ message: "현재 사용 중인 가림판은 삭제가 불가합니다." });
         }
 
@@ -233,8 +230,6 @@ router.post('/delete', async (req, res) => {
 });
 
 // 현재 사용 중인 커버인지 확인
-// session에 있는 값이랑 비교하면 될 듯
-// 수정하자 
 async function usedCoverChk(user_id, cover_id) {
     const usedCoverId = await getUserCoverId(user_id);
     if (cover_id == usedCoverId) return true;
