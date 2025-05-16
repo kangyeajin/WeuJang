@@ -100,8 +100,55 @@ async function updateCoverInfo(param) {
 }
 
 /**
- * 가림판 설정 저장
+ * 가림판 설정 삭제
  * @param {string} cover_id 가림판 id
+ * @param {string} user_id 사용자 id
+ * @returns {boolean} 성공여부 반환
+ */
+async function DeleteCoverInfo(user_id, cover_id) {
+  try {
+    const [result] = await pool.query(
+      `DELETE FROM sys.cover
+      WHERE cover_id= ? and user_id= ?`,
+      [cover_id, user_id]
+    );
+
+    if (result.affectedRows < 0) return false;
+    return true;
+  } catch (err) {
+    console.error("가림판 설정 삭제 중 오류:", err);
+    throw err;
+  }
+}
+
+/**
+ * 사용중인 가림판 정보 조회
+ * @param {string} user_id 가림판 id
+ * @returns {boolean} 성공여부 반환
+ */
+async function getSelectedCoverId(user_id) {
+  try {
+    const [result] = await pool.query(
+      `SELECT cover_id 
+        FROM sys.user 
+        WHERE user_id= ? `,
+      [user_id]
+    );
+
+    if (result.length > 0) {
+      return result[0].cover_id;
+    } else {
+      return -1;
+    }
+  } catch (err) {
+    console.error("가림판 설정 저장 중 오류:", err);
+    throw err;
+  }
+}
+
+/**
+ * 사용자 기본 가림판 정보 수정
+ * @param param 기본 정보
  * @returns {boolean} 성공여부 반환
  */
 async function updateCoverId(param) {
@@ -127,5 +174,7 @@ module.exports = {
   getCoverInfo,
   insertCoverInfo,
   updateCoverInfo,
+  DeleteCoverInfo,
+  getSelectedCoverId,
   updateCoverId,
 };

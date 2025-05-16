@@ -8,7 +8,7 @@ window.addEventListener('DOMContentLoaded', () => {
             selectBox.dispatchEvent(new Event('change'));
             break;
         }
-  }
+    }
 });
 
 // 가림판 선택
@@ -20,14 +20,14 @@ async function chageCoverSelect() {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({cover_id: document.getElementsByName("cover_id")[0].value})
+            body: JSON.stringify({ cover_id: document.getElementsByName("cover_id")[0].value })
         });
 
         const data = await response.json();
         if (!response.ok) {
             alert(data.message); // 오류 메시지
         }
-        else {            
+        else {
             setCoverOpt(data); // 미리보기 화면 적용
         }
 
@@ -45,7 +45,7 @@ async function setDefaultCover() {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({cover_id: document.getElementsByName("cover_id")[0].value})
+            body: JSON.stringify({ cover_id: document.getElementsByName("cover_id")[0].value })
         });
 
         const data = await response.json();
@@ -65,14 +65,14 @@ async function setDefaultCover() {
 }
 
 // 가림판 설정 적용
-function setCoverOpt(data){
+function setCoverOpt(data) {
     console.log(data);
 
     const coverPreview = document.getElementById("coverPreview");//가림판 미리보기 화면
     const coverImage = document.getElementById("previewImage");
     const decorationText = document.getElementById('decorationText');//꾸밈 문구
 
-    if(!data.Img){
+    if (!data.Img) {
         coverImage.src = "";
         coverImage.style.display = "none";  // 깨진 아이콘 숨기기
     }
@@ -88,14 +88,44 @@ function setCoverOpt(data){
 }
 
 // 수정/등록 화면으로 이동
-async function goCoverEdit (btnName) {
+async function goCoverEdit(btnName) {
     var cover_id = "";
-    if(btnName == "update") {
+    if (btnName == "update") {
         cover_id = document.getElementsByName("cover_id")[0].value;
-        if(cover_id == '-1') {
-            alert("기본 화면은 편집이 불가능 합니다.");
+        if (cover_id == '-1') {
+            alert("기본 커버는 편집이 불가능 합니다.");
             return;
         }
     }
     window.location.href = "/cover/edit?coverId=" + cover_id;
+}
+
+// 삭제
+async function deleteCover() {
+    try {
+        const cover_id = document.getElementsByName("cover_id")[0].value;
+        if (cover_id == '-1' || cover_id == '') {
+            alert("기본 커버는 삭제가 불가능 합니다.");
+            return;
+        }
+        
+        const response = await fetch('/cover/delete', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ cover_id: cover_id })
+        });
+        
+        const data = await response.json();
+        alert(data.message);
+
+    }
+    catch (error) {
+        console.error('예외 발생:', error);
+        alert("커버 삭제 중 오류가 발생했습니다.");
+    }
+    finally {
+        window.location.href = "/cover/list"; //새로고침
+    }
 }

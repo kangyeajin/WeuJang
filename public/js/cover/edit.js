@@ -152,20 +152,23 @@ document.getElementById("saveBtn").addEventListener("click", async () => {
                 await deleteImage(filename);
             }
         }
-        response = await fetch("/cover/updateSettings", {
+        response = await fetch("/cover/update", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(settings)
         });
     }
     else {
-        response = await fetch("/cover/saveSettings", {
+        response = await fetch("/cover/save", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(settings)
         });
     }
-    alert("가림판 설정이 저장되었습니다.");
+
+    const data = await response.json();
+    alert(data.message);
+
 });
 
 //이미지 삭제
@@ -179,4 +182,15 @@ async function deleteImage(filename) {
     } catch (err) {
         console.error("이미지 삭제 실패:", err);
     }
+
+    
+        // if (!response.ok) {
+        //     alert(data.message);
+        // } else {
+        //     // 사용자가 선택한 가림판의 설정을 localStorage에 저장
+        //     console.log(data.cover);
+        //     localStorage.setItem("coverSettings", JSON.stringify(data.cover));
+        //     window.location.href = data.redirect;
+        // }
+
 }

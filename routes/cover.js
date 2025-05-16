@@ -9,6 +9,8 @@ const {
     getCoverOption,
     createCover,
     updateCover,
+    deleteCover,
+    getUserCoverId,
     setUserCoverId,
 } = require("../controllers/coverController");
 
@@ -19,7 +21,7 @@ router.use(express.json());
 const defaultCoverOpt = { title: "", opacity: 0.87, color: "#ff0000", text: "", text_size: 16, text_color: "#000000", Img: "" };
 
 /* 가림판 화면 이동 */
-router.get(`/edit`, async (req, res) => {
+router.get('/edit', async (req, res) => {
     const cover_id = req.query?.coverId || '';
     const user_id = req.session.user?.id || "admin";
 
@@ -47,13 +49,12 @@ router.get(`/edit`, async (req, res) => {
 });
 
 /* 가림판 목록 화면 이동 */
-router.get(`/list`, async (req, res) => {
+router.get('/list', async (req, res) => {
     // 로긴 귀찮아서 임시로 고정
     const user_id = req.session.user?.id || "admin"
 
     // 현재 사용중인 cover_id 값 가져오기 
     const cover_id = req.session.user?.coverId || -1;
-    console.log("cover_id : ", cover_id);
 
     // 가림판 리스트 
     const coverList = await getCoverLists(user_id);
@@ -81,7 +82,6 @@ const storage = multer.diskStorage({
         cb(null, `${Date.now()}-${user_id}-${safeName}${ext}`);
     }
 });
-
 const upload = multer({ storage });
 
 // 이미지 업로드
@@ -89,21 +89,17 @@ router.post('/upload-image', upload.single('image'), (req, res) => {
     if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
 
     // 도메인 등록 전까지는 개발 서버의 IP 주소 및 포트 포함한 http://121.166.19.3:5001/uploads/_.jpg 형식으로 DB에 저장되도록 함
-    const protocol = req.protocol;
-    const host = req.headers.host;
     // 반환할 URL (프론트에서 접근 가능한 경로)
-    const imageUrl = `${protocol}://${host}/uploads/${req.file.filename}`;
-
+    const imageUrl = `${req.protocol}://${req.headers.host}/uploads/${req.file.filename}`;
     res.json({ url: imageUrl });
 });
 
 // 업로드한 이미지 삭제 
-router.post(`/delete-image`, (req, res) => {
+router.post('/delete-image', (req, res) => {
     const filename = req.body.filename;
     if (!filename) return res.status(400).json({ error: "파일명이 없습니다" });
 
     const filepath = path.join(__dirname, "../public/uploads", `${filename}`);
-
     fs.unlink(filepath, (err) => {
         if (err) {
             console.error("파일 삭제 실패:", err);
@@ -172,41 +168,77 @@ router.post('/options', async (req, res) => {
     }
 });
 
-// 가림판 설정 저장
-router.post('/saveSettings', async (req, res) => {
+// 가림판 설정 등록
+router.post('/save', async (req, res) => {
     // 로긴 귀찮아서 임시로 고정
     req.body.user_id = req.session.user?.id || "admin";
 
     try {
         if (await createCover(req.body)) {
-            res.send("가림판 설정이 등록되었습니다.");
+            res.json({ message: "가림판 설정이 등록되었습니다." });
         }
         else {
-            res.status(500).send("가림판 설정 등록 중 오류가 발생했습니다.\r\n다시 시도해주세요.");
+            res.status(500).json({ message: "가림판 설정 등록 중 오류가 발생했습니다.\r\n다시 시도해주세요." });
         }
     } catch (error) {
         console.error(error);
-        res.status(500).send("서버 오류");
+        res.status(500).json({ message: "서버오류" });
     }
 });
 
-// 가림판 설정 저장
-router.post('/updateSettings', async (req, res) => {
+// 가림판 설정 수정
+router.post('/update', async (req, res) => {
     // 로긴 귀찮아서 임시로 고정
     req.body.user_id = req.session.user?.id || "admin";
 
     try {
         if (await updateCover(req.body)) {
-            res.send("가림판 설정이 수정되었습니다.");
+            res.json({ message: "가림판 설정이 수정되었습니다." });
         }
         else {
-            res.status(500).send("가림판 설정 수정 중 오류가 발생했습니다.\r\n다시 시도해주세요.");
+            res.status(500).json({ message: "가림판 설정 수정 중 오류가 발생했습니다.\r\n다시 시도해주세요." });
         }
     } catch (error) {
         console.error(error);
-        res.status(500).send("서버 오류");
+        res.status(500).json({ message: "서버오류" });
     }
 });
 
+// 가림판 삭제
+router.post('/delete', async (req, res) => {
+    // 로긴 귀찮아서 임시로 고정
+    const user_id = req.session.user?.id || "admin";
+    const cover_id = req.body.cover_id;
+    console.log({ user_id, cover_id });
+    try {
+        // 1. 가림판 사용유무 확인
+        const usedCoverId = req.session.user?.coverId;
+        if (user_id == usedCoverId) console.log("현재 사용 중인 가림판");
+
+        if(usedCoverChk(user_id, cover_id)) {
+            return res.status(400).json({ message: "현재 사용 중인 가림판은 삭제가 불가합니다." });
+        }
+
+        // 2. DB 삭제
+        if (await deleteCover(user_id, cover_id)) {
+            res.json({ message: "가림판이 삭제되었습니다." });
+        }
+        else {
+            res.status(500).json({ message: "가림판 삭제 중 오류가 발생했습니다.\r\n다시 시도해주세요." });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "서버오류" });
+    }
+});
+
+// 현재 사용 중인 커버인지 확인
+// session에 있는 값이랑 비교하면 될 듯
+// 수정하자 
+async function usedCoverChk(user_id, cover_id) {
+    const usedCoverId = await getUserCoverId(user_id);
+    if (cover_id == usedCoverId) return true;
+    return false;
+}
 
 module.exports = router;
