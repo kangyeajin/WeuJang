@@ -29,10 +29,12 @@ document.getElementById("imageUpload").addEventListener("change", async (e) => {
 
     // 수정 작업 중 기존에 저장된 이미지는 가림판 저장 시에 삭제
     const isSavedImage = mode.value == "update" && preImage.value == previewImage.getAttribute('src');
+
     console.log("현재 설정된 이미지가 DB에 저장된 이미지와 같나요? ", isSavedImage);
 
     // 기존에 DB에 저장되지 않은 이미지가 업로드되어있는 경우 파일 삭제 
     if (!isSavedImage && previewImage) {
+
         if (previewImage.getAttribute('src').startsWith(window.location.origin + "/uploads/")) {
             const filename = previewImage.getAttribute('src').split("/uploads/")[1];
             console.log("delete filename : ", filename);
@@ -125,6 +127,7 @@ document.getElementById("saveBtn").addEventListener("click", async () => {
         alert("가림판 이름을 입력해주세요.");
         return;
     }
+
     const settings = {
         cover_id: document.getElementById("coverId").value,
         title: document.getElementById("cover-title").value,
@@ -175,6 +178,7 @@ document.getElementById("saveBtn").addEventListener("click", async () => {
         // localStorage에 설정 정보 저장
         localStorage.setItem("coverSettings", JSON.stringify(data.coverOpt));
     }
+
     if (response.ok) {
         window.location.href = "/cover/list"; //새로고침
     }

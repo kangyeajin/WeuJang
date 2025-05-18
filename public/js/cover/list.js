@@ -30,7 +30,6 @@ async function chageCoverSelect() {
         else {
             setCoverOpt(data); // 미리보기 화면 적용
         }
-
     } catch (error) {
         console.error('예외 발생:', error);
         alert('네트워크 오류가 발생했습니다.');

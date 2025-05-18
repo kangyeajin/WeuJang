@@ -136,7 +136,6 @@ router.post('/change', async (req, res) => {
         else {
             res.status(500).json({ message: "가림판 설정에 실패했습니다." });
         }
-
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "서버오류" });
