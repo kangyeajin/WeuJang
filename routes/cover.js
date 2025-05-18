@@ -36,8 +36,6 @@ router.get('/edit', async (req, res) => {
         page.mode = "update";
     }
 
-    console.log(coverSettings);
-
     res.render(`cover/edit`, {
         layout: "main",
         title: "가림판 꾸미기",
@@ -75,11 +73,11 @@ const storage = multer.diskStorage({
     filename: (req, file, cb) => {
         const user_id = req.session.user?.id || "admin";
         const ext = path.extname(file.originalname); // 확장자 추출
-        const baseName = path.basename(file.originalname, ext);
+        //const baseName = path.basename(file.originalname, ext);
 
         // 파일명을 안전한 형태로 변환 (영문 + 타임스탬프)
-        const safeName = baseName.replace(/[^a-z0-9]/gi, '_'); // 한글 등 제거
-        cb(null, `${Date.now()}-${user_id}-${safeName}${ext}`);
+        //const safeName = baseName.replace(/[^a-z0-9]/gi, ''); // 한글 등 제거
+        cb(null, `${Date.now()}-${user_id}${ext}`);
     }
 });
 const upload = multer({ storage });
@@ -193,7 +191,7 @@ router.post('/update', async (req, res) => {
 
     try {
         if (await updateCover(req.body)) {
-            res.json({ message: "가림판 설정이 수정되었습니다." });
+            res.json({ message: "가림판 설정이 저장되었습니다." });
         }
         else {
             res.status(500).json({ message: "가림판 설정 수정 중 오류가 발생했습니다.\r\n다시 시도해주세요." });

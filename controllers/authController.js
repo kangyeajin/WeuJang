@@ -72,7 +72,6 @@ async function handleLogin(req, res, username, password) {
                 status: user.status,
                 coverId: user.cover_id,
             };
-            console.log(req.session.user);
 
             // 출석체크
 

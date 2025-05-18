@@ -253,39 +253,21 @@ async function getNoteBookmarkList(noteId) {
     } else {
       var html = "";
       for (let i = 0; i < data.length; i++) {
-        html += `<div class="index-sticker${i === 0 ? ' active' : ''}" id="index-sticker_${data[i].card_id}" style="left: 80px; z-index: ${i === 0 ? 5 : -1};"></div>`;
+        html += `<div class="index-sticker${i === 0 ? ' active' : ''}" id="index-sticker_${data[i].card_id}" style="left: 22px; z-index: ${i === 0 ? 5 : -1};"></div>`;
       }
 
       document.getElementById("index-sticker-list").innerHTML = html;
 
       // 💡 요소 삽입 후, top 값 자동 설정
       const stickers = document.querySelectorAll('#index-sticker-list .index-sticker');
-      const baseTop = 134;
+      const baseTop = 58;
       const gap = 30;
 
       stickers.forEach((sticker, index) => {
         sticker.style.zIndex = index === 0 ? "5" : "-1";
-        sticker.style.left = `80px`;
+        sticker.style.left = `22px`;
         sticker.style.top = `${baseTop + index * gap}px`;
       });
-
-      //       var html = "";
-      //       for (let i = 0; i < data.length; i++) {
-      //         if (i == 0) {
-      //           html += `<div class="index-sticker active" id="index-sticker_${data[i].card_id}" style="
-      //     left: 80px;
-      //     top: 244px;
-      // "></div>`;
-      //         } else {
-      //           html += `
-      // <div class="index-sticker" id="index-sticker_${data[i].card_id}" style="
-      //     left: 80px;
-      //     top: 281px;
-      //     z-index: -1;
-      // "></div>`;
-      //         }
-      //       }
-      //       document.getElementById("index-sticker-list").innerHTML = html;
     }
   } catch (error) { console.error('북마크 목록 세팅 실패:', error); }
   finally {

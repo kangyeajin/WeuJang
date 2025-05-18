@@ -1,4 +1,3 @@
-
 const mode = document.getElementById("pageMode");
 const preImage = document.getElementById("preImage");
 const coverPreview = document.getElementById("coverPreview");//가림판 미리보기 화면
@@ -7,13 +6,11 @@ const previewImage = document.getElementById('previewImage');//배경 이미지
 const decorationText = document.getElementById('decorationText');//꾸밈 문구
 
 window.addEventListener('DOMContentLoaded', () => {
-    if (!preImage.value) {
-        console.log("기존에 저장된 img X");
+    if (!preImage.value) { //기존에 저장된 이미지 없음
         previewImage.src = "";
         previewImage.style.display = "none";  // 깨진 아이콘 숨기기
     }
     else {
-        console.log("기존에 저장된 img o");
         previewImage.src = preImage.value;
         previewImage.style.display = "block";
     }
@@ -124,6 +121,11 @@ document.getElementById('answerOpacity').addEventListener("input", (e) => {
 
 // 가림판 등록
 document.getElementById("saveBtn").addEventListener("click", async () => {
+    if (!document.getElementById("cover-title").value) {
+        alert("가림판 이름을 입력해주세요.");
+        return;
+    }
+
     const settings = {
         cover_id: document.getElementById("coverId").value,
         title: document.getElementById("cover-title").value,
@@ -148,7 +150,7 @@ document.getElementById("saveBtn").addEventListener("click", async () => {
             console.log("기존에 저장된 이미지를 삭제합니다.");
             if (preImage.value) {
                 const filename = preImage.value.split("/uploads/")[1];
-                console.log("기존 delete filename : ", filename);
+                // console.log("기존 delete filename : ", filename);
                 await deleteImage(filename);
             }
         }
@@ -168,7 +170,9 @@ document.getElementById("saveBtn").addEventListener("click", async () => {
 
     const data = await response.json();
     alert(data.message);
-
+    if (response.ok) {
+        window.location.href = "/cover/list"; //새로고침
+    }
 });
 
 //이미지 삭제
