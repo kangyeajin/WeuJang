@@ -170,6 +170,12 @@ document.getElementById("saveBtn").addEventListener("click", async () => {
 
     const data = await response.json();
     alert(data.message);
+
+    // 사용중인 가림판을 수정한 경우, 수정 정보를 바로 반영한다.
+    if (data.coverOpt) {
+        // localStorage에 설정 정보 저장
+        localStorage.setItem("coverSettings", JSON.stringify(data.coverOpt));
+    }
     if (response.ok) {
         window.location.href = "/cover/list"; //새로고침
     }

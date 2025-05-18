@@ -66,8 +66,6 @@ async function setDefaultCover() {
 
 // 가림판 설정 적용
 function setCoverOpt(data) {
-    console.log(data);
-
     const coverPreview = document.getElementById("coverPreview");//가림판 미리보기 화면
     const coverImage = document.getElementById("previewImage");
     const decorationText = document.getElementById('decorationText');//꾸밈 문구
