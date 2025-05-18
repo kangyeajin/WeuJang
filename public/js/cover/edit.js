@@ -28,13 +28,13 @@ document.getElementById("imageUpload").addEventListener("change", async (e) => {
     if (!file) return;
 
     // 수정 작업 중 기존에 저장된 이미지는 가림판 저장 시에 삭제
-    const isSavedImage = mode.value == "update" && preImage.value == previewImage.src;
+    const isSavedImage = mode.value == "update" && preImage.value == previewImage.getAttribute('src');
     console.log("현재 설정된 이미지가 DB에 저장된 이미지와 같나요? ", isSavedImage);
 
     // 기존에 DB에 저장되지 않은 이미지가 업로드되어있는 경우 파일 삭제 
     if (!isSavedImage && previewImage) {
-        if (previewImage.src.startsWith(window.location.origin + "/uploads/")) {
-            const filename = previewImage.src.split("/uploads/")[1];
+        if (previewImage.getAttribute('src').startsWith(window.location.origin + "/uploads/")) {
+            const filename = previewImage.getAttribute('src').split("/uploads/")[1];
             console.log("delete filename : ", filename);
             await deleteImage(filename);
         }
@@ -68,8 +68,8 @@ document.getElementById("imageUpload").addEventListener("change", async (e) => {
 
 // 서버에 저장된 배경 이미지 삭제
 document.getElementById("deleteImageBtn").addEventListener("click", async () => {
-    if (previewImage.src.startsWith(window.location.origin + "/uploads/")) {
-        const filename = previewImage.src.split("/uploads/")[1];
+    if (previewImage.getAttribute('src').startsWith(window.location.origin + "/uploads/")) {
+        const filename = previewImage.getAttribute('src').split("/uploads/")[1];
         console.log("delete filename : ", filename);
         await deleteImage(filename);
     }
@@ -125,11 +125,10 @@ document.getElementById("saveBtn").addEventListener("click", async () => {
         alert("가림판 이름을 입력해주세요.");
         return;
     }
-
     const settings = {
         cover_id: document.getElementById("coverId").value,
         title: document.getElementById("cover-title").value,
-        imgUrl: document.getElementById("previewImage").src,
+        imgUrl: previewImage.getAttribute('src') || '',
         backgroundColor: document.getElementById("coverBackgroundColor").value,
         backgroundOpacity: parseFloat(document.getElementById("coverOpacity").value),
         text: document.getElementById("textInput").value,
@@ -143,7 +142,7 @@ document.getElementById("saveBtn").addEventListener("click", async () => {
     var response = null;
 
     if (mode.value == "update") {
-        const isSavedImage = preImage.value && mode.value == "update" && preImage.value == previewImage.src;
+        const isSavedImage = preImage.value && mode.value == "update" && preImage.value == previewImage.getAttribute('src');
         console.log("현재 설정된 이미지가 DB에 저장된 이미지와 같나요? ", isSavedImage);
 
         if (!isSavedImage) {

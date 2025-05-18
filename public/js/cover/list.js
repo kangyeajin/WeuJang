@@ -91,7 +91,15 @@ async function goCoverEdit(btnName) {
     if (btnName == "update") {
         cover_id = document.getElementsByName("cover_id")[0].value;
         if (cover_id == '-1') {
-            alert("기본 커버는 편집이 불가능 합니다.");
+            alert("기본 가림판은 편집이 불가능 합니다.");
+            return;
+        }
+    }
+    else {
+        // 가림판 갯수가 6개 이상이면 등록 불가
+        const coverCount = document.getElementById('coverSelectbox').options.length
+        if (coverCount > 5) {
+            alert("최대 5개 까지만 가림판 등록이 가능합니다.");
             return;
         }
     }
@@ -107,24 +115,26 @@ async function deleteCover() {
             return;
         }
 
-        const response = await fetch('/cover/delete', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ cover_id: cover_id })
-        });
+        if (confirm("정말 삭제하시겠습니까?")) {
+            const response = await fetch('/cover/delete', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ cover_id: cover_id })
+            });
 
-        const data = await response.json();
-        if (!response.ok) {
-            alert(data.message);
-        } else {
-            alert(data.message);
+            const data = await response.json();
+            if (!response.ok) {
+                alert(data.message);
+            } else {
+                alert(data.message);
 
-            const coverImage = document.getElementById("previewImage").src;
-            const filename = coverImage.split("/uploads/")[1];
-            // 서버에 저장된 이미지 삭제 
-            if (filename) await deleteImage(filename);
+                const coverImage = document.getElementById("previewImage").getAttribute('src');
+                const filename = coverImage.split("/uploads/")[1];
+                // 서버에 저장된 이미지 삭제 
+                if (filename) await deleteImage(filename);
+            }
         }
     }
     catch (error) {
