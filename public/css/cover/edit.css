@@ -23,6 +23,9 @@ h2 {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
+#textInput {
+  height: 180px;
+}
 
 /* 우측: 가림판 화면 미리보기 */
 #previewWrapper {

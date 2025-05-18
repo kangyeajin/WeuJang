@@ -45,8 +45,9 @@ router.get("/main", async (req, res) => {
       page: "main",
       layout: "main",
       title: "외우장",
-      cssFile: "/css/notes/notes.css",
       notes: noteList || [],
+      cssFile: "/css/notes/notes.css",
+      jsFile: `/js/notes/notes.js`,
     });
   } catch (err) {
     console.error("메인 페이지 렌더링 오류:", err);

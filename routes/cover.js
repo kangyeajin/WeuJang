@@ -136,7 +136,6 @@ router.post('/change', async (req, res) => {
         else {
             res.status(500).json({ message: "가림판 설정에 실패했습니다." });
         }
-
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "서버오류" });
@@ -188,9 +187,17 @@ router.post('/save', async (req, res) => {
 router.post('/update', async (req, res) => {
     // 로긴 귀찮아서 임시로 고정
     req.body.user_id = req.session.user?.id || "admin";
-
+    const cover_id = req.body.cover_id;
     try {
         if (await updateCover(req.body)) {
+            // 가림판 사용유무 확인 - 사용중인 가림판의 경우 session storage update
+            const usedCoverId = req.session.user?.coverId;
+            if (cover_id == usedCoverId && usedCoverChk) {
+                const Info = await getCoverOption(req.body.user_id, cover_id);
+                if (Info != null) {
+                    return res.json({ message: "가림판 설정이 저장되었습니다.", coverOpt: Info });
+                }
+            }
             res.json({ message: "가림판 설정이 저장되었습니다." });
         }
         else {
