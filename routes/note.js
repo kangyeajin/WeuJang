@@ -14,7 +14,8 @@ const {
     getCardBookMarkList,
     setCardBookMarkUpd,
     delCard,
-    updCard
+    updCard,
+    updNote,
 } = require("../controllers/noteController");
 
 router.use(express.urlencoded({ extended: true }));
@@ -102,7 +103,7 @@ router.get('/download_sample', async (req, res) => {
 // 틀린갯수 처리
 router.post('/wrongCnt', async (req, res) => {
     try {
-        const result=await setWrongCnt(req.body)
+        const result = await setWrongCnt(req.body)
         res.send(result.toString());
     } catch (err) {
         console.error(err);
@@ -157,7 +158,7 @@ router.post('/del_card', async (req, res) => {
     try {
         const userId = req.session.user?.id;
         if (!userId) return res.redirect("/");
-        
+
         const result = await delCard(req.body)
         res.send(result);
     } catch (err) {
@@ -171,9 +172,22 @@ router.post('/upd_card', async (req, res) => {
     try {
         const userId = req.session.user?.id;
         if (!userId) return res.redirect("/");
-        
+
         const result = await updCard(req.body)
         res.send(result);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('서버 오류');
+    }
+});
+
+// 수첩 수정
+router.post('/upd_note', async (req, res) => {
+    try {
+        req.body.user_id = req.session.user?.id;
+        if (await updNote(req.body)) {
+            res.json({ message: '제목이 저장되었습니다.' });
+        }
     } catch (err) {
         console.error(err);
         res.status(500).send('서버 오류');

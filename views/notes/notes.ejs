@@ -5,7 +5,11 @@
         <a class="folder-link" href="/cards_<%= note.template %>?note_id=<%= note.note_id %>">
           <img src="/images/folder.jpg" alt="폴더">
         </a>
-        <%= note.title %>
+        
+        <!-- 제목 텍스트 영역 -->
+        <span class="note-title" title="제목수정" data-id="<%= note.note_id %>" data-title="<%= note.title %>">
+          <%= note.title.length > 5 ? note.title.substring(0, 5) + '...' : note.title %>
+        </span>
       </div>
     <% }) %>
   <% } else { %>

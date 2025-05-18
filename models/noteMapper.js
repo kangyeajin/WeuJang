@@ -294,6 +294,55 @@ async function updateCard(param) {
   }
 }
 
+/**
+ * 노트 수정
+ * @param {string} user_id 사용자 id
+ * @param {string} note_id 노트 id
+ * @param {string} title 제목
+ * @param {string} template 템플릿
+ * @returns {bookmark} 북마크 설정값 반환
+ */
+async function updateNote(param) {
+  try {
+    const { user_id, note_id, title, template, UPDDT, UPDTM } = param;
+
+    // 동적으로 쿼리 구성
+    let setClauses = [];
+    let params = [];
+
+    // 필드가 있는 경우에만 SET 절에 추가
+    if (title !== undefined && title !== null) {
+      setClauses.push("title = ?");
+      params.push(title);
+    }
+    if (template !== undefined && template !== null) {
+      setClauses.push("template = ?");
+      params.push(template);
+    }
+
+    // 공통적으로 항상 업데이트되는 항목
+    setClauses.push("UPDDT = ?", "UPDTM = ?");
+    params.push(UPDDT, UPDTM);
+
+    // WHERE 절
+    params.push(note_id, user_id);
+
+    // 최종 쿼리
+    const sql = `
+      UPDATE sys.note
+      SET ${setClauses.join(', ')}
+      WHERE note_id = ? AND user_id = ?`;
+
+    const [result] = await pool.query(sql, params);
+
+    if (result.affectedRows < 1) return false;
+    return true;
+  } catch (err) {
+    console.error("카드 수정 중 오류:", err);
+    throw err;
+  }
+}
+
 module.exports = {
   getUserNoteLists,
   insertNoteInfo,
@@ -306,4 +355,5 @@ module.exports = {
   setCardBookMark,
   deleteCard,
   updateCard,
+  updateNote,
 };

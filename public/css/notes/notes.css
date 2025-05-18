@@ -1,17 +1,43 @@
-
-
 .folder-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-    gap: 1rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 1rem;
+}
+
+.folder-item {
+  text-align: center;
+
+  &:hover {
+    color: blue;
   }
-  
-  .folder-item img {
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    object-fit: contain;
-    background-color: white;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 10px;
-  }
+}
+
+.folder-item img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.note-title {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.note-title-input {
+  width: 100%;
+  max-width: 180px;
+  padding: 4px;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+.loading-indicator {
+  font-size: 14px;
+  color: #aaa;
+  padding: 4px;
+}
