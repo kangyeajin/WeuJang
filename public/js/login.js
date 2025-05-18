@@ -18,13 +18,13 @@ document.getElementById('loginForm').addEventListener('submit', async function (
 
         const data = await response.json();
 
-        if (response.status === 200) {
+        if (!response.ok) {
+            alert(data.message);
+        } else {
             // 사용자가 선택한 가림판의 설정을 localStorage에 저장
+            console.log(data.cover);
             localStorage.setItem("coverSettings", JSON.stringify(data.cover));
             window.location.href = data.redirect;
-        }
-        else {
-            alert(data.message);
         }
 
     } catch (error) {

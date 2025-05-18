@@ -39,7 +39,7 @@ async function registerUser(req) {
 async function handleLogin(req, res, username, password) {
 
     // 가림판 default option 
-    var coverSettings = { opacity: 0.87, color: "#ff0000", text: "", text_size: 0, text_color: "", Img: "" };
+    var coverSettings = { title: "", opacity: 0.87, color: "#ff0000", text: "", text_size: 16, text_color: "#000000", Img: "" };
 
     // 테스트용 계정
     if (username === 'admin' && password === '1234') {
@@ -72,13 +72,12 @@ async function handleLogin(req, res, username, password) {
                 status: user.status,
                 coverId: user.cover_id,
             };
-            console.log(req.session.user);
 
             // 출석체크
 
             // 가림판 상세 조회
             if (user.cover_id > -1) {
-                coverSettings = await getCoverOption(user.cover_id);
+                coverSettings = await getCoverOption(user.user_id, user.cover_id);
             }
             return res.status(200).json({ message: "로그인 성공!", redirect: "/main", cover: coverSettings });
         }

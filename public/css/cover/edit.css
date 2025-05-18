@@ -1,3 +1,7 @@
+h2 {
+  text-align: center;
+}
+
 #edit {
   max-width: 900px;
   margin: auto;
@@ -6,8 +10,9 @@
   align-items: flex-start;
 }
 
-/* 공통 요소 스타일 */
+/* 좌측: 가림판 옵션 설정 */
 #coverEditForm {
+  width: 400px;
   min-width: 200px;
   display: flex;
   flex-direction: column;
@@ -18,14 +23,8 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.inputBox#textInput {
-  height: 200px;
-}
 
-h2 {
-  text-align: center;
-}
-
+/* 우측: 가림판 화면 미리보기 */
 #previewWrapper {
   position: relative;
   width: 100%;
@@ -41,6 +40,10 @@ h2 {
   font-size: 20px;
   color: #ff4e00d4;
   text-align: center;
+}
+
+#sample-question {
+  color: black;
 }
 
 #coverPreview {
@@ -82,12 +85,37 @@ h2 {
   overflow-wrap: break-word;
   /* 추가: 단어 안에서라도 줄바꿈 */
   word-break: break-word;
-
-  /* padding: 10px; */
 }
 
-#sample-question {
-  color: black;
+/* 가림판 옵션 */
+.setting-groups {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid #ddd;
+}
+
+.setting-groups:last-child {
+  border-bottom: none;
+}
+
+.setting-group {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.setting-group label {
+  max-width: 130px;
+  width: 120px;
+  font-weight: bold;
+}
+
+.setting-group input[type="color"] {
+  width: 100%;
+  border: none;
+  padding: 0;
 }
 
 .inputBox,
@@ -103,20 +131,7 @@ textarea {
   font-size: 1rem;
 }
 
-/* 섹션 그룹 스타일링 */
-.setting-group {
-  display: flex;
-  flex-direction: column;
-  /* gap: 0.5rem;
-  padding: 0.75rem 0; */
-  border-bottom: 1px solid #ddd;
-}
-
-.setting-group:last-child {
-  border-bottom: none;
-}
-
-/* 슬라이더 스타일 개선 */
+/* 슬라이더 */
 input[type="range"] {
   width: 100%;
 }
@@ -136,25 +151,4 @@ input[type="range"] {
 
 #deleteImageBtn {
   cursor: pointer;
-}
-
-.setting-groups {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 0.5rem;
-}
-
-.setting-groups label {
-  max-width: 130px;
-  width: 120px;
-  /* 고정 너비로 정렬 안정 */
-  font-weight: bold;
-}
-
-.setting-groups input[type="color"] {
-  width: 100%;
-  border: none;
-  padding: 0;
 }
