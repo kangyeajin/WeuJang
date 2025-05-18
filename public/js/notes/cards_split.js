@@ -253,9 +253,8 @@ async function getNoteBookmarkList(noteId) {
     } else {
       var html = "";
       for (let i = 0; i < data.length; i++) {
-        html += `<div class="index-sticker${i === 0 ? ' active' : ''}" id="index-sticker_${data[i].card_id}" style="left: 22px; z-index: ${i === 0 ? 5 : -1};"></div>`;
+        html += `<div class="index-sticker${i === 0 ? ' active' : ''}" id="index-sticker_${data[i].card_id}" onclick="scrollToSticker(${data[i].card_id})" ></div>`;
       }
-
       document.getElementById("index-sticker-list").innerHTML = html;
 
       // 💡 요소 삽입 후, top 값 자동 설정
@@ -264,7 +263,6 @@ async function getNoteBookmarkList(noteId) {
       const gap = 30;
 
       stickers.forEach((sticker, index) => {
-        sticker.style.zIndex = index === 0 ? "5" : "-1";
         sticker.style.left = `22px`;
         sticker.style.top = `${baseTop + index * gap}px`;
       });
@@ -277,29 +275,39 @@ async function getNoteBookmarkList(noteId) {
 
 // 북마크 바로가기 클릭 이벤트
 async function scrollToSticker(cardId) {
-  let sticker = document.querySelector(`[data-index="${cardId}"]`);
+  let targetNote = document.querySelector(`.note-row[data-index="${cardId}"]`);
   let maxTries = 10;
   let tries = 0;
 
-  // 카드가 화면에 없으면 계속 로딩 시도
-  while (!sticker && tries < maxTries) {
+  // 이동할 카드가 화면에 없으면 계속 로딩 시도
+  while (!targetNote && tries < maxTries) {
     tries++;
     page++;
     await getCard(); // 다음 페이지 로드
     await new Promise(resolve => setTimeout(resolve, 100));
-    sticker = document.querySelector(`[data-index="${cardId}"]`);
+    sticker = document.querySelector(`.note-row[data-index="${cardId}"]`);
   }
 
-  if (!sticker) {
-    console.warn(`cardId ${cardId} 를 찾을 수 없습니다.`);
-    return; // 실패 시 종료
+  // 1. 모든 .index-sticker 요소에서 active 클래스 제거
+  document.querySelectorAll('.index-sticker').forEach(el => {
+    el.classList.remove('active');
+  });
+
+  // 2. 클릭한 스티커에 active 클래스 추가
+  const clickedSticker = document.getElementById(`index-sticker_${cardId}`);
+  if (clickedSticker) {
+    clickedSticker.classList.add('active');
   }
 
-  // 화면에 나타났으면 스크롤 이동
-  sticker.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  sticker.classList.add('highlight'); // 강조 효과 추가
-  setTimeout(() => sticker.classList.remove('highlight'), 2000); // 2초 후 강조 효과 제거
-
+  // 3. 전달받은 index에 해당하는 .note-row를 찾아 스크롤
+  if (targetNote) {
+    targetNote.scrollIntoView({
+      behavior: 'smooth', // 부드럽게 스크롤
+      block: 'center'     // 중앙에 위치하도록 스크롤
+    });
+    targetNote.classList.add('highlight'); // 강조 효과 추가
+    setTimeout(() => targetNote.classList.remove('highlight'), 2000); // 2초 후 강조 효과 제거
+  }
 }
 
 //(설정 팝업)북마크 적용
