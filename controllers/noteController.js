@@ -78,6 +78,8 @@ async function importCardsFromExcel(req) {
       const question = clean(row.question);
       const answer = clean(row.answer?.toString());
       const hint = clean(row.hint || '');
+      const start = clean(row.start || '0');
+      const bookmark = clean(row.bookmark || '0');
 
       // 필수값 검증
       if (!note_id || !question || !answer) {
@@ -92,7 +94,8 @@ async function importCardsFromExcel(req) {
         question,
         answer,
         hint,
-        row['star(0~3)']?.toString() || '0',
+        start,
+        bookmark,
         ENTDT,
         ENTTM,
       ]);

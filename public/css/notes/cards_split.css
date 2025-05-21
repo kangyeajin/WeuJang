@@ -26,6 +26,11 @@
   background-color: #f9f9f9;
   border: 2px solid #ccc;
   border-radius: 8px;
+
+  /* 임의로 높이 고정 */
+  height: 700px;
+  /* 상단바 높이만큼 마진 적용 */
+  margin-bottom: 71px;
 }
 
 /* 노트 영역 */

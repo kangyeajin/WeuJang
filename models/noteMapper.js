@@ -115,7 +115,7 @@ async function insertCard(param) {
 async function insertCards(param) {
   try {
     const [result] = await pool.query(
-      `INSERT INTO card (note_id, question, answer, hint, star, ENTDT, ENTTM)
+      `INSERT INTO card (note_id, question, answer, hint, star, bookmark, ENTDT, ENTTM)
     VALUES ? `, [param]);
 
     if (result.affectedRows < 0) return false;
