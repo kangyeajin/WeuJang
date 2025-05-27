@@ -245,5 +245,6 @@ async function updNote(req) {
 
 module.exports = {
   getNoteLists, createNote, getCardLists, addCard,
-  importCardsFromExcel, setWrongCnt, getNoteInfo, getCardBookMarkList, setCardBookMarkUpd, delCard, updCard, updNote,
+  importCardsFromExcel, setWrongCnt, getNoteInfo, getCardBookMarkList, 
+  setCardBookMarkUpd, delCard, updCard, updNote,
 };
