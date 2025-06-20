@@ -48,7 +48,7 @@
 .note-row {
   align-items: flex-start;
   margin-bottom: 20px;
-  padding: 15px;
+  padding: 15px 25px;
   border-radius: 8px;
   cursor: default;
   position: relative;
@@ -185,7 +185,7 @@ li {
     font-size: 0.9rem;
     padding: 6px;
     border-radius: 5px;
-    max-width: 95vw;
+    max-width: 30vw;
   }
 }
 
@@ -238,12 +238,13 @@ li {
 }
 
 .index-sticker {
+  font-size: 14px;
   width: 55px;
   position: absolute;
   background-color: #FFFDBF;
-  color: #333;
+  color: #333333de;
   border: 2px solid #f0c040;
-  padding: 9px 18px;
+  padding: 4px 7px 4px 8px;
   transform: rotate(-3deg);
   z-index: 0;
 }
@@ -257,6 +258,18 @@ li {
   /* 연한 노란색 */
   transition: background-color 0.5s ease;
   animation: highlight-fade 2s forwards;
+}
+.yellow-border {
+  position: relative;
+}
+.yellow-border::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 20px;
+  height: 100%;
+  background-color: #FFFDBF;
 }
 
 @keyframes highlight-fade {
@@ -440,7 +453,7 @@ li {
 } */
 
 .note-list {
-  padding: 1rem;
+  padding: 1rem 0;
   overflow-y: auto;
   /* 내부 영역이 넘치면 스크롤 */
   flex: 1 1 auto;

@@ -8,8 +8,7 @@ let html = "";
 
 document.addEventListener('DOMContentLoaded', function () {
   window.addEventListener("scroll", handleScroll); // 스크롤 이벤트 등록
-  //getNoteInfo(noteId);  //노트 제목
-  getNoteBookmarkList(noteId); //북마크 목록
+  
   getCard();  // DOM이 로드된 후 자동 실행
 });
 
@@ -33,17 +32,18 @@ async function getCard() {
         for (let i = 0; i < cards.length; i++) {
           var heart_fivefg = false;
 
-          html += `<li class="note-row" data-index="${cards[i].card_id}" >
-                        <input type="hidden" value="${cards[i].wrongCnt}" id="wrongCnt_${cards[i].card_id}"></input>
+          // 북마크
+          if (cards[i].bookmark == '1') {
+            html += `<li class="note-row yellow-border" data-index="${cards[i].card_id}" >`
+          }else{
+            html += `<li class="note-row" data-index="${cards[i].card_id}" >`
+          }
+          html += `     <input type="hidden" value="${cards[i].wrongCnt}" id="wrongCnt_${cards[i].card_id}"></input>
                         <input type="hidden" value="${cards[i].bookmark}" id="txtBookmark_${cards[i].card_id}"></input>
+                        <input type="hidden" value="${cards[i].num}" id="cardNum_${cards[i].card_id}"></input>
                     <div class="left"> 
                     <span id="spanBookmark_${cards[i].card_id}">`
-          // 북마크표시
-          // if (cards[i].bookmark == '1') {
-          //   html += `  <div class="index-sticker" id="index-sticker_${cards[i].card_id}"></div> `
-          // } else {
-          //   html += `  <div class="index-sticker hidden" id="index-sticker_${cards[i].card_id}"></div> `
-          // }
+
           html += `   </span>
                       <div class="meta">
                         <span class="spanHeart" id="heart_${cards[i].card_id}" onclick="setWrongCnt(${cards[i].card_id})" >`;
@@ -72,11 +72,11 @@ async function getCard() {
                           <div class="dots-menu" id="dots-menu_${cards[i].card_id}">
                             <p onclick="editCard(${cards[i].card_id})">문제 편집</p>
                             <p onclick="delCard(${cards[i].card_id})">문제 삭제</p>`
-          // 북마크
+          // 북마크 설정 문구
           if (cards[i].bookmark == '1') {
-          html += `         <p onclick="setBookmark(${cards[i].card_id})">북마크 해제</p>`
+          html += `         <p id='pBookmarkSet_${cards[i].card_id}' onclick="setBookmark(${cards[i].card_id})">북마크 해제</p>`
           } else {
-          html += `         <p onclick="setBookmark(${cards[i].card_id})">북마크 적용</p>`
+          html += `         <p id='pBookmarkSet_${cards[i].card_id}' onclick="setBookmark(${cards[i].card_id})">북마크 적용</p>`
           }
           html += `      </div>
                       </div>
@@ -89,6 +89,8 @@ async function getCard() {
                    </li>`;
         }
         noteList.innerHTML = html;
+        
+        getNoteBookmarkList(noteId); //북마크 목록
       })
       .catch(err => {
         console.error("카드 불러오기 실패:", err);
@@ -126,9 +128,9 @@ document.addEventListener('click', function (e) {
 
     // 위치 및 크기 설정
     const rect = leftBox.getBoundingClientRect();
-    popup.style.top = `${window.scrollY + rect.top + 40}px`;
-    popup.style.left = `${rect.left}px`;
-    popup.style.width = `${rect.width}px`;
+    popup.style.top = `${window.scrollY + rect.top - 33}px`;
+    popup.style.left = `${rect.left - 35}px`;
+    popup.style.width = `${rect.width - 30}px`;
 
     popup.style.display = popup.style.display == 'block' ? 'none' : 'block';
   } else {
@@ -257,18 +259,21 @@ async function getNoteBookmarkList(noteId, cardId) {
       alert(result); // 오류 메시지
     } else {
       var html = "";
+      
       for (let i = 0; i < data.length; i++) {
-        html += `<div class="index-sticker${i === 0 ? ' active' : ''}" id="index-sticker_${data[i].card_id}" onclick="scrollToSticker(${data[i].card_id})" ></div>`;
+        html += `<div class="index-sticker${i === 0 ? ' active' : ''}" id="index-sticker_${data[i].card_id}" onclick="scrollToSticker(${data[i].card_id})" >`
+        html += document.getElementById('cardNum_'+data[i].card_id).value
+        html += `</div>`;
       }
       document.getElementById("index-sticker-list").innerHTML = html;
 
       // 💡 요소 삽입 후, top 값 자동 설정
       const stickers = document.querySelectorAll('#index-sticker-list .index-sticker');
-      const baseTop = 58;
-      const gap = 30;
+      const baseTop = 27;
+      const gap = 35;
 
       stickers.forEach((sticker, index) => {
-        sticker.style.left = `22px`;
+        sticker.style.left = `18px`;
         sticker.style.top = `${baseTop + index * gap}px`;
       });
 
@@ -341,12 +346,15 @@ async function setBookmark(card_id) {
       alert(result); // 오류 메시지
     } else {
       document.getElementById("txtBookmark_" + card_id).value = result;
-      // html = `<div class="index-sticker hidden" id="index-sticker_${card_id}"></div>`
-      // if (result == 1) {
-      //   html = `<div class="index-sticker" id="index-sticker_${card_id}"></div>`
-      // }
-      // document.getElementById("spanBookmark_" + card_id).innerHTML = html;
-
+      // 북마크 해제하는 경우 css 제거
+      if (bookmark == '0') { 
+        document.querySelector(`[data-index="${card_id}"]`).classList.remove("yellow-border");
+        document.getElementById(`pBookmarkSet_${card_id}`).innerText = "북마크 등록";
+        card_id = ''; 
+      }else{
+        document.querySelector(`[data-index="${card_id}"]`).classList.add("yellow-border");
+        document.getElementById(`pBookmarkSet_${card_id}`).innerText = "북마크 해제";
+      }
       getNoteBookmarkList(noteId, card_id); //북마크 목록 재조회
     }
   } catch (error) { console.error('북마크 적용 실패:', error); }
