@@ -197,42 +197,11 @@ async function setWrongCnt(card_id) {
       }
       document.getElementById("heart_" + card_id).innerHTML = html;
     }
-  } catch (error) { console.error('답변 처리 실패:', error); }
+  } catch (error) { console.error('하트표시 처리 실패:', error); }
   finally {
     loading = false;
   }
 }
-
-//노트 제목 세팅
-async function getNoteInfo(noteId) {
-  try {
-    const note_id = noteId;
-    const jsonData = { note_id };
-
-    const response = await fetch('/note/get_note', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(jsonData)
-    });
-
-    const result = await response.text();
-
-    const data = JSON.parse(result);
-
-    if (!response.ok) {
-      alert(result); // 오류 메시지
-    } else {
-      var html = "";
-      document.getElementById("note_title").textContent = data[0].title;
-    }
-  } catch (error) { console.error('제목 세팅 실패:', error); }
-  finally {
-    loading = false;
-  }
-}
-
 
 //노트 북마크 목록
 async function getNoteBookmarkList(noteId, cardId) {
@@ -383,6 +352,8 @@ async function delCard(card_id) {
     } else {
       document.querySelector(`[data-index="${card_id}"]`).remove(); // 카드 삭제
       getNoteBookmarkList(noteId); //북마크 목록 재조회
+      
+      alert("문제가 삭제되었습니다.");
     }
   } catch (error) { console.error('문제 삭제 실패:', error); }
 }
@@ -405,7 +376,7 @@ function editCard(cardId) {
     // 문제 편집 textarea 생성
     leftQuestion.innerHTML = `<textarea class="edit-textarea2 full-width">${leftQuestion.textContent}</textarea>
                             <div class="edit-wrapper">
-                            <span>❓</span><textarea class="edit-textarea2 textHint">${hintText}</textarea>
+                            <span>❓</span><input type="text" class="edit-textarea2 textHint" value='${hintText}'/>
                             </div>`;
     rigthQnswer.innerHTML = `<textarea class="edit-textarea full-width">${rigthQnswer.textContent}</textarea>`;
 
@@ -434,7 +405,7 @@ async function cardEditSave(cardId) {
   try {
     const newQuestion = document.querySelector(`#spanTextLeft_${cardId} textarea`).value;
     const newAnswer = document.querySelector(`#spanTextRigth_${cardId} textarea`).value;
-    const newHint = document.querySelector(`#spanTextLeft_${cardId} .edit-wrapper textarea`).value;
+    const newHint = document.querySelector(`#spanTextLeft_${cardId} .edit-wrapper input`).value;
     var hint = document.getElementById("spanHint_"+cardId);
 
     const confirmDelete = confirm("변경된 내용을 저장하시겠습니까?");

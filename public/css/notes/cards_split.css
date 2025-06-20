@@ -69,7 +69,7 @@
 
 /* 좌측 영역에만 구분선 추가 */
 .left {
-  font-size: 1.2rem;
+  font-size: 1rem;
   border-right: 2px solid #ccc;
 }
 
@@ -116,7 +116,7 @@ li {
 }
 
 /* 반응형 처리 */
-@media (max-width: 768px) {
+/* @media (max-width: 768px) {
   .note-container {
     padding: 10px;
   }
@@ -124,7 +124,7 @@ li {
   .note {
     width: 100%;
   }
-}
+} */
 
 @media (max-width: 480px) {
   .note {
@@ -361,7 +361,7 @@ li {
 }
 
 .left span .textHint {
-  min-height: 65px;
+  min-height: 20px;
 }
 
 .full-width {
@@ -435,7 +435,7 @@ li {
   text-align: center;
   font-size: 1.1rem;
   color: #999;
-  margin-top: 5rem;
+  margin: 5rem auto;
 }
 
 /* .note-list {
@@ -462,7 +462,7 @@ li {
 /* 반응형 폰트 및 패딩 조정 */
 @media (max-width: 480px) {
   .note-container .note-list {
-    padding: 16px;
+    /* padding: 16px; */
     font-size: 14px;
   }
 }
