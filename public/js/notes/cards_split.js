@@ -8,7 +8,7 @@ let html = "";
 
 document.addEventListener('DOMContentLoaded', function () {
   window.addEventListener("scroll", handleScroll); // 스크롤 이벤트 등록
-  getNoteInfo(noteId);  //노트 제목
+  //getNoteInfo(noteId);  //노트 제목
   getNoteBookmarkList(noteId); //북마크 목록
   getCard();  // DOM이 로드된 후 자동 실행
 });
@@ -63,19 +63,24 @@ async function getCard() {
             html += `  <span class="hint-btn hidden" id="spanHint_${cards[i].card_id}" data-hint="">❓</span>`
           }
           html += `    </div>
-                    ${cards[i].num}. <span id='spanTextLeft_${cards[i].card_id}'>${cards[i].question}</span>
+                    ${cards[i].num}. <span id='spanTextLeft_${cards[i].card_id}' class='spanTextLefts'>${cards[i].question}</span>
                     </div>
                     <div class="right">
                       <div class="settings-icon">
                         <img id="dots-button_${cards[i].card_id}" src="/images/dots.png" alt="설정" />
                           <!-- 팝업 메뉴 -->
                           <div class="dots-menu" id="dots-menu_${cards[i].card_id}">
-                            <p onclick="editCard(${cards[i].card_id},'${cards[i].question}','${cards[i].answer}')">문제 편집</p>
-                            <p onclick="delCard(${cards[i].card_id})">문제 삭제</p>
-                            <p onclick="setBookmark(${cards[i].card_id})">북마크 적용</p>
-                          </div>
+                            <p onclick="editCard(${cards[i].card_id})">문제 편집</p>
+                            <p onclick="delCard(${cards[i].card_id})">문제 삭제</p>`
+          // 북마크
+          if (cards[i].bookmark == '1') {
+          html += `         <p onclick="setBookmark(${cards[i].card_id})">북마크 해제</p>`
+          } else {
+          html += `         <p onclick="setBookmark(${cards[i].card_id})">북마크 적용</p>`
+          }
+          html += `      </div>
                       </div>
-                      <span id='spanTextRigth_${cards[i].card_id}'>${cards[i].answer}</span>
+                      <span id='spanTextRigth_${cards[i].card_id}' class='spanTextRigths'>${cards[i].answer}</span>
                       <div id="answer-actions_${cards[i].card_id}" class="answer-actions">
                         <button class="edit-save-btn hidden" onclick="cardEditSave(${cards[i].card_id})">저장</button>
                         <button class="edit-cancel-btn hidden" onclick="cardEditCancel(${cards[i].card_id})">취소</button>
@@ -228,7 +233,7 @@ async function getNoteInfo(noteId) {
 
 
 //노트 북마크 목록
-async function getNoteBookmarkList(noteId) {
+async function getNoteBookmarkList(noteId, cardId) {
   try {
     const note_id = noteId;
     const jsonData = { note_id };
@@ -266,6 +271,11 @@ async function getNoteBookmarkList(noteId) {
         sticker.style.left = `22px`;
         sticker.style.top = `${baseTop + index * gap}px`;
       });
+
+      // 북마크 추가한 경우
+      if (cardId) {
+        scrollToSticker(cardId); // 북마크 바로가기 클릭 이벤트 호출
+      }
     }
   } catch (error) { console.error('북마크 목록 세팅 실패:', error); }
   finally {
@@ -331,13 +341,13 @@ async function setBookmark(card_id) {
       alert(result); // 오류 메시지
     } else {
       document.getElementById("txtBookmark_" + card_id).value = result;
-      html = `<div class="index-sticker hidden" id="index-sticker_${card_id}"></div>`
-      if (result == 1) {
-        html = `<div class="index-sticker" id="index-sticker_${card_id}"></div>`
-      }
-      document.getElementById("spanBookmark_" + card_id).innerHTML = html;
+      // html = `<div class="index-sticker hidden" id="index-sticker_${card_id}"></div>`
+      // if (result == 1) {
+      //   html = `<div class="index-sticker" id="index-sticker_${card_id}"></div>`
+      // }
+      // document.getElementById("spanBookmark_" + card_id).innerHTML = html;
 
-      getNoteBookmarkList(noteId); //북마크 목록 재조회
+      getNoteBookmarkList(noteId, card_id); //북마크 목록 재조회
     }
   } catch (error) { console.error('북마크 적용 실패:', error); }
 }
@@ -417,6 +427,7 @@ async function cardEditSave(cardId) {
     const newQuestion = document.querySelector(`#spanTextLeft_${cardId} textarea`).value;
     const newAnswer = document.querySelector(`#spanTextRigth_${cardId} textarea`).value;
     const newHint = document.querySelector(`#spanTextLeft_${cardId} .edit-wrapper textarea`).value;
+    var hint = document.getElementById("spanHint_"+cardId);
 
     const confirmDelete = confirm("변경된 내용을 저장하시겠습니까?");
     if (!confirmDelete) return; // 취소 시 함수 종료
@@ -460,6 +471,8 @@ async function cardEditSave(cardId) {
     document.querySelector(`#answer-actions_${cardId} .edit-save-btn`).classList.add("hidden");
     document.querySelector(`#answer-actions_${cardId} .edit-cancel-btn`).classList.add("hidden");
     hint.classList.remove("hidden");
+    const dotsButton = document.getElementById(`dots-button_${cardId}`);
+    dotsButton.classList.remove("hidden");
 
   } catch (err) {
     console.error("수정 실패", err);

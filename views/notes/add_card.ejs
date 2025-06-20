@@ -3,7 +3,7 @@
   <form id="addCardForm">
     <div class="input-box">
       <label>수첩 선택:</label>
-      <select class="inputBox" id="noteSelect" name="note_id" required>
+      <select class="inputBox" id="note_id" name="note_id" required>
         <% notes.forEach(note => { %>
           <option value="<%= note.note_id %>"><%= note.title %></option>
         <% }) %>
