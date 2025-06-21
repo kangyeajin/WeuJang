@@ -229,7 +229,11 @@ async function getNoteBookmarkList(noteId, cardId) {
       
       for (let i = 0; i < data.length; i++) {
         html += `<div class="index-sticker${i === 0 ? ' active' : ''}" id="index-sticker_${data[i].card_id}" onclick="scrollToSticker(${data[i].card_id})" >`
-        html += document.getElementById('cardNum_'+data[i].card_id).value
+        if(document.getElementById('cardNum_'+data[i].card_id)) {
+          html += document.getElementById('cardNum_'+data[i].card_id).value
+        }else{
+          html += `...` // 아직 로드되지 않은 문제인 경우
+        }
         html += `</div>`;
       }
       document.getElementById("index-sticker-list").innerHTML = html;
@@ -267,7 +271,7 @@ async function scrollToSticker(cardId) {
     page++;
     await getCard(); // 다음 페이지 로드
     await new Promise(resolve => setTimeout(resolve, 100));
-    sticker = document.querySelector(`.note[data-index="${cardId}"]`);
+    targetNote = document.querySelector(`.note[data-index="${cardId}"]`);
   }
 
   // 1. 모든 .index-sticker 요소에서 active 클래스 제거
@@ -360,7 +364,7 @@ async function delCard(card_id) {
 function editCard(cardId) {
   try {
     var leftQuestion = document.getElementById("spanTextLeft_" + cardId);
-    var rigthQnswer = document.getElementById("spanTextRigth_" + cardId);
+    var rigthAnswer = document.getElementById("spanTextRigth_" + cardId);
     var hint = document.getElementById("spanHint_" + cardId);
     const hintText = hint.dataset.hint;
 
@@ -368,7 +372,7 @@ function editCard(cardId) {
     if (!row) return;
     // 원본 question/answer를 row에 임시 저장
     row.dataset.originalQuestion = leftQuestion.textContent;
-    row.dataset.originalAnswer = rigthQnswer.textContent;
+    row.dataset.originalAnswer = rigthAnswer.textContent;
     row.dataset.originalHint = hintText;
 
     // 문제 편집 textarea 생성
@@ -376,7 +380,7 @@ function editCard(cardId) {
                             <div class="edit-wrapper">
                             <span>❓</span><input type="text" class="edit-textarea2 textHint" value='${hintText}' />
                             </div>`;
-    rigthQnswer.innerHTML = `<input type='text' class="edit-textarea full-width" value="${rigthQnswer.textContent}" />`;
+    rigthAnswer.innerHTML = `<input type='text' class="edit-textarea full-width" value="${rigthAnswer.textContent}" />`;
 
     // 버튼 보이기
     document.querySelector(`#answer-actions_${cardId} .edit-save-btn`).classList.remove("hidden");
@@ -450,6 +454,7 @@ async function cardEditSave(cardId) {
     hint.classList.remove("hidden");
     const dotsButton = document.getElementById(`dots-button_${cardId}`);
     dotsButton.classList.remove("hidden");
+    alert("문제가 수정되었습니다.");
 
   } catch (err) {
     console.error("수정 실패", err);

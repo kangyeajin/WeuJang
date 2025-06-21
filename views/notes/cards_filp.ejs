@@ -1,7 +1,25 @@
-<div class="card-container" id="divCardContainer">
+
+<div id="index-sticker-list" class="index-sticker-list"></div>
+<div class="note-container" id="divCardContainer">
   <div class="meta">
-    <span id="star">⭐⭐</span>
+  <div class="meta-left">
+      <span id="spanHeart" onclick="setWrongCnt()">       
+        <img src="/images/heart.png" alt="틀림" class="img-heart">       
+        <img src="/images/heart-empty.png" alt="틀림" class="img-heart">     
+      </span>
+      </div>
+  <div class="meta-right">
     <span class="hint-btn"  id="hint-btn" data-hint="">❓</span>
+    <div class="settings-icon">
+      <img id="dots-button" src="/images/dots.png" alt="설정">
+        <!-- 팝업 메뉴 -->
+        <div class="dots-menu" id="dots-menu">
+          <p onclick="editCard()">문제 편집</p>
+          <p onclick="delCard()">문제 삭제</p>
+          <p id='pBookmarkSet' onclick="setBookmark()">북마크 적용</p>
+        </div>
+    </div>
+    </div>
   </div>
   <div class="card" id="flashcard">
     <div class="card-front">
@@ -13,13 +31,16 @@
       <p id="answer">답 내용</p>
     </div>
   </div>
-</div>
 
 <div class="navigation">
   <button id="pre-button">&lt;</button>
   <button id="next-button">&gt;</button>
 </div>
 
+</div>
+
 <div id="hint-popup" class="hint-popup">
   <div class="hint-content"></div>
 </div>
+
+    
