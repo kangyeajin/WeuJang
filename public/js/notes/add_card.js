@@ -1,3 +1,13 @@
+const urlParams = new URLSearchParams(window.location.search);
+const noteId = urlParams.get('note_id'); // 노트 ID 파라미터
+
+document.addEventListener('DOMContentLoaded', function () {
+    if(noteId) {
+        const noteSelect = document.getElementById('note_id');
+        noteSelect.value = noteId;
+    }
+});
+
 // 카드 등록 버튼
 document.getElementById('addCardForm').addEventListener('submit', async function (e) {
     e.preventDefault();

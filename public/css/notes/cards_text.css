@@ -75,6 +75,11 @@
   font-size: 1.1rem;
   color: #999;
   margin: 5rem auto;
+  text-decoration: none; /* 밑줄 제거 */
+}
+
+.no-data:hover {
+  color: #000000;
 }
 
   /* 메타 정보 (별, 힌트)를 좌우 배치 */

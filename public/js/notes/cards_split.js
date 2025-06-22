@@ -25,7 +25,7 @@ async function getCard() {
         if (!cards || cards.length === 0) {
           if (page == 1) {
             document.querySelector('.note-container').innerHTML
-              = `<div class="no-data">등록된 문제가 없습니다.</div>`;
+              = `<a class="no-data" href="/add_card?note_id=${noteId}">등록된 문제가 없습니다.</>`;
           }
           done = true; // 더 이상 데이터 없음 표시
           return;

@@ -36,6 +36,11 @@
   font-size: 1.1rem;
   color: #767676;
   margin: 5rem auto;
+  text-decoration: none; /* 밑줄 제거 */
+}
+
+.no-data:hover {
+  color: #000000;
 }
 
 /* 카드 위 메타 정보 */
