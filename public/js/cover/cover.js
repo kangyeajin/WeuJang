@@ -1,5 +1,6 @@
 const cover = document.getElementById("cover");
-
+const headerHight = document.querySelector('.header').offsetHeight; // 헤더 높이
+    
 let isDragging = false;
 let offsetX, offsetY;
 
@@ -13,8 +14,9 @@ cover.addEventListener("mousedown", (e) => {
 
 document.addEventListener("mousemove", (e) => {
   if (isDragging) {
-    const x = e.clientX + window.scrollX - offsetX;
-    const y = e.clientY + window.scrollY - offsetY;
+    var menuWidth = document.querySelector('.menu-header').offsetWidth;
+    const x = e.clientX + window.scrollX - offsetX - menuWidth;
+    const y = e.clientY + window.scrollY - offsetY - headerHight;
     cover.style.left = `${x}px`;
     cover.style.top = `${y}px`;
   }
@@ -36,9 +38,10 @@ cover.addEventListener("touchstart", (e) => {
 
 document.addEventListener("touchmove", (e) => {
   if (!isDragging) return;
+  var menuWidth = document.querySelector('.menu-header').offsetWidth;
   const touch = e.touches[0];
-  const x = touch.clientX + window.scrollX - offsetX;
-  const y = touch.clientY + window.scrollY - offsetY;
+  const x = touch.clientX + window.scrollX - offsetX - menuWidth;
+  const y = touch.clientY + window.scrollY - offsetY - headerHight;
   cover.style.left = `${x}px`;
   cover.style.top = `${y}px`;
   e.preventDefault();
