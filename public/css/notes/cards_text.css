@@ -4,9 +4,10 @@
   justify-content: center;
   align-items: center;
   /* 화면 전체 높이 */
-  min-height: 100vh;
+  /* min-height: 100vh; */
+      max-height: 100vh;
   /* 모바일에서 너무 꽉 차는 것 방지 */
-  padding: 2.3rem;
+  padding: 2.3rem 2.3rem 1rem 2.3rem;;
   /* index-sticker-list가 절대 위치 잡을 기준 */
   position: relative;
   box-sizing: border-box;
@@ -20,19 +21,21 @@
   width: 100%;
   min-width: 350px;
   max-width: 1200px;
-  height: auto;
-  max-height: 90vh;
+  /* height: auto; */
+  height: calc(85dvh - 4rem); /* 동적 뷰포트 사용 */
+  max-height: calc(85dvh - 4rem);
   /* 너무 길어지면 스크롤 허용 */
   overflow: auto;
   background-color: #f9f9f9;
   border: 2px solid #ccc;
   border-radius: 8px;
       padding-top: 1rem;
+  box-sizing: border-box;
 
   /* 임의로 높이 고정 */
-  height: 700px;
+  /* height: 700px; */
   /* 상단바 높이만큼 마진 적용 */
-  margin-bottom: 71px;
+  /* margin-bottom: 71px; */
 }
   
   /* 각 문제와 답 쌍 */

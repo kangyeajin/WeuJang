@@ -278,7 +278,7 @@ async function getNoteBookmarkList(noteId, cardId) {
 
       // 💡 요소 삽입 후, top 값 자동 설정
       const stickers = document.querySelectorAll('#index-sticker-list .index-sticker');
-      const baseTop = -270;
+      const baseTop = -190;
       const gap = 35;
 
       stickers.forEach((sticker, index) => {

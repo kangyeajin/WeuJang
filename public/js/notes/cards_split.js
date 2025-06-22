@@ -7,8 +7,9 @@ let done = false; // 데이터 끝났는지 여부
 let html = "";
 
 document.addEventListener('DOMContentLoaded', function () {
-  window.addEventListener("scroll", handleScroll); // 스크롤 이벤트 등록
-  
+  const container = document.querySelector('.note-container');
+  container.addEventListener("scroll", handleScroll); // note-container에 스크롤 이벤트 등록
+
   getCard();  // DOM이 로드된 후 자동 실행
 });
 
@@ -103,14 +104,20 @@ async function getCard() {
 
 // 스크롤 이벤트(페이징)
 function handleScroll() {
-  const scrollTop = window.scrollY;
-  const windowHeight = window.innerHeight;
-  const bodyHeight = document.body.offsetHeight;
+  try{
+    const container = document.querySelector('.note-container');
 
-  // 스크롤이 거의 바닥에 닿았을 때
-  if (scrollTop + windowHeight >= bodyHeight - 100) {
-    ++page; // 다음 목록 생성 
-    getCard();
+    const scrollTop = container.scrollTop;
+    const windowHeight = container.clientHeight;
+    const bodyHeight = container.scrollHeight;
+
+    // 스크롤이 거의 바닥에 닿았을 때
+    if (scrollTop + windowHeight >= bodyHeight - 100) {
+      ++page; // 다음 목록 생성 
+      getCard();
+    }
+  }catch (error) {
+    console.error('스크롤 이벤트 처리 실패:', error); 
   }
 }
 
@@ -242,7 +249,7 @@ async function getNoteBookmarkList(noteId, cardId) {
 
       // 💡 요소 삽입 후, top 값 자동 설정
       const stickers = document.querySelectorAll('#index-sticker-list .index-sticker');
-      const baseTop = 27;
+      const baseTop = 22;
       const gap = 35;
 
       stickers.forEach((sticker, index) => {
