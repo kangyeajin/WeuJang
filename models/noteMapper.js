@@ -9,7 +9,7 @@ const pool = require("../dbconfig.js");
 async function getUserNoteLists(user_id) {
   try {
     const [rows] = await pool.query(
-      "SELECT note_id, user_id, title, template, bookmark, sort, randomfg, ENTDT, ENTTM, UPDDT, UPDTM FROM sys.note WHERE user_id = ? ORDER BY sort",
+      "SELECT note_id, user_id, title, template, bookmark, sort, randomfg, ENTDT, ENTTM, UPDDT, UPDTM FROM sys.note WHERE user_id = ? ORDER BY sort desc",
       [user_id]
     );
 
@@ -343,6 +343,39 @@ async function updateNote(param) {
   }
 }
 
+
+/**
+ * 노트 삭제
+ * @param {string} user_id 사용자 id
+ * @param {string} note_id 노트 id
+ */
+async function deleteNote(param) {
+  try {
+    const { user_id, note_id } = param;
+    const [result] = await pool.query(
+      `delete from note where note_id = ? and user_id = ?`,
+      [note_id, user_id]
+    );
+
+    if (result.affectedRows < 1) { return false;}
+    else {
+      // 카드 삭제
+      const [noteResult] = await pool.query(
+        `delete from card where note_id = ?`,
+        [note_id]
+      );
+
+      if (noteResult.affectedRows < 1) return false;
+    }
+
+    // 조회된 값 반환
+    return true;
+  } catch (err) {
+    console.error("노트 삭제 중 오류:", err);
+    throw err;
+  }
+}
+
 module.exports = {
   getUserNoteLists,
   insertNoteInfo,
@@ -356,4 +389,5 @@ module.exports = {
   deleteCard,
   updateCard,
   updateNote,
+  deleteNote,
 };

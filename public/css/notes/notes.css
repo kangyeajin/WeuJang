@@ -12,7 +12,7 @@
   }
 }
 
-.folder-item img {
+.folder-item .folder-link img {
   width: 100%;
   aspect-ratio: 1 / 1;
   object-fit: contain;
@@ -40,4 +40,115 @@
   font-size: 14px;
   color: #aaa;
   padding: 4px;
+}
+
+/* 상단 검색 기능 */
+.folder-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.control-left {
+  flex: 1;
+  min-width: 180px;
+}
+
+.search-input {
+  width: 50%;
+  padding: 6px 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+
+.control-right {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.sort-select {
+  padding: 6px 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: white;
+}
+
+.settings-btn {
+  padding: 6px 12px;
+  font-size: 14px;
+  background-color: #f1f1f1;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.settings-btn:hover {
+  background-color: #e0e0e0;
+}
+
+.icon-set{
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+
+.icon-set:hover {
+  border-radius: 20px;
+  background-color: #e0e0e0;
+  padding: 2px;
+}
+
+/* 편집 모드 */
+.folder-checkbox {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  transform: scale(1.2);
+}
+
+.folder-item {
+  position: relative;
+}
+
+.folder-checkbox.hidden {
+  display: none;
+}
+
+.folder-link.editing img {
+  pointer-events: none; /* 클릭 막기 */
+  opacity: 0.5;
+  filter: grayscale(80%);
+  pointer-events: none; /* 링크 클릭 막기 */
+}
+
+/* 삭제 버튼: 폴더 우측 상단에 뜨게 */
+.folder-image-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.delete-icon {
+  position: absolute;
+  top: -9px;
+    right: -10px;
+    width: 32px;
+    height: 32px;
+  cursor: pointer;
+  z-index: 10;
+  transition: transform 0.2s;
+}
+
+.delete-icon:hover {
+  transform: scale(1.2);
+}
+
+.hidden {
+  display: none;
 }

@@ -96,4 +96,103 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    //검색
+    const searchInput = document.getElementById('folder-search');
+
+    searchInput.addEventListener('input', function () {
+        const keyword = this.value.toLowerCase().trim();
+        const items = document.querySelectorAll('.folder-item');
+
+        items.forEach(item => {
+            const titleEl = item.querySelector('.note-title');
+            const title = titleEl.dataset.title.toLowerCase();
+
+            if (title.includes(keyword)) {
+                item.style.display = 'block'; // 보이기
+            } else {
+                item.style.display = 'none'; // 숨기기
+            }
+        });
+    });
+
+    //정렬
+    document.getElementById('sort-select').addEventListener('change', function () {
+        const sortBy = this.value;
+        const grid = document.querySelector('.folder-grid');
+        const items = Array.from(grid.querySelectorAll('.folder-item'));
+
+        items.sort((a, b) => {
+            const aTitle = a.querySelector('.note-title').dataset.title;
+            const bTitle = b.querySelector('.note-title').dataset.title;
+
+            if (sortBy === 'title') { // 제목순 
+                return aTitle.localeCompare(bTitle);
+            } else if (sortBy === 'latest') { // 최신순 
+                const aId = parseInt(a.id);
+                const bId = parseInt(b.id);
+                return bId - aId; // 최신순 (ID 큰 게 최신이라 가정)
+            } else if (sortBy === 'oldest') { // 오래된 순 
+                const aId = parseInt(a.id);
+                const bId = parseInt(b.id);
+                return aId - bId;
+            }
+        });
+
+        // 기존 내용 제거 후 정렬된 항목 다시 추가
+        grid.innerHTML = '';
+        items.forEach(item => grid.appendChild(item));
+    });
+    
+    //수첩 삭제
+  document.querySelectorAll('.delete-icon').forEach(btn => {
+    btn.addEventListener('click', async (e) => {
+      e.preventDefault();
+
+      const note_id = btn.dataset.id;
+      const noteTitle = btn.dataset.title;
+      const jsonData = { note_id };
+
+      const confirmDelete = confirm(`"${noteTitle}" 수첩을 삭제하시겠습니까?\n삭제된 수첩은 복구할 수 없습니다.`);
+      
+      if (confirmDelete) {
+        try {
+          const res = await fetch(`/note/del_note`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(jsonData)
+          });
+
+          if (res.ok) {
+            // 삭제 성공 → DOM에서 제거
+            btn.closest('.folder-item').remove();
+            alert(`"${noteTitle}" 수첩이 삭제되었습니다.`);
+          } else {
+            alert('삭제에 실패했습니다.');
+          }
+        } catch (err) {
+          console.error('삭제 중 오류:', err);
+          alert('삭제 중 오류가 발생했습니다.');
+        }
+      }
+    });
+  });
+});
+
+// 편집 모드
+let editMode = false;
+
+document.querySelector('.icon-set').addEventListener('click', function () {
+    editMode = !editMode;
+
+    document.querySelectorAll('.folder-link').forEach(item => {
+        item.classList.toggle('editing', editMode);
+    });
+
+    const checkboxes = document.querySelectorAll('.delete-icon');
+    checkboxes.forEach(cb => {
+        cb.classList.toggle('hidden', !editMode);
+    });
 });

@@ -16,6 +16,7 @@ const {
     delCard,
     updCard,
     updNote,
+    delNote,
 } = require("../controllers/noteController");
 
 router.use(express.urlencoded({ extended: true }));
@@ -188,6 +189,21 @@ router.post('/upd_note', async (req, res) => {
         if (await updNote(req.body)) {
             res.json({ message: '제목이 저장되었습니다.' });
         }
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('서버 오류');
+    }
+});
+
+// 수첩 삭제
+router.post('/del_note', async (req, res) => {
+    try {
+        const userId = req.session.user?.id;
+        if (!userId) return res.redirect("/");
+        req.body.user_id = userId;
+
+        const result = await delNote(req.body)
+        res.send(result);
     } catch (err) {
         console.error(err);
         res.status(500).send('서버 오류');
