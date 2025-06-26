@@ -14,6 +14,9 @@ router.use("/note", require("./note"))
 
 // 가림판 관련 기능
 router.use("/cover", require("./cover"))
+
+// 공지사항 관련 기능
+router.use("/notice", require("./notice"))
 /* 페이지 라우터 */
 
 // 로그인 화면
