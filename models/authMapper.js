@@ -61,8 +61,36 @@ async function insertUserInfo(param) {
   }
 };
 
+/**
+ * 아이디 조회
+ * @param {string} name 회원명
+ * @param {string} email 메일주소
+ * @returns {int} 0 : 사용가능 / 그외 : 사용 불가
+ */
+async function getUserId(param) {
+  try {
+    const { name, email } = param;
+    const [rows] = await pool.query(`
+      SELECT user_id, ENTDT, ENTTM 
+      FROM sys.USER 
+      WHERE name = ? 
+      AND email = ?`, [name, email]);
+
+    if (rows.length > 0) {
+      return rows[0];
+    } else {
+      return null; // ID 없음
+    }
+
+  } catch (err) {
+    console.error('아이디 중복여부 확인 중 오류:', err);
+    return -1;
+  }
+};
+
 module.exports = {
   getUserInfo,
   searchSameUserId,
   insertUserInfo,
+  getUserId,
 };

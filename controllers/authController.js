@@ -1,6 +1,8 @@
-const { getUserInfo, searchSameUserId, insertUserInfo } = require("../models/authMapper");
+const { getUserInfo, searchSameUserId, insertUserInfo, getUserId } = require("../models/authMapper");
 const { getCoverOption } = require("./coverController");
 const { getDate } = require('../utils/date');
+const { transporter } = require('../utils/email');
+require('dotenv').config();
 
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
@@ -97,4 +99,117 @@ async function chkPw(plainPassword, storedHashedPassword) {
     return match;
 }
 
-module.exports = { chkUserId, registerUser, handleLogin };
+/**
+ * 아이디 찾기
+ */
+async function findUserId(req, res) {
+    try {
+        console.log(req);
+        const user = await getUserId(req);
+        console.log("user", user);
+        if (user == null)
+            return res.status(200).json({ message: "계정 정보가 존재하지 않습니다." });
+        return res.status(200).json({ message: "고객님의 정보와 일치하는 아이디입니다.", user: user });
+    } catch (error) {
+        console.error("sql error:", err);
+        return res.status(500).json({ message: "서버오류발생 다시 한번 시도해 주세요." });
+    }
+}
+
+/**
+ * 비밀번호 재설정 
+ */
+async function setUserPw(req, res, username, password) {
+
+    // 아이디 / 최초 가입일자
+}
+
+/**
+ * 인증번호 생성
+ */
+const createAuthCode = function (min, max) {
+    var randumNum = Math.floor(Math.random() * (max - min + 1)) + min;
+    return randumNum;
+}
+
+/**
+ * 이메일 발송
+ */
+async function sendAuthCode(req, res) {
+    const code = createAuthCode(111111, 999999);
+    const { email } = req;
+    const content = `
+  <div style="max-width: 600px; margin: 0 auto; font-family: Arial, sans-serif; border: 1px solid #ddd; padding: 20px; border-radius: 8px;">
+    <h2 style="color: #333;">인증번호 확인</h2>
+    <p style="font-size: 16px; color: #555;">
+      안녕하세요.<br>
+      요청하신 인증번호는 아래와 같습니다. 해당 번호를 정확히 입력해주세요.
+    </p>
+    
+    <div style="text-align: center; margin: 30px 0;">
+      <span style="display: inline-block; font-size: 32px; letter-spacing: 8px; font-weight: bold; color: #2c3e50;">
+        ${code}
+      </span>
+    </div>
+
+    <p style="font-size: 14px; color: #999;">
+      본 이메일은 자동 발송된 메시지입니다. 답변하지 마세요.<br>
+      인증번호는 10분간 유효합니다.
+    </p>
+
+    <hr style="margin-top: 40px;">
+    <p style="font-size: 12px; color: #aaa;">
+      © 2025 Your App Name. All rights reserved.
+    </p>
+  </div>
+  `
+    console.log("전송 주소 :", email)
+    console.log("content : ", content);
+
+    await transporter.verify();
+    console.log("Server is ready to take our messages");
+
+    const mailOption = mailOpt(email, process.env.EMAIL_TITLE, content);
+
+    (async () => {
+        try {
+            const info = await sendMail(mailOption);
+            console.log("메일 전송 성공:", info.response);
+            return res.status(200).json({ message: "메일 전송에 성공했습니다.", authCode: code });
+        } catch (err) {
+            console.error("메일 전송 실패:", err);
+            return res.status(500).json({ message: "메일 전송에 실패했습니다." });
+        }
+    })();
+}
+
+// 메일을 받을 유저 설정
+const mailOpt = (email, title, contents) => {
+    const mailOptions = {
+        from: process.env.EMAIL_ID,
+        to: email,
+        subject: title,
+        html: contents
+    };
+
+    return mailOptions;
+}
+
+// 메일 전송
+const sendMail = (mailOption) => {
+    return new Promise((resolve, reject) => {
+        transporter.sendMail(mailOption, (error, info) => {
+            if (error) {
+                console.log('에러:', error);
+                reject(error);  // 실패 시 reject
+            } else {
+                console.log('전송 완료:', info.response);
+                resolve(info);  // 성공 시 resolve
+            }
+
+            transporter.close(); // 연결 종료는 콜백 안에서 실행해야 함
+        });
+    });
+};
+
+module.exports = { chkUserId, registerUser, handleLogin, sendAuthCode, findUserId, setUserPw };

@@ -4,6 +4,9 @@ const {
   chkUserId,
   registerUser,
   handleLogin,
+  sendAuthCode,
+  findUserId,
+  setUserPw,
 } = require("../controllers/authController");
 
 router.use(express.urlencoded({ extended: true }));
@@ -48,5 +51,30 @@ router.get("/chkUserId", async (req, res) => {
     res.status(500).json({ available: false });
   }
 });
+
+// 인증번호 발송
+router.post("/sendAuthEmail", async (req, res) => {
+  try {
+    await sendAuthCode(req.body, res);
+  } catch (error) {
+    res
+      .status(500)
+      .send("인증번호 발송 중 오류가 발생했습니다.\r\n다시 시도해주세요.");
+  }
+});
+
+// 아이디 찾기
+router.post("/findUserId", async (req, res) => {
+  try {
+    return await findUserId(req.body, res);
+  } catch (error) {
+    res
+      .status(500)
+      .send("아이디 조회 중 오류가 발생했습니다.\r\n다시 시도해주세요.");
+  }
+});
+
+// 비밀번호 찾기
+
 
 module.exports = router;

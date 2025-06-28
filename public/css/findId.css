@@ -1,0 +1,48 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: #333;
+    padding: 50px;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.find-box {
+    padding: 2rem;
+    width: 100%;
+    min-width: 200px;
+    max-width: 600px;
+}
+
+.find-box input[type="text"] {
+    width: 100%;
+    padding: 0.75rem;
+    margin: 0.5rem 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.find-box input[type="email"] {
+    width: 75%;
+    margin: 1rem 2px 0 0;
+}
+
+.find-box input[name="authCode"] {
+    visibility: hidden;
+    position: absolute;
+}
+
+#sendEmail {
+    width: auto;
+    margin: 0;
+}
+
+#emailCheckMsg {
+    font-family: 'Pretendard-Regular';
+}

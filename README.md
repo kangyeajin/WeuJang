@@ -34,3 +34,8 @@ npm 버전 : 10.8.1<br>
  ├── package.json # Node.js 패키지 정보
  └── README.md
 ```
+
+### < 이메일 설정 >
+1. `nodemailer` 라이브러리 다운 **npm i nodemailer**
+2. 네이버 메일 환경 설정 변경 (notion 참고) https://www.notion.so/2203c3393b15803b83c0d8102ceae34c?source=copy_link
+2. `.env` 파일에서 `EMAIL_ID, EMAIL_PW` 항목 수정하기
