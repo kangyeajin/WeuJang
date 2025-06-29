@@ -46,3 +46,45 @@ h2 {
 #emailCheckMsg {
     font-family: 'Pretendard-Regular';
 }
+
+.custom-box {
+    display: block;
+    width: 100%;
+    padding: 2rem;
+    margin-top: 1rem;
+    /* background-color: #ffffff; */
+    border: 1px solid #a1a1a1;
+    border-radius: 5px;
+    font-size: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    margin: auto;
+}
+
+.info-group {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.info-row {
+    flex: 1 1 45%;
+    color: #333;
+}
+
+.info-row .label {
+    font-weight: bold;
+    margin-right: 0.5rem;
+}
+
+.info-row.createDate {
+    color: gray;
+}
+
+.content-center {
+    display: none;
+    text-align: center;
+}
+
+.content-center .btn {
+    width: auto;
+}

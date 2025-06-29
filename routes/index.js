@@ -131,7 +131,7 @@ router.get("/favicon.ico", (req, res) => res.sendStatus(204));
 
 // layout 없이 렌더링되는 페이지 (ex: 회원가입, 비밀번호 찾기 등)
 // 화이트리스트 방식으로 보안 유지
-const staticPages = ["register", "findId", "findPw"]; // 필요한 페이지 추가
+const staticPages = ["register", "findId", "findPw", "findResult"]; // 필요한 페이지 추가
 
 router.get("/:page", (req, res) => {
   const page = req.params.page;

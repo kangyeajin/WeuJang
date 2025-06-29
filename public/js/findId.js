@@ -81,14 +81,20 @@ document.getElementById('findForm').addEventListener('submit', async function (e
     if (!response.ok) {
       alert(result); // 오류 메시지
     } else {
-      const user = data.user;
-      // console.log(user);
-      const queryParams = new URLSearchParams({
-        message: data.message,
-        user_id: user.user_id,
-        ENTDT: user.ENTDT,
-        ENTTM: user.ENTTM
-      });
+      var queryParams = "";
+      if (data.user) {
+        const user = data.user;
+        queryParams = new URLSearchParams({
+          message: data.message,
+          user_id: user.user_id,
+          ENTDT: user.ENTDT,
+          ENTTM: user.ENTTM
+        });
+        // queryParams.append(user_id, user.user_id);
+        // queryParams.append(ENTDT, user.ENTDT);
+        // queryParams.append(ENTTM, user.ENTTM);
+        // console.log(user);
+      }
       window.location.href = `/findResult?${queryParams.toString()}`;
     }
   } catch (error) {

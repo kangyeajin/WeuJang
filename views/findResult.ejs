@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>회원가입</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+  <link rel="stylesheet" href="/css/find.css" />
+</head>
+<body>
+  <div class="find-box">
+    <!-- <h2>아이디 찾기</h2> -->
+    <div id="resultMsg"></div>
+    <div id="resultBox" style="display: none;"></div>
+
+    <div class="content-center" id="success">
+        <button class="btn" type="button" onclick="location.href='main'">로그인</button>
+        <button class="btn" type="button" onclick="location.href='findPw'">비밀번호 찾기</button>
+    </div>
+    <div class="content-center" id="fail">
+        <button class="btn" type="button" onclick="location.href='findId'">뒤로가기</button>
+        <button class="btn" type="button" onclick="location.href='register'">회원가입</button>
+    </div>
+  </div>
+</body>
+</html>
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const userId = params.get("user_id");
+  const ENTDT = params.get("ENTDT");
+  const ENTTM = params.get("ENTTM");
+
+ const formatDateTime = (dateStr, timeStr) => {
+  if (!dateStr || !timeStr) return "";
+  const yy = dateStr.slice(2, 4);
+  const mm = dateStr.slice(4, 6);
+  const dd = dateStr.slice(6, 8);
+  const hh = timeStr.slice(0, 2);
+  const mi = timeStr.slice(2, 4);
+  const ss = timeStr.slice(4, 6);
+  return `${yy}.${mm}.${dd} ${hh}:${mi}:${ss}`;
+};
+
+const formattedDateTime = formatDateTime(ENTDT, ENTTM);
+
+const resultBox = document.getElementById("resultBox");
+const resultMsg = document.getElementById("resultMsg");
+const btnSuccess = document.getElementById("success");
+const btnFail = document.getElementById("fail");
+btnSuccess.style.display = "none";
+btnFail.style.display = "none";
+
+if (userId && formattedDateTime) {
+    btnSuccess.style.display = "block";
+    resultBox.style.display = "block";
+    resultBox.classList.add("custom-box");
+
+    resultMsg.innerHTML = `<h2>아이디 조회 결과</h2>`;
+    resultBox.innerHTML = `
+        <div class="info-group">
+          <div class="info-row"><span class="label">아이디:</span> <span>${userId}</span></div>
+          <div class="info-row createDate"><span class="label">가입일자:</span> <span>${formattedDateTime}</span></div>
+        </div>
+  `;
+} else {
+    btnFail.style.display = "block";
+    resultMsg.innerHTML = `<h2>조회된 정보가 없습니다.</h2>`;
+}
+</script>
