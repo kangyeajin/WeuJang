@@ -126,6 +126,50 @@ router.get(`/upload_cards`, async (req, res) => {
   });
 });
 
+// 모의고사 생성 페이지
+router.get("/exam_edit", async (req, res) => {
+  try {
+  const userId = req.session.user?.id;
+  const noteList = await getNoteLists(userId);
+
+    res.render("notes/exam_edit", {
+      page: "main",
+      layout: "main",
+      title: "외우장",
+      notes: noteList || [],
+      cssFile: "/css/notes/exam_edit.css",
+      jsFile: `/js/notes/exam_edit.js`,
+    });
+  } catch (err) {
+    console.error("모의고사 생성 렌더링 오류:", err);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+// 모의고사 페이지
+router.post("/exam", async (req, res) => {
+  try {
+    const notes = req.body.notes; // 예: [3, 7, 9]
+    const cardNum = parseInt(req.body.cardNum) || 30;
+    
+    // noteIds를 기반으로 카드 목록 불러오기 (랜덤, 제한된 개수)
+    //const cardList = await getExamCards(cardNum, notes);
+
+    res.render("notes/exam", {
+      page: "main",
+      layout: "main",
+      title: "외우장",
+      notes: notes,
+      cardNum: cardNum,
+      cssFile: "/css/notes/exam.css",
+      jsFile: `/js/notes/exam.js`,
+    });
+  } catch (err) {
+    console.error("모의고사 렌더링 오류:", err);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
 // favicon.ico 무시
 router.get("/favicon.ico", (req, res) => res.sendStatus(204));
 

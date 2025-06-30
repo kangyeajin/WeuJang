@@ -17,6 +17,7 @@ const {
     updCard,
     updNote,
     delNote,
+    getExamCards,
 } = require("../controllers/noteController");
 
 router.use(express.urlencoded({ extended: true }));
@@ -203,6 +204,20 @@ router.post('/del_note', async (req, res) => {
         req.body.user_id = userId;
 
         const result = await delNote(req.body)
+        res.send(result);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('서버 오류');
+    }
+});
+
+// 모의고사 문제 조회
+router.post('/getExamCards', async (req, res) => {
+    try {
+        const userId = req.session.user?.id;
+        if (!userId) return res.redirect("/");
+
+        const result = await getExamCards(req.body);
         res.send(result);
     } catch (err) {
         console.error(err);

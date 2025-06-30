@@ -376,6 +376,36 @@ async function deleteNote(param) {
   }
 }
 
+/**
+ * 모의고사 문제 랜덤 조회
+ * @param {Promise<Array>} notes 노트 id
+ * @param {string} cardNum 문제 개수
+ * @returns {Promise<Array>} recordset 반환
+ */
+async function selExamCards(param) {
+  try {
+    const { cardNum, notes } = param;
+console.log("selExamCards param:", param);
+    if (!Array.isArray(notes) || notes.length === 0) {
+      throw new Error("note_id는 필수값 입니다.");
+    }
+
+    const placeholders = notes.map(() => '?').join(','); // ?, ?, ?
+    const sql = `
+      SELECT *
+      FROM card
+      WHERE note_id IN (${placeholders})
+      ORDER BY RAND()
+      LIMIT ?
+    `;
+    const [rows] = await pool.query(sql, [...notes, Number(cardNum)]);
+    return rows.length > 0 ? rows : null;
+  } catch (err) {
+    console.error("모의고사 문제 랜덤 조회 중 오류:", err);
+    throw err;
+  }
+}
+
 module.exports = {
   getUserNoteLists,
   insertNoteInfo,
@@ -390,4 +420,5 @@ module.exports = {
   updateCard,
   updateNote,
   deleteNote,
+  selExamCards,
 };

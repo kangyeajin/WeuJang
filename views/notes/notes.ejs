@@ -30,7 +30,7 @@
         
         <!-- 제목 텍스트 영역 -->
         <span class="note-title" title="<%= note.title %>" data-id="<%= note.note_id %>" data-title="<%= note.title %>">
-          <%= note.title.length > 5 ? note.title.substring(0, 5) + '...' : note.title %>
+          <%= note.title && note.title.length > 5 ? note.title.substring(0, 5) + '...' : note.title %>
         </span>
       </div>
     <% }) %>
