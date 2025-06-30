@@ -23,6 +23,7 @@
 }
 
 .note-title {
+  font-size: 0.9rem;
   position: relative;
   display: inline-block;
   cursor: pointer;
@@ -151,4 +152,21 @@
 
 .hidden {
   display: none;
+}
+
+.no-data {
+  text-align: center;
+  font-size: 1.1rem;
+  color: #999;
+  margin: 5rem auto;
+  text-decoration: none; /* 밑줄 제거 */
+}
+
+.no-data:hover {
+  color: #000000;
+}
+
+.div-no-data{
+  text-align: center; 
+  margin-top: 5rem;
 }
