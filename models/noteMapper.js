@@ -385,7 +385,6 @@ async function deleteNote(param) {
 async function selExamCards(param) {
   try {
     const { cardNum, notes } = param;
-console.log("selExamCards param:", param);
     if (!Array.isArray(notes) || notes.length === 0) {
       throw new Error("note_id는 필수값 입니다.");
     }
@@ -405,6 +404,44 @@ console.log("selExamCards param:", param);
     throw err;
   }
 }
+/**
+ * 모의고사 결과저장
+ * @param {string} user_id 노트 id
+ * @param {string} card_id 문제 id
+ * @param {string} try_count 시도횟수
+ * @param {string} total_count 문제 개수
+ * @param {string} entdt 등록일자
+ * @param {string} enttm 등록시간
+ * @returns {boolean} 성공여부 반환
+ */
+async function instExamResult(param) {
+  try {
+    const { user_id, cardNum, notes, failCnt, ENTDT, ENTTM} = param;
+
+    const [result] = await pool.query(
+      `INSERT INTO sys.studylog (user_id, card_id, try_count, total_count, entdt, enttm)
+             VALUES (?, ?, ?, ?, ?, ?)`,
+      [user_id, notes, failCnt, cardNum, ENTDT, ENTTM]
+    );
+
+    if (result.affectedRows <= 0) return false;
+
+    // 학습여부 UPDATE
+    const [updateResult] = await pool.query(
+      `UPDATE sys.user_att SET studyFg = 1 WHERE user_id = ? and loginDt = ?`,
+      [user_id, ENTDT]
+    );
+
+    if (updateResult.affectedRows <= 0) {
+      console.warn("user_att 업데이트 실패 또는 영향 없음");
+    }
+
+    return true;
+  } catch (err) {
+    console.error("모의고사 결과저장 중 오류:", err);
+    throw err;
+  }
+}
 
 module.exports = {
   getUserNoteLists,
@@ -421,4 +458,5 @@ module.exports = {
   updateNote,
   deleteNote,
   selExamCards,
+  instExamResult,
 };

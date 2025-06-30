@@ -14,7 +14,7 @@
         <% notes.forEach(note => { %>
             <label class="note-checkbox">
                 <input type="checkbox" name="notes" value="<%= note.note_id %>" class="hidden-checkbox">
-                <span class="box-label"><%= note.title && note.title.length > 30 ? note.title.substring(0, 40) + '...' : note.title %></span>
+                <span class="box-label"><%= note.title && note.title.length > 30 ? note.title.substring(0, 30) + '...' : note.title %></span>
             </label>
         <% }) %>
       </div>

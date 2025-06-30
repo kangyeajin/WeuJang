@@ -18,6 +18,7 @@ const {
     updNote,
     delNote,
     getExamCards,
+    setExamResult,
 } = require("../controllers/noteController");
 
 router.use(express.urlencoded({ extended: true }));
@@ -218,6 +219,21 @@ router.post('/getExamCards', async (req, res) => {
         if (!userId) return res.redirect("/");
 
         const result = await getExamCards(req.body);
+        res.send(result);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('서버 오류');
+    }
+});
+
+// 모의고사 결과 저장
+router.post('/setExamResult', async (req, res) => {
+    try {
+        const userId = req.session.user?.id;
+        if (!userId) return res.redirect("/");
+        req.body.user_id = userId;
+
+        const result = await setExamResult(req.body);
         res.send(result);
     } catch (err) {
         console.error(err);

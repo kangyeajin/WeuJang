@@ -1,17 +1,52 @@
 let currentIndex = 0;
 let totalCards = document.getElementById("hidCardNum").value; // 카드 총 개수
+let failCnt = 0; // 오답 갯수
 
 const progressText = document.getElementById("progressText");
 const progressFill = document.getElementById("progressFill");
 
+const notes = document.getElementById("hidNotes").value;
+const cardNum = document.getElementById("hidCardNum").value;
+
+// 다음카드로 전환
 function updateProgress() {
   const percent = ((currentIndex) / totalCards) * 100;
   progressText.textContent = `${currentIndex} / ${totalCards}`;
   progressFill.style.width = `${percent}%`;
 }
 
+// 시험 종료
+async function finProgress() {
+    try {
+        const jsonData = { 
+            notes: notes.split(',').join('|'), 
+            cardNum: parseInt(cardNum),
+            failCnt: failCnt
+        };
+        const response = await fetch('/note/setExamResult', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(jsonData)
+        });
+
+        const result = await response.json();
+        if (!response.ok) {
+            alert(result); // 오류 메시지
+        } else {
+            alert("시험이 종료되었습니다.");
+            // 시험 종료 후 페이지 이동
+            window.location.href = `/main`;
+        }
+    } catch (error) {
+        console.error('시험 종료 처리 실패:', error);
+    }
+}
+
 // "틀림" 버튼 클릭 시
 document.querySelector(".wrong-btn").addEventListener("click", () => {
+    failCnt++;
   if (currentIndex < totalCards - 1) {
     updateCard(currentCardIndex + 1);
     updateProgress();
@@ -22,15 +57,10 @@ document.querySelector(".wrong-btn").addEventListener("click", () => {
 // "정답" 버튼 클릭 시
 document.querySelector(".correct-btn").addEventListener("click", () => {
   updateCard(currentCardIndex + 1);
-    var card_id = cards[currentCardIndex].card_id;
-      const index = cards.findIndex(card => card.card_id === card_id);
-      if (index !== -1) {
-        cards.splice(index, 1); // 해당 인덱스에서 1개 제거
-      }
-    if (cards.length <= 0) {
+    if (cards.length <= 1) {
         currentIndex++;
         updateProgress();
-        alert("시험이 종료되었습니다.(시험내용 저장 및 페이지이동 예정)");
+        finProgress();
         return;
     }
   if (currentIndex < totalCards - 1) {
@@ -38,6 +68,11 @@ document.querySelector(".correct-btn").addEventListener("click", () => {
     updateProgress();
     // 다음 카드로 전환 등 추가 로직 삽입 가능
   }
+    var card_id = cards[currentCardIndex].card_id;
+      const index = cards.findIndex(card => card.card_id === card_id);
+      if (index !== -1) {
+        cards.splice(index, 1); // 해당 인덱스에서 1개 제거
+      }
 });
 
 const urlParams = new URLSearchParams(window.location.search);
@@ -47,9 +82,6 @@ let done = false; // 데이터 끝났는지 여부
 let html = "";
 const cards = []; // 카드 정보를 저장할 배열
 let currentCardIndex = 0;
-
-const notes = document.getElementById("hidNotes").value;
-const cardNum = document.getElementById("hidCardNum").value;
 
 document.addEventListener('DOMContentLoaded', function () {
   getCard();  // DOM이 로드된 후 자동 실행

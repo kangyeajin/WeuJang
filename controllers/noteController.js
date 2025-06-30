@@ -1,5 +1,5 @@
 const { getUserNoteLists, insertNoteInfo, getUserCardLists, insertCard, insertCards,
-  updateWrongCnt, getUserNoteInfo, getCardBookMark, setCardBookMark, deleteCard, 
+  updateWrongCnt, getUserNoteInfo, getCardBookMark, setCardBookMark, deleteCard, instExamResult,
   updateCard, updateNote, deleteNote, selExamCards } = require("../models/noteMapper");
 const { clean } = require('../utils/sanitize');
 const { getDate } = require('../utils/date');
@@ -283,8 +283,27 @@ async function getExamCards(req) {
   return false;
 }
 
+/**
+ * 모의고사 결과 저장
+ */
+async function setExamResult(req) {
+  try {
+    const { user_id, cardNum, notes, failCnt } = req;
+    const { DT: ENTDT, TM: ENTTM } = getDate();
+    // 기본 입력 검증
+    if (!notes || !cardNum) {
+      return res.status(400).send('필수 입력값이 누락되었습니다.');
+    }
+    const param = { user_id, cardNum, notes, failCnt, ENTDT, ENTTM };
+    return instExamResult(param);
+  } catch (error) {
+    console.log("error : ", error);
+  }
+  return false;
+}
+
 module.exports = {
   getNoteLists, createNote, getCardLists, addCard,
   importCardsFromExcel, setWrongCnt, getNoteInfo, getCardBookMarkList, 
-  setCardBookMarkUpd, delCard, updCard, updNote, delNote, getExamCards,
+  setCardBookMarkUpd, delCard, updCard, updNote, delNote, getExamCards, setExamResult,
 };
