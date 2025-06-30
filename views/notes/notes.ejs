@@ -20,12 +20,16 @@
   <% if (notes && notes.length > 0) { %>
     <% notes.forEach(note => { %>
       <div class="folder-item" id="<%= note.note_id %>">
-        
         <div class="folder-image-wrapper">
           <img src="/images/delete-red.png" class="delete-icon hidden" data-id="<%= note.note_id %>" data-title="<%= note.title %>" alt="삭제"> 
-          <a class="folder-link" href="/cards_<%= note.template %>?note_id=<%= note.note_id %>">
-            <img src="/images/folder.jpg" alt="폴더">
-          </a>
+
+          <div class="folder-hover-wrapper">
+            <a class="folder-link" href="/cards_<%= note.template %>?note_id=<%= note.note_id %>">
+              <img src="/images/note_<%=note.template%>.png" alt="폴더" class="folder-image">
+              <div class="hover-overlay"></div>
+              <div class="card-count"><%= note.card_count && note.card_count.length > 3 ? '+999' : note.card_count %></div>
+            </a>
+          </div>
         </div>
         
         <!-- 제목 텍스트 영역 -->

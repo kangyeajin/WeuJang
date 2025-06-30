@@ -9,7 +9,14 @@ const pool = require("../dbconfig.js");
 async function getUserNoteLists(user_id) {
   try {
     const [rows] = await pool.query(
-      "SELECT note_id, user_id, title, template, bookmark, sort, randomfg, ENTDT, ENTTM, UPDDT, UPDTM FROM sys.note WHERE user_id = ? ORDER BY sort desc",
+      `SELECT n.note_id, n.user_id, n.title, n.template, n.bookmark, n.sort, n.randomfg, n.ENTDT, n.ENTTM, n.UPDDT, n.UPDTM 
+        ,(
+          SELECT COUNT(*) 
+          FROM sys.card c 
+          WHERE c.note_id = n.note_id
+        ) AS card_count
+        FROM sys.note n
+      WHERE n.user_id = ? ORDER BY n.sort desc`,
       [user_id]
     );
 
