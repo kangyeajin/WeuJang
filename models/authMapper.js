@@ -64,17 +64,38 @@ async function insertUserInfo(param) {
 /**
  * 아이디 조회
  * @param {string} name 회원명
+ * @param {string} userId 아이디
  * @param {string} email 메일주소
  * @returns {int} 0 : 사용가능 / 그외 : 사용 불가
  */
 async function getUserId(param) {
   try {
-    const { name, email } = param;
+    const { name, email, userId } = param;
+
+    const conditions = [];
+    const params = [];
+
+    if (email) {
+      conditions.push("email = ?");
+      params.push(email);
+    }
+
+    if (name && name.trim() !== "") {
+      conditions.push("name = ?");
+      params.push(name);
+    }
+
+    if (userId && userId.trim() !== "") {
+      conditions.push("user_id = ?");
+      params.push(userId);
+    }
+
+    const whereClause = conditions.length > 0 ? "WHERE " + conditions.join(" AND ") : "";
+
     const [rows] = await pool.query(`
-      SELECT user_id, ENTDT, ENTTM 
+      SELECT user_id, name, ENTDT, ENTTM 
       FROM sys.USER 
-      WHERE name = ? 
-      AND email = ?`, [name, email]);
+      ${whereClause}`, params);
 
     if (rows.length > 0) {
       return rows[0];
@@ -88,9 +109,37 @@ async function getUserId(param) {
   }
 };
 
+/**
+ * 비밀번호 재설정
+ * @returns {boolean} 성공여부
+ */
+async function updatePassword(param) {
+  try {
+    const { userId, pw, UPDDT, UPDTM } = param;
+
+    if (!pw || pw.trim() == "") return false;
+    if (!userId || userId.trim() == "") return false;
+
+    const [result] = await pool.query(`
+      UPDATE sys.USER 
+      SET password = ?, UPDDT = ?, UPDTM = ?
+      WHERE user_id = ?`,
+      [pw, UPDDT, UPDTM, userId]
+    );
+
+    if (result.affectedRows < 1) return false;
+    return true;
+  } catch (err) {
+    console.error("비밀번호 재설정 중 오류:", err);
+    throw err;
+  }
+}
+
+
 module.exports = {
   getUserInfo,
   searchSameUserId,
   insertUserInfo,
   getUserId,
+  updatePassword,
 };

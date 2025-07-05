@@ -43,7 +43,8 @@ h2 {
     margin: 0;
 }
 
-#emailCheckMsg {
+#emailCheckMsg,
+#pwCheckMsg {
     font-family: 'Pretendard-Regular';
 }
 

@@ -1,4 +1,4 @@
-const { getUserInfo, searchSameUserId, insertUserInfo, getUserId } = require("../models/authMapper");
+const { getUserInfo, searchSameUserId, insertUserInfo, getUserId, updatePassword } = require("../models/authMapper");
 const { getCoverOption } = require("./coverController");
 const { getDate } = require('../utils/date');
 const { transporter } = require('../utils/email');
@@ -104,9 +104,9 @@ async function chkPw(plainPassword, storedHashedPassword) {
  */
 async function findUserId(req, res) {
     try {
-        console.log(req);
+        // console.log(req);
         const user = await getUserId(req);
-        console.log("user", user);
+        // console.log("user", user);
         if (user == null)
             return res.status(200).json({ message: "계정 정보가 존재하지 않습니다." });
         return res.status(200).json({ message: "고객님의 정보와 일치하는 아이디입니다.", user: user });
@@ -119,9 +119,25 @@ async function findUserId(req, res) {
 /**
  * 비밀번호 재설정 
  */
-async function setUserPw(req, res, username, password) {
+async function setUserPw(req, res) {
+    // console.log(req);
+    try {
+        const { userId, password } = req;
+        const { DT: UPDDT, TM: UPDTM } = getDate();
 
-    // 아이디 / 최초 가입일자
+        // 비밀번호 암호화
+        const pw = await bcrypt.hash(password, saltRounds);
+
+        const param = { userId, pw, UPDDT, UPDTM };
+        if (updatePassword(param)) {
+            return res.status(200).json({ message: "비밀번호 변경 성공" });
+        } else {
+            return res.status(500).json({ message: "비밀번호 변경 실패" });
+        }
+    } catch (error) {
+        console.error("sql error:", err);
+        return res.status(500).json({ message: "서버오류발생 다시 한번 시도해 주세요." });
+    }
 }
 
 /**
@@ -159,7 +175,7 @@ async function sendAuthCode(req, res) {
 
     <hr style="margin-top: 40px;">
     <p style="font-size: 12px; color: #aaa;">
-      © 2025 Your App Name. All rights reserved.
+      © 2025 외우장. All rights reserved.
     </p>
   </div>
   `

@@ -113,3 +113,14 @@ input[type="password"]::placeholder {
   height: 100%;
   object-fit: cover;
 }
+
+/* 홈화면 바로가기 */
+#home {
+  text-align: center;
+  cursor: pointer;
+  margin-top: 2.5rem;
+}
+
+#home:hover {
+  color: blue;
+}

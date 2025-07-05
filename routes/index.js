@@ -129,8 +129,8 @@ router.get(`/upload_cards`, async (req, res) => {
 // 모의고사 생성 페이지
 router.get("/exam_edit", async (req, res) => {
   try {
-  const userId = req.session.user?.id;
-  const noteList = await getNoteLists(userId);
+    const userId = req.session.user?.id;
+    const noteList = await getNoteLists(userId);
 
     res.render("notes/exam_edit", {
       page: "main",
@@ -151,7 +151,7 @@ router.post("/exam", async (req, res) => {
   try {
     const notes = req.body.notes; // 예: [3, 7, 9]
     const cardNum = parseInt(req.body.cardNum) || 30;
-    
+
     // noteIds를 기반으로 카드 목록 불러오기 (랜덤, 제한된 개수)
     //const cardList = await getExamCards(cardNum, notes);
 
@@ -175,7 +175,7 @@ router.get("/favicon.ico", (req, res) => res.sendStatus(204));
 
 // layout 없이 렌더링되는 페이지 (ex: 회원가입, 비밀번호 찾기 등)
 // 화이트리스트 방식으로 보안 유지
-const staticPages = ["register", "findId", "findPw", "findResult"]; // 필요한 페이지 추가
+const staticPages = ["register", "findId", "findPw", "findResult", "updatePw"]; // 필요한 페이지 추가
 
 router.get("/:page", (req, res) => {
   const page = req.params.page;

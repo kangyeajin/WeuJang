@@ -6,18 +6,18 @@ const idChkMsg = document.getElementById('idCheckMsg');
 const idValidPattern = /^[a-z0-9_-]{5,20}$/;
 
 let timeout = null;
-userIdInput.addEventListener('input', () => {
+function checkId() {
   const userId = userIdInput.value.trim();
 
   if (userId === "") {
     idChkMsg.textContent = "";
-    return;
+    return false;
   }
 
   if (!userId || userId.length < 5 || !idValidPattern.test(userId)) {
     idChkMsg.textContent = '* 5~20자의 영문 소문자, 숫자, 밑줄(_), 하이픈(-)만 사용 가능합니다';
     idChkMsg.className = "invalid";
-    return;
+    return false;
   }
 
   // 입력 지연 후 요청
@@ -30,17 +30,21 @@ userIdInput.addEventListener('input', () => {
       if (result.available) {
         idChkMsg.textContent = '* 사용 가능한 ID입니다.';
         idChkMsg.className = "valid";
+        return true;
       } else {
         idChkMsg.textContent = '* 이미 사용 중인 ID입니다.';
         idChkMsg.className = "invalid";
+        return false;
       }
     } catch (err) {
       console.error(err);
       idChkMsg.textContent = '* 확인 중 오류 발생';
       idChkMsg.className = "invalid";
+      return false;
     }
   }, 500); // 0.5초 대기
-});
+}
+userIdInput.addEventListener('input', checkId);
 
 // 비밀번호 유효성 검사
 const passwordInput = document.getElementById('password');
@@ -55,20 +59,22 @@ function checkPasswordMatch() {
 
   pwChkMsg.textContent = "";
   if (userPw === "") {
-    return;
+    return false;
   }
 
   if (!userPw || userPw.length < 8 || !pwValidPattern.test(userPw)) {
     pwChkMsg.textContent = '* 8~20자의 영문 대/소문자, 숫자, 특수문자를 모두 사용해 주세요.';
     pwChkMsg.className = "invalid";
-    return;
+    return false;
   }
 
   if (passwordInput.value !== pwCheckInput.value) {
     pwChkMsg.textContent = '* 비밀번호가 일치하지 않습니다.';
     pwChkMsg.className = "invalid";
-    return;
+    return false;
   }
+
+  return true;
 }
 
 passwordInput.addEventListener('input', checkPasswordMatch);
@@ -77,6 +83,16 @@ pwCheckInput.addEventListener('input', checkPasswordMatch);
 // 회원가입 버튼
 document.getElementById('registerForm').addEventListener('submit', async function (e) {
   e.preventDefault();
+
+  if (idChkMsg.className != "valid") {
+    alert("아이디를 확인해주세요");
+    return;
+  }
+
+  if (!checkPasswordMatch()) {
+    alert("비밀번호를 확인해주세요");
+    return;
+  }
 
   const formData = new FormData(this);
   // console.log(Object.fromEntries(formData.entries()));

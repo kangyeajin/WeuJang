@@ -74,7 +74,15 @@ router.post("/findUserId", async (req, res) => {
   }
 });
 
-// 비밀번호 찾기
-
+// 비밀번호 재설정
+router.post("/updatePassword", async (req, res) => {
+  try {
+    return await setUserPw(req.body, res);
+  } catch (error) {
+    res
+      .status(500)
+      .send("비밀번호 변경 중 오류가 발생했습니다.\r\n다시 시도해주세요.");
+  }
+});
 
 module.exports = router;

@@ -60,12 +60,13 @@ document.getElementById('findForm').addEventListener('submit', async function (e
   }
 
   const formData = new FormData(this);
+  // console.log(Object.fromEntries(formData.entries()));
   const jsonData = {};
   formData.forEach((value, key) => {
     jsonData[key] = value;
   });
 
-  // 아이디 조회
+  // 계정 조회
   try {
     const response = await fetch('/user/findUserId', {
       method: 'POST',
@@ -76,27 +77,21 @@ document.getElementById('findForm').addEventListener('submit', async function (e
     });
 
     const data = await response.json();
-
     if (!response.ok) {
       alert(result); // 오류 메시지
     } else {
-      let paramObj = { opt: "id" };
-      if (data.user) {
+      let paramObj = { opt: "pw" };
+      if (data.user && data.user != null) {
         const user = data.user;
         Object.assign(paramObj, {
-          result: "success",
-          message: data.message,
           user_id: user.user_id,
-          ENTDT: user.ENTDT,
-          ENTTM: user.ENTTM
         });
+        var queryParams = new URLSearchParams(paramObj);
+        window.location.href = `/updatePw?${queryParams.toString()}`;
       } else {
-        Object.assign(paramObj, {
-          result: "fail",
-        });
+        var queryParams = new URLSearchParams(paramObj);
+        window.location.href = `/findResult?${queryParams.toString()}`;
       }
-      const queryParams = new URLSearchParams(paramObj);
-      window.location.href = `/findResult?${queryParams.toString()}`;
     }
   } catch (error) {
     console.error('예외 발생:', error);
