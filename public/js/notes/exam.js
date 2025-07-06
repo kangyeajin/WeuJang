@@ -9,7 +9,13 @@ const notes = document.getElementById("hidNotes").value;
 const cardNum = document.getElementById("hidCardNum").value;
 
 // 다음카드로 전환
-function updateProgress() {
+function updateProgress(status) {
+    updateCard(currentCardIndex + 1);
+    if(status =='Y') {
+        currentIndex++;
+    }else {
+        failCnt++;
+    }
     const percent = ((currentIndex) / totalCards) * 100;
     progressText.textContent = `${currentIndex} / ${totalCards}`;
     progressFill.style.width = `${percent}%`;
@@ -46,34 +52,26 @@ async function finProgress() {
 
 // "틀림" 버튼 클릭 시
 document.querySelector(".wrong-btn").addEventListener("click", () => {
-    failCnt++;
     if (currentIndex < totalCards - 1) {
-        updateCard(currentCardIndex + 1);
-        updateProgress();
+        updateProgress('N');
         // 다음 카드로 전환 등 추가 로직 삽입 가능
     }
 });
 
 // "정답" 버튼 클릭 시
 document.querySelector(".correct-btn").addEventListener("click", () => {
-    updateCard(currentCardIndex + 1);
+    updateProgress('Y');
 
     if (cards.length == 1) {   // 끝난 경우
-        currentIndex++;
-        updateProgress();
         finProgress();
         return;
     }
-    if (currentIndex < totalCards - 1) {
-        currentIndex++;
-        updateProgress();
-        // 다음 카드로 전환 등 추가 로직 삽입 가능
-    }
-    var card_id = cards[currentCardIndex].card_id;
-    const index = cards.findIndex(card => card.card_id === card_id);
-    if (index !== -1) {
-        cards.splice(index, 1); // 해당 인덱스에서 1개 제거
-    }
+        // 현재 카드 제거
+        var card_id = cards[currentCardIndex].card_id;
+        const index = cards.findIndex(card => card.card_id === card_id);
+        if (index !== -1) {
+            cards.splice(index, 1); // 해당 인덱스에서 1개 제거
+        }
 });
 
 const urlParams = new URLSearchParams(window.location.search);

@@ -17,6 +17,9 @@ router.use("/cover", require("./cover"))
 
 // 공지사항 관련 기능
 router.use("/notice", require("./notice"))
+
+// 학습기록 관련 기능
+router.use("/history", require("./history"))
 /* 페이지 라우터 */
 
 // 로그인 화면
@@ -129,8 +132,8 @@ router.get(`/upload_cards`, async (req, res) => {
 // 모의고사 생성 페이지
 router.get("/exam_edit", async (req, res) => {
   try {
-    const userId = req.session.user?.id;
-    const noteList = await getNoteLists(userId);
+  const userId = req.session.user?.id;
+  const noteList = await getNoteLists(userId);
 
     res.render("notes/exam_edit", {
       page: "main",
@@ -151,7 +154,7 @@ router.post("/exam", async (req, res) => {
   try {
     const notes = req.body.notes; // 예: [3, 7, 9]
     const cardNum = parseInt(req.body.cardNum) || 30;
-
+    
     // noteIds를 기반으로 카드 목록 불러오기 (랜덤, 제한된 개수)
     //const cardList = await getExamCards(cardNum, notes);
 
