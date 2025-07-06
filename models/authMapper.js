@@ -135,6 +135,32 @@ async function updatePassword(param) {
   }
 }
 
+/**
+ * 출석체크
+ * @returns {boolean} 성공여부
+ */
+async function insertAttendance(userId, ENTDT) {
+  try {
+    const [userAttendance] = await pool.query(`
+      SELECT user_id, loginDt 
+      FROM sys.user_att
+      WHERE user_id = ? AND loginDt= ? ;`,
+      [userId, ENTDT]
+    );
+    if (userAttendance.length > 0) return false;
+
+    const [result] = await pool.query(`
+      INSERT INTO sys.user_att (user_id, loginDt)
+      VALUES(?, ?)`,
+      [userId, ENTDT]
+    );
+    if (result.affectedRows < 1) return false;
+    return true;
+  } catch (err) {
+    console.error("출석체크 중 오류:", err);
+    throw err;
+  }
+}
 
 module.exports = {
   getUserInfo,
@@ -142,4 +168,5 @@ module.exports = {
   insertUserInfo,
   getUserId,
   updatePassword,
+  insertAttendance,
 };

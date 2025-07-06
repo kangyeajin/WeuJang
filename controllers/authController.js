@@ -1,4 +1,4 @@
-const { getUserInfo, searchSameUserId, insertUserInfo, getUserId, updatePassword } = require("../models/authMapper");
+const { getUserInfo, searchSameUserId, insertUserInfo, getUserId, updatePassword, insertAttendance } = require("../models/authMapper");
 const { getCoverOption } = require("./coverController");
 const { getDate } = require('../utils/date');
 const { transporter } = require('../utils/email');
@@ -74,13 +74,18 @@ async function handleLogin(req, res, username, password) {
                 status: user.status,
                 coverId: user.cover_id,
             };
-
-            // 출석체크
-
             // 가림판 상세 조회
             if (user.cover_id > -1) {
                 coverSettings = await getCoverOption(user.user_id, user.cover_id);
             }
+            // 출석체크
+            const { DT: ENTDT, TM: ENTTM } = getDate();
+            var userAtt = insertAttendance(user.user_id, ENTDT);
+
+            if (!coverSettings || !userAtt) {
+                return res.status(500).json({ message: "서버오류발생 다시 한번 시도해 주세요." });
+            }
+
             return res.status(200).json({ message: "로그인 성공!", redirect: "/main", cover: coverSettings });
         }
         return res.status(401).json({ message: "비밀번호가 일치하지 않습니다." });
