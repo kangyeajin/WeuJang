@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>아이디 찾기</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+  <link rel="stylesheet" href="/css/profile.css" />
+</head>
+<body>
+<main class="profile-container">
+  <h2>프로필 설정</h2>
+
+  <form action="/setting/update" method="POST" class="profile-form">
+    <div class="form-group">
+      <label for="user_id">회원 ID</label>
+      <input type="text" id="user_id" name="user_id" value="<%= userInfo.user_id %>" readonly />
+    </div>
+
+    <div class="form-group">
+      <label for="name">이름</label>
+      <input type="text" id="name" name="name" value="<%= userInfo.name %>" required />
+    </div>
+
+    <div class="form-group">
+      <label for="email">이메일</label>
+      <input type="email" id="email" name="email" value="<%= userInfo.email %>" required />
+    </div>
+
+    <div class="form-group">
+      <label for="birth">생년월일</label>
+      <input type="text" id="birth" name="birth" value="<%= userInfo.birth %>" pattern="\d{8}" placeholder="YYYYMMDD" />
+    </div>
+
+    <!-- <div class="form-group">
+      <label for="STATUS">계정 상태</label>
+      <select id="STATUS" name="STATUS">
+        <option value="1" <%= userInfo.STATUS === "1" ? "selected" : "" %>>활성</option>
+        <option value="0" <%= userInfo.STATUS === "0" ? "selected" : "" %>>비활성</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="LOGINCNT">로그인 시도 횟수</label>
+      <input type="number" id="LOGINCNT" name="LOGINCNT" value="<%= userInfo.LOGINCNT %>" readonly />
+    </div>
+
+    <div class="form-group">
+      <label for="LASTLOGINDT">최종 로그인 일자</label>
+      <input type="text" id="LASTLOGINDT" name="LASTLOGINDT" value="<%= userInfo.LASTLOGINDT %>" readonly />
+    </div>
+
+    <div class="form-group">
+      <label for="coverSet">가림판 설정</label>
+      <select id="coverSet" name="coverSet">
+        <option value="1" <%= userInfo.coverSet === "1" ? "selected" : "" %>>활성</option>
+        <option value="0" <%= userInfo.coverSet === "0" ? "selected" : "" %>>비활성</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="cover_id">가림판 ID</label>
+      <input type="number" id="cover_id" name="cover_id" value="<%= userInfo.cover_id %>" />
+    </div> -->
+    <hr />
+
+    <div class="form-meta">
+      <p>가입일시: <%= userInfo.creatDTM %></p>
+      <!-- <p>등록일시: <%= userInfo.ENTDT %> <%= userInfo.ENTTM %></p>
+      <p>수정일시: <%= userInfo.UPDDT %> <%= userInfo.UPDTM %></p> -->
+    </div>
+
+    <button type="submit" class="btn">저장하기</button>
+  </form>
+</main>
+
+</body>
+<script src="/js/profile.js"></script>
+
+</html>
