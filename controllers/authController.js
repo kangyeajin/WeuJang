@@ -1,4 +1,4 @@
-const { getUserInfo, searchSameUserId, insertUserInfo, getUserId, updatePassword, insertAttendance } = require("../models/authMapper");
+const { getUserInfo, searchSameUserId, insertUserInfo, getUserId, updatePassword, updateUserInfo, insertAttendance } = require("../models/authMapper");
 const { getCoverOption } = require("./coverController");
 const { getDate } = require('../utils/date');
 const { transporter } = require('../utils/email');
@@ -145,6 +145,26 @@ async function setUserPw(req, res) {
     }
 }
 
+// 회원정보 수정
+async function updateUser(req, res){
+    try {
+        const { user_id, name, email, birth } = req;
+        const { DT: UPDDT, TM: UPDTM } = getDate();
+        const formattedBirth = birth.replace(/-/g, "");
+        const param = { user_id, name, email, birth: formattedBirth, UPDDT, UPDTM };
+
+        if (updateUserInfo(param)) {
+            return res.status(200).json({ message: "회원정보 변경 성공" });
+        } else {
+            return res.status(500).json({ message: "회원정보 변경 실패" });
+        }
+    } catch (error) {
+        console.error("sql error:", error);
+        return res.status(500).json({ message: "서버오류발생 다시 한번 시도해 주세요." });
+    }
+};
+
+
 /**
  * 인증번호 생성
  */
@@ -233,4 +253,4 @@ const sendMail = (mailOption) => {
     });
 };
 
-module.exports = { chkUserId, registerUser, handleLogin, sendAuthCode, findUserId, setUserPw };
+module.exports = { chkUserId, registerUser, handleLogin, sendAuthCode, findUserId, setUserPw, updateUser };

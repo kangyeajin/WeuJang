@@ -7,8 +7,9 @@ const {
   sendAuthCode,
   findUserId,
   setUserPw,
+  updateUser,
 } = require("../controllers/authController");
-
+const { getUserInfo, } = require("../models/authMapper");
 router.use(express.urlencoded({ extended: true }));
 router.use(express.json());
 
@@ -82,6 +83,39 @@ router.post("/updatePassword", async (req, res) => {
     res
       .status(500)
       .send("비밀번호 변경 중 오류가 발생했습니다.\r\n다시 시도해주세요.");
+  }
+});
+
+/* 프로필 설정 화면 이동 */
+router.get('/setting', async (req, res) => {
+  try {
+    const user_id = req.session.user?.id || "admin";
+    const Info = await getUserInfo(user_id);
+
+    if (!Info) {
+      return res.status(404).send("사용자 정보를 찾을 수 없습니다.");
+    }
+
+    res.render("profile", {
+      layout: "main",
+      title: "프로필 설정",
+      userInfo: Info,
+      cssFile: "/css/profile.css",
+      jsFile: "/js/profile.js",
+    });
+  } catch (error) {
+    console.error("프로필 설정 화면 오류:", error);
+    res.status(500).send("서버 오류가 발생했습니다.");
+  }
+});
+
+router.post('/setting/update', async (req, res) => {
+  try {
+    return await updateUser(req.body, res);
+  } catch (error) {
+    res
+      .status(500)
+      .send("회원정보 수정 중 오류가 발생했습니다.\r\n다시 시도해주세요.");
   }
 });
 
