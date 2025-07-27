@@ -11,70 +11,56 @@
 <main class="profile-container">
   <h2>프로필 설정</h2>
 
-  <form action="/setting/update" method="POST" class="profile-form">
-    <div class="form-group">
-      <label for="user_id">회원 ID</label>
-      <input type="text" id="user_id" name="user_id" value="<%= userInfo.user_id %>" readonly />
+  <form id="profileForm" class="profile-form" >
+    <table class="profile-table">
+      <tr>
+        <td><label for="user_id">회원 ID</label></td>
+        <td><input type="text" id="user_id" name="user_id" value="<%= userInfo.user_id %>" readonly /></td>
+      </tr>
+      <tr>
+        <td><label for="name">이름</label></td>
+        <td><input type="text" id="name" name="name" value="<%= userInfo.name %>" readonly required /></td>
+      </tr>
+      <tr>
+        <td><label for="email">이메일</label></td>
+        <td><input type="email" id="email" name="email" value="<%= userInfo.email %>" readonly required /></td>
+      </tr>
+      <tr>
+        <td><label for="birth">생년월일</label></td>
+        <td>
+          <%
+            const birth = userInfo.birth;
+            const birthFormatted = birth.substring(0,4) + '-' + birth.substring(4,6) + '-' + birth.substring(6,8);
+          %>
+          <input type="date" id="birth" name="birth" value="<%= birthFormatted %>" readonly required>
+        </td>
+      </tr>
+    </table>
+
+    <div class="form-meta" id="createDt">
+      <%
+        const dt = userInfo.creatDTM;
+        const dtFormatted = dt.substring(0,4) + '/' + dt.substring(4,6) + '/' + dt.substring(6,8) + ' ' + dt.substring(8,10) + ':' + dt.substring(10,12) + ':' + dt.substring(12,14);
+      %>
+      <p>* 가입일시: <%= dtFormatted %></p>
     </div>
 
-    <div class="form-group">
-      <label for="name">이름</label>
-      <input type="text" id="name" name="name" value="<%= userInfo.name %>" required />
-    </div>
-
-    <div class="form-group">
-      <label for="email">이메일</label>
-      <input type="email" id="email" name="email" value="<%= userInfo.email %>" required />
-    </div>
-
-    <div class="form-group">
-      <label for="birth">생년월일</label>
-      <input type="text" id="birth" name="birth" value="<%= userInfo.birth %>" pattern="\d{8}" placeholder="YYYYMMDD" />
-    </div>
-
-    <!-- <div class="form-group">
-      <label for="STATUS">계정 상태</label>
-      <select id="STATUS" name="STATUS">
-        <option value="1" <%= userInfo.STATUS === "1" ? "selected" : "" %>>활성</option>
-        <option value="0" <%= userInfo.STATUS === "0" ? "selected" : "" %>>비활성</option>
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label for="LOGINCNT">로그인 시도 횟수</label>
-      <input type="number" id="LOGINCNT" name="LOGINCNT" value="<%= userInfo.LOGINCNT %>" readonly />
-    </div>
-
-    <div class="form-group">
-      <label for="LASTLOGINDT">최종 로그인 일자</label>
-      <input type="text" id="LASTLOGINDT" name="LASTLOGINDT" value="<%= userInfo.LASTLOGINDT %>" readonly />
-    </div>
-
-    <div class="form-group">
-      <label for="coverSet">가림판 설정</label>
-      <select id="coverSet" name="coverSet">
-        <option value="1" <%= userInfo.coverSet === "1" ? "selected" : "" %>>활성</option>
-        <option value="0" <%= userInfo.coverSet === "0" ? "selected" : "" %>>비활성</option>
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label for="cover_id">가림판 ID</label>
-      <input type="number" id="cover_id" name="cover_id" value="<%= userInfo.cover_id %>" />
-    </div> -->
-    <hr />
-
-    <div class="form-meta">
-      <p>가입일시: <%= userInfo.creatDTM %></p>
-      <!-- <p>등록일시: <%= userInfo.ENTDT %> <%= userInfo.ENTTM %></p>
-      <p>수정일시: <%= userInfo.UPDDT %> <%= userInfo.UPDTM %></p> -->
-    </div>
-
-    <button type="submit" class="btn">저장하기</button>
+    <button type="button" class="btn" id="save" onclick="saveUserInfo()">저장하기</button>
   </form>
+    <div class="form-meta" >
+      <button type="button" class="btn" id="update" onclick="disableReadonly()">
+        회원정보 수정
+      </button>  
+    </div>
+    <div class="form-meta">
+      <button type="button" class="btn" id="pasword">
+        비밀번호 변경
+      </button>  
+    </div>
 </main>
 
-</body>
 <script src="/js/profile.js"></script>
-
+</body>
 </html>
+
+

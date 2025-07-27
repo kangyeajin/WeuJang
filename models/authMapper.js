@@ -9,7 +9,9 @@ const pool = require("../dbconfig.js");
 async function getUserInfo(user_id) {
   try {
     const [rows] = await pool.query(
-      'SELECT user_id, password, name, email, birth, status, cover_id FROM sys.USER WHERE user_id = ?',
+      `SELECT user_id, password, name, email, birth, creatDTM, STATUS, 
+      LASTLOGINDT, LOGINCNT, coverSet, cover_id, ENTDT, ENTTM, UPDDT, UPDTM 
+      FROM sys.USER WHERE user_id = ?`,
       [user_id]
     );
 
@@ -57,6 +59,28 @@ async function insertUserInfo(param) {
     return true;
   } catch (err) {
     console.error('유저 정보 등록 중 오류:', err);
+    return false;
+  }
+};
+
+/**
+ * 유저 정보 수정
+ * @param param 사용자 입력 데이터
+ * @returns {boolean} 성공여부 반환
+ */
+async function updateUserInfo(param) {
+  try {
+    const { user_id, name, email, birth, UPDDT, UPDTM } = param;
+    const [result] = await pool.query(
+      `UPDATE sys.USER
+      SET name=?, email=?, birth=?, UPDDT=?, UPDTM=?
+      WHERE user_id=?`,
+      [name, email, birth, UPDDT, UPDTM, user_id]);
+
+    if (result.affectedRows < 0) return false;
+    return true;
+  } catch (err) {
+    console.error('유저 정보 수정 중 오류:', err);
     return false;
   }
 };
@@ -169,4 +193,5 @@ module.exports = {
   getUserId,
   updatePassword,
   insertAttendance,
+  updateUserInfo,
 };

@@ -7,6 +7,7 @@ const {
   sendAuthCode,
   findUserId,
   setUserPw,
+  updateUser,
 } = require("../controllers/authController");
 const { getUserInfo, } = require("../models/authMapper");
 router.use(express.urlencoded({ extended: true }));
@@ -109,13 +110,12 @@ router.get('/setting', async (req, res) => {
 });
 
 router.post('/setting/update', async (req, res) => {
-  const updatedData = req.body;
   try {
-    await updateUserInfo(updatedData); // DB 업데이트 로직
-    res.redirect('/setting');
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("업데이트 실패");
+    return await updateUser(req.body, res);
+  } catch (error) {
+    res
+      .status(500)
+      .send("회원정보 수정 중 오류가 발생했습니다.\r\n다시 시도해주세요.");
   }
 });
 
