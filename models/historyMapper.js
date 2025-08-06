@@ -36,16 +36,16 @@ async function selAttDetail(param) {
   try {
     const { user_id, yyyyMMdd } = param;
     const [rows] = await pool.query(
-      `SELECT study_id, user_id, card_id, try_count, total_count, ENTDT, ENTTM
+      `SELECT study_id, user_id, note_id, try_count, total_count, ENTDT, ENTTM
         FROM sys.studylog WHERE user_id = ? and ENTDT = ?
         order by ENTTM`,
       [user_id, yyyyMMdd]
     );
 
     if (rows.length > 0) {
-      // 각 row의 card_id 별 title 조회 후 추가
+      // 각 row의 note_id 별 title 조회 후 추가
       for (const row of rows) {
-        const titles = await getTitlesByCardIds(row.card_id);
+        const titles = await getTitlesByNoteIds(row.note_id);
         // titles 배열을 '영어, 한국사, 수학' 형태 문자열로 만들기
         row.titles = titles.map(s => s.title).join(', ');
       }
@@ -60,18 +60,18 @@ async function selAttDetail(param) {
   }
 }
 
-async function getTitlesByCardIds(cardIdStr) {
-  const cardIds = cardIdStr.split('|'); // ['34', '29', '28']
+async function getTitlesByNoteIds(noteIdStr) {
+  const noteIds = noteIdStr.split('|'); // ['34', '29', '28']
 
-  if (cardIds.length === 0) return [];
+  if (noteIds.length === 0) return [];
 
   // ? placeholders 개수만큼 생성
-  const placeholders = cardIds.map(() => '?').join(',');
+  const placeholders = noteIds.map(() => '?').join(',');
 
   const sql = `SELECT note_id, title FROM sys.note WHERE note_id IN (${placeholders})`;
 
   try {
-    const [rows] = await pool.query(sql, cardIds);
+    const [rows] = await pool.query(sql, noteIds);
     return rows; // [{note_id: '34', title: '영어'}, ...]
   } catch (err) {
     console.error('note title 조회 중 오류:', err);

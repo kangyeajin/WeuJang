@@ -413,8 +413,8 @@ async function selExamCards(param) {
 }
 /**
  * 모의고사 결과저장
- * @param {string} user_id 노트 id
- * @param {string} card_id 문제 id
+ * @param {string} user_id 사용자 id
+ * @param {string} notes 노트 id
  * @param {string} try_count 시도횟수
  * @param {string} total_count 문제 개수
  * @param {string} entdt 등록일자
@@ -426,7 +426,7 @@ async function instExamResult(param) {
     const { user_id, cardNum, notes, failCnt, ENTDT, ENTTM} = param;
 
     const [result] = await pool.query(
-      `INSERT INTO sys.studylog (user_id, card_id, try_count, total_count, entdt, enttm)
+      `INSERT INTO sys.studylog (user_id, note_id, try_count, total_count, entdt, enttm)
              VALUES (?, ?, ?, ?, ?, ?)`,
       [user_id, notes, failCnt, cardNum, ENTDT, ENTTM]
     );
