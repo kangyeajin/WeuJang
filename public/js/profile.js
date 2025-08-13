@@ -1,14 +1,13 @@
-function disableReadonly(){
-    document.getElementById("name").readOnly = false;
-    document.getElementById("email").readOnly = false;
-    document.getElementById("birth").readOnly = false;
-    document.getElementById("save").style.display = "block";
-    document.getElementById("createDt").style.display = "none";
-    document.getElementById("update").style.display = "none";
-    document.getElementById("pasword").style.display = "none";
+function disableReadonly() {
+  document.getElementById("name").readOnly = false;
+  document.getElementById("email").readOnly = false;
+  document.getElementById("birth").readOnly = false;
+  document.getElementById("save").style.display = "block";
+  document.getElementById("createDt").style.display = "none";
+  document.getElementById("password").style.display = "none";
 }
 
-async function saveUserInfo() { 
+async function saveUserInfo() {
   const formData = new FormData(document.getElementById('profileForm'));
   const jsonData = {};
   formData.forEach((value, key) => {
@@ -27,7 +26,7 @@ async function saveUserInfo() {
     const result = await response.json();
     alert(result.message); // 오류 메시지 출력
     window.location.href = `/user/setting`;
-    
+
   } catch (error) {
     console.error('예외 발생:', error);
     alert('네트워크 오류가 발생했습니다.');

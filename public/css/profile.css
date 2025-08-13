@@ -63,3 +63,25 @@ table.profile-table {
 #save {
   display: none;
 }
+
+.icon-set {
+  width: 30px;
+  height: 30px;
+  margin-right: 8px;
+  cursor: pointer;
+}
+
+.icon-set:hover {
+  border-radius: 20px;
+  background-color: #e0e0e0;
+  padding: 2px;
+}
+
+.profile-header {
+  display: flex;
+  /* Flexbox를 활성화 */
+  justify-content: space-between;
+  /* 요소들을 양 끝으로 정렬 */
+  align-items: center;
+  /* 수직 방향으로 가운데 정렬 */
+}

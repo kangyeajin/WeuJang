@@ -9,7 +9,10 @@
 </head>
 <body>
 <main class="profile-container">
-  <h2>프로필 설정</h2>
+  <div class="profile-header">
+    <h2>프로필 설정</h2>
+    <img src="/images/setting.png" class="icon-set" alt="설정" title="프로필 설정 변경" onclick="disableReadonly()">
+  </div>
 
   <form id="profileForm" class="profile-form" >
     <table class="profile-table">
@@ -47,13 +50,8 @@
 
     <button type="button" class="btn" id="save" onclick="saveUserInfo()">저장하기</button>
   </form>
-    <div class="form-meta" >
-      <button type="button" class="btn" id="update" onclick="disableReadonly()">
-        회원정보 수정
-      </button>  
-    </div>
     <div class="form-meta">
-      <button type="button" class="btn" id="pasword">
+      <button type="button" class="btn" id="password" onclick="location.href='/'">
         비밀번호 변경
       </button>  
     </div>
