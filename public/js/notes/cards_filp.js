@@ -9,7 +9,33 @@ let editMode = false; // 편집 모드 여부
 
 document.addEventListener('DOMContentLoaded', function () {
   getCard();  // DOM이 로드된 후 자동 실행
+  getNoteInfo();  //제목 정보 가져오기
 });
+
+async function getNoteInfo() {
+  try {
+    const jsonData = { note_id : noteId };
+
+    const response = await fetch('/note/get_note', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(jsonData)
+    });
+
+    const result = await response.text();
+
+    if (!response.ok) {
+      // 오류 
+    } else {
+        var data = '';
+        data = JSON.parse(result);
+        document.querySelector('.note-title-detail').textContent = data[0].title;
+    }
+
+  } catch (error) { console.error('수첩정보 요청 실패:', error); }
+}
 
 async function getCard() {
   if (loading || done) return;
