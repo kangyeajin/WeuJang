@@ -8,6 +8,7 @@ const {
   findUserId,
   setUserPw,
   updateUser,
+  isCorrectPw,
 } = require("../controllers/authController");
 const { getUserInfo, } = require("../models/authMapper");
 router.use(express.urlencoded({ extended: true }));
@@ -95,8 +96,7 @@ router.get('/setting', async (req, res) => {
     if (!Info) {
       return res.status(404).send("사용자 정보를 찾을 수 없습니다.");
     }
-
-    res.render("profile", {
+    res.render("user/profile", {
       layout: "main",
       title: "프로필 설정",
       userInfo: Info,
@@ -116,6 +116,39 @@ router.post('/setting/update', async (req, res) => {
     res
       .status(500)
       .send("회원정보 수정 중 오류가 발생했습니다.\r\n다시 시도해주세요.");
+  }
+});
+
+/* 비밀번호 변경 화면 이동 */
+router.get('/setting/pw', async (req, res) => {
+  try {
+    res.render("user/changePw", {
+      layout: "main",
+      title: "프로필 설정",
+      cssFile: "/css/profile.css",
+      jsFile: "/js/profile.js",
+    });
+  } catch (error) {
+    console.error("프로필 설정 화면 오류:", error);
+    res.status(500).send("서버 오류가 발생했습니다.");
+  }
+});
+
+// 비밀번호 변경
+router.post("/changePassword", async (req, res) => {
+  try {
+    // id 교차 검증
+    // console.log("session :: ", req.session.user.id);
+    // console.log("body :: ", req.body);
+    if (await isCorrectPw(req.body))
+      return await setUserPw(req.body, res);
+    else
+      return res.status(500).json({ message: "현재 사용 중인 비밀번호와 일치하지 않습니다." });
+
+  } catch (error) {
+    res
+      .status(500)
+      .send("비밀번호 변경 중 오류가 발생했습니다.\r\n다시 시도해주세요.");
   }
 });
 

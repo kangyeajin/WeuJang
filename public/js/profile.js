@@ -32,3 +32,9 @@ async function saveUserInfo() {
     alert('네트워크 오류가 발생했습니다.');
   }
 }
+
+function goChangePw() {
+  let paramObj = { user_id: document.getElementById("user_id").value };
+  var queryParams = new URLSearchParams(paramObj);
+  window.location.href = `/user/setting/pw?${queryParams}`;
+}

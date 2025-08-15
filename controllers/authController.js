@@ -100,8 +100,7 @@ async function handleLogin(req, res, username, password) {
  * 비밀번호 비교
  */
 async function chkPw(plainPassword, storedHashedPassword) {
-    const match = await bcrypt.compare(plainPassword, storedHashedPassword);
-    return match;
+    return await bcrypt.compare(plainPassword, storedHashedPassword);
 }
 
 /**
@@ -125,7 +124,6 @@ async function findUserId(req, res) {
  * 비밀번호 재설정 
  */
 async function setUserPw(req, res) {
-    // console.log(req);
     try {
         const { userId, password } = req;
         const { DT: UPDDT, TM: UPDTM } = getDate();
@@ -145,8 +143,10 @@ async function setUserPw(req, res) {
     }
 }
 
-// 회원정보 수정
-async function updateUser(req, res){
+/**
+ * 회원정보 수정
+ */
+async function updateUser(req, res) {
     try {
         const { user_id, name, email, birth } = req;
         const { DT: UPDDT, TM: UPDTM } = getDate();
@@ -164,6 +164,23 @@ async function updateUser(req, res){
     }
 };
 
+/**
+ * 비밀번호 일치여부 조회
+ */
+async function isCorrectPw(body) {
+    const { userId, currentPw } = body;
+    try {
+        // 사용자 정보 조회
+        const user = await getUserInfo(userId);
+        if (user == null) return false;
+
+        // 비밀번호 비교
+        return await chkPw(currentPw, user.password);
+    }
+    catch (error) {
+        console.error("pw check err", error);
+    }
+}
 
 /**
  * 인증번호 생성
@@ -208,7 +225,6 @@ async function sendAuthCode(req, res) {
     console.log("content : ", content);
 
     await transporter.verify();
-    console.log("Server is ready to take our messages");
 
     const mailOption = mailOpt(email, process.env.EMAIL_TITLE, content);
 
@@ -232,7 +248,6 @@ const mailOpt = (email, title, contents) => {
         subject: title,
         html: contents
     };
-
     return mailOptions;
 }
 
@@ -247,10 +262,11 @@ const sendMail = (mailOption) => {
                 console.log('전송 완료:', info.response);
                 resolve(info);  // 성공 시 resolve
             }
-
             transporter.close(); // 연결 종료는 콜백 안에서 실행해야 함
         });
     });
 };
 
-module.exports = { chkUserId, registerUser, handleLogin, sendAuthCode, findUserId, setUserPw, updateUser };
+
+
+module.exports = { chkUserId, registerUser, handleLogin, sendAuthCode, findUserId, setUserPw, updateUser, isCorrectPw };
