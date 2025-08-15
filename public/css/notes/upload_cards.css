@@ -61,3 +61,10 @@ input[type=file]::file-selector-button {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
   }
 }
+
+.pMsg{
+    font-size: 12px;
+    color: #868686;
+    display: inline-block;
+    margin-left: 10px;
+}

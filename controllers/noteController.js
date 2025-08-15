@@ -73,6 +73,7 @@ async function importCardsFromExcel(req) {
     const sheet = workbook.Sheets[sheetName];
     const rows = xlsx.utils.sheet_to_json(sheet);
     const values = [];
+    let bookmarkCount = 0; // 북마크 카운트
 
     for (const row of rows) {
       // html 태그 제거
@@ -80,7 +81,7 @@ async function importCardsFromExcel(req) {
       const answer = clean(row.answer?.toString());
       const hint = clean(row.hint || '');
       const start = clean(row.start || '0');
-      const bookmark = clean(row.bookmark || '0');
+      let bookmark = clean(row.bookmark || '0');
 
       // 필수값 검증
       if (!note_id || !question || !answer) {
@@ -88,6 +89,15 @@ async function importCardsFromExcel(req) {
         return res.status(400).send('누락된 값이 존재합니다. 파일을 확인해주세요.');
         // console.send(`누락된 필수 값 (note_id: ${note_id}, question: ${question}, answer: ${answer})`);
         // continue;
+      }
+
+      // bookmark가 1이면 카운트 증가
+      if (bookmark === '1') {
+        bookmarkCount++;
+        // 10개 초과 시 무조건 0으로 변경
+        if (bookmarkCount > 10) {
+          bookmark = '0';
+        }
       }
 
       values.push([
@@ -171,12 +181,12 @@ async function getCardBookMarkList(req) {
  */
 async function setCardBookMarkUpd(req) {
   try {
-    const { card_id, bookmark } = req;
+    const { note_id, card_id, bookmark } = req;
     // 기본 입력 검증
     if (!card_id) {
       return res.status(400).send('필수 입력값이 누락되었습니다.');
     }
-    const param = { card_id, bookmark };
+    const param = { note_id, card_id, bookmark };
 
     return setCardBookMark(param);
   } catch (error) {

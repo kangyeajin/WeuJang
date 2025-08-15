@@ -74,6 +74,26 @@
     text-align: center;
   }
 
+  .note-title-detail {
+    margin-left: 100px;
+    margin-right: 10px;
+    flex: 1;                 /* 제목 영역을 왼쪽에 꽉 채움 */
+    text-align: left;        /* 왼쪽 정렬 */
+    font-size: 1.4rem;
+    color: #333;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+.note-title-input-detail {
+    margin-left: 100px;
+    margin-right: 10px;
+    flex: 1;                 /* 제목 영역을 왼쪽에 꽉 채움 */
+    text-align: left;        /* 왼쪽 정렬 */
+    font-size: 1.4rem;
+  box-sizing: border-box;
+}
 
   @font-face {
     font-family: "Cafe24Ssurround";

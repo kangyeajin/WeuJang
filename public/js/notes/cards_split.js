@@ -11,7 +11,33 @@ document.addEventListener('DOMContentLoaded', function () {
   container.addEventListener("scroll", handleScroll); // note-container에 스크롤 이벤트 등록
 
   getCard();  // DOM이 로드된 후 자동 실행
+  getNoteInfo();  //제목 정보 가져오기
 });
+
+async function getNoteInfo() {
+  try {
+    const jsonData = { note_id : noteId };
+
+    const response = await fetch('/note/get_note', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(jsonData)
+    });
+
+    const result = await response.text();
+
+    if (!response.ok) {
+      // 오류 
+    } else {
+        var data = '';
+        data = JSON.parse(result);
+        document.querySelector('.note-title-detail').textContent = data[0].title;
+    }
+
+  } catch (error) { console.error('수첩정보 요청 실패:', error); }
+}
 
 //카드 목록 가져오기
 async function getCard() {
@@ -310,7 +336,7 @@ async function setBookmark(card_id) {
   try {
     var bookmark = document.getElementById("txtBookmark_" + card_id).value;
     if (bookmark == '1') { bookmark = '0'; } else { bookmark = '1'; }
-    const jsonData = { card_id, bookmark };
+    const jsonData = { note_id : noteId, card_id, bookmark };
 
     const response = await fetch('/note/set_cardBookmark', {
       method: 'POST',
@@ -322,9 +348,7 @@ async function setBookmark(card_id) {
 
     const result = await response.text();
     var html = "";
-    if (!response.ok) {
-      alert(result); // 오류 메시지
-    } else {
+    if(result == '0' || result == '1') {
       document.getElementById("txtBookmark_" + card_id).value = result;
       // 북마크 해제하는 경우 css 제거
       if (bookmark == '0') { 
@@ -336,7 +360,9 @@ async function setBookmark(card_id) {
         document.getElementById(`pBookmarkSet_${card_id}`).innerText = "북마크 해제";
       }
       getNoteBookmarkList(noteId, card_id); //북마크 목록 재조회
-    }
+    }else{
+      alert(result); // 오류 메시지
+      }
   } catch (error) { console.error('북마크 적용 실패:', error); }
 }
 

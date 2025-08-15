@@ -113,7 +113,7 @@ async function finProgress() {
     isFinishing = true;
     try {
         const jsonData = {
-            notes: notes.split(',').join('|'),
+            notes: notes,
             cardNum: parseInt(cardNum),
             failCnt: failCnt
         };
