@@ -225,7 +225,22 @@ async function getCardBookMark(param) {
  */
 async function setCardBookMark(param) {
   try {
-    const { card_id, bookmark } = param;
+    const { note_id, card_id, bookmark } = param;
+
+    // bookmark가 1로 설정될 때 10개 제한 체크
+    if (bookmark == '1') {
+      const [countRows] = await pool.query(
+        `SELECT COUNT(*) AS cnt 
+         FROM card 
+         WHERE note_id = ? AND bookmark = 1`,
+        [note_id]
+      );
+
+      if (countRows[0].cnt >= 10) {
+        return "북마크의 최대 갯수를 초과하였습니다.";
+      }
+    }
+
     const [result] = await pool.query(
       `UPDATE card SET bookmark  = ? WHERE card_id = ?`,
       [bookmark, card_id]

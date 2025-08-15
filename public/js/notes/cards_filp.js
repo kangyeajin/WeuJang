@@ -187,7 +187,7 @@ document.addEventListener('click', function (e) {
 
     // 위치 및 크기 설정
     const rect = flashcard.getBoundingClientRect();
-    popup.style.top = `${window.scrollY + rect.top - 70}px`;
+    popup.style.top = `${window.scrollY + rect.top - 75}px`;
     popup.style.left = `${rect.left - 30}px`;
     popup.style.width = `${rect.width - 30}px`;
 
@@ -304,7 +304,7 @@ async function getNoteBookmarkList(noteId, cardId) {
 
       // 💡 요소 삽입 후, top 값 자동 설정
       const stickers = document.querySelectorAll('#index-sticker-list .index-sticker');
-      const baseTop = -190;
+      const baseTop = -197;
       const gap = 35;
 
       stickers.forEach((sticker, index) => {
@@ -365,7 +365,7 @@ async function setBookmark() {
     var card_id = cards[currentCardIndex].card_id;
     var bookmark = cards[currentCardIndex].bookmark;
     if (bookmark == '1') { bookmark = '0'; } else { bookmark = '1'; }
-    const jsonData = { card_id, bookmark };
+    const jsonData = { note_id : noteId, card_id, bookmark };
 
     const response = await fetch('/note/set_cardBookmark', {
       method: 'POST',
@@ -376,10 +376,9 @@ async function setBookmark() {
     });
 
     const result = await response.text();
+    
     var html = "";
-    if (!response.ok) {
-      alert(result); // 오류 메시지
-    } else {
+    if(result == '0' || result == '1') {
       cards[currentCardIndex].bookmark = result; // js 배열에도 반영
       // 북마크 해제하는 경우 css 제거
       if (bookmark == '0') {
@@ -391,6 +390,8 @@ async function setBookmark() {
         document.getElementById(`pBookmarkSet`).innerText = "북마크 해제";
       }
       getNoteBookmarkList(noteId, card_id); //북마크 목록 재조회
+    } else {
+      alert(result); // 오류 메시지
     }
   } catch (error) { console.error('북마크 적용 실패:', error); }
 }
