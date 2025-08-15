@@ -42,18 +42,7 @@ async function selAttDetail(param) {
       [user_id, yyyyMMdd]
     );
 
-    if (rows.length > 0) {
-      // 각 row의 note_id 별 title 조회 후 추가
-      for (const row of rows) {
-        const titles = await getTitlesByNoteIds(row.note_id);
-        // titles 배열을 '영어, 한국사, 수학' 형태 문자열로 만들기
-        row.titles = titles.map(s => s.title).join(', ');
-      }
-
-      return rows;
-    } else {
-      return null; // 해당 ID 없음
-    }
+    return rows;
   } catch (err) {
     console.error('출석 기록 상세 조회 중 오류:', err);
     return null;

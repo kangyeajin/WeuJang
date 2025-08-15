@@ -2,12 +2,12 @@
     <h2>수첩 생성</h2>
     <form id="addNoteForm">
       <label for="title">제목</label>
-      <input class="inputBox" id="title" name="title" type="text" placeholder="제목" required>
+      <input class="inputBox" id="title" name="title" type="text" maxlength="15" placeholder="제목" required>
 
       <label for="template">템플릿</label>
       
       <div>
-      <input type="radio" id="template-filp" name="template" value="filp" class="radio-image" required>
+      <input type="radio" id="template-filp" name="template" value="filp" class="radio-image">
       <label for="template-filp">
         <img src="/images/note_filp.png" alt="플립">
       </label>

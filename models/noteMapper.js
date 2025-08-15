@@ -425,10 +425,21 @@ async function instExamResult(param) {
   try {
     const { user_id, cardNum, notes, failCnt, ENTDT, ENTTM} = param;
 
+    // note_id → title 변환
+    const [rows] = await pool.query(
+      `
+        SELECT GROUP_CONCAT(title SEPARATOR '/') AS titles
+        FROM sys.note
+        WHERE note_id IN (?)
+      `,
+      [notes.split(',')]
+    );
+    const noteTitles = rows[0]?.titles || '';
+
     const [result] = await pool.query(
       `INSERT INTO sys.studylog (user_id, note_id, try_count, total_count, entdt, enttm)
              VALUES (?, ?, ?, ?, ?, ?)`,
-      [user_id, notes, failCnt, cardNum, ENTDT, ENTTM]
+      [user_id, noteTitles, failCnt, cardNum, ENTDT, ENTTM]
     );
 
     if (result.affectedRows <= 0) return false;

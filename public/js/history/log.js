@@ -186,7 +186,7 @@ async function getStudyLog(yyyyMMdd) {
       // ✅ studyRecords 객체 생성
       const studyRecords = result.map(row => ({
           count: row.total_count,
-          title: row.titles,
+          title: row.note_id,
           time: row.ENTTM.slice(0, 2) + ':' + row.ENTTM.slice(2, 4)
         }));
 

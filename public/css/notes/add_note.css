@@ -6,9 +6,6 @@ form {
     max-width: 400px;
     margin: auto;
 }
-.radio-image {
-  display: none; /* 기본 라디오 버튼 숨김 */
-}
 
 .radio-image + label {
   cursor: pointer;
@@ -25,8 +22,10 @@ form {
   object-fit: cover;
 }
 
-.radio-image {
-  display: none;
+input[name="template"] {
+    opacity: 0;
+    position: absolute;
+    left: -9999px;
 }
 
 .radio-image + label {

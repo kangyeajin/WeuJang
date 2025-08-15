@@ -42,9 +42,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const input = document.createElement('input');
         input.type = 'text';
         input.value = noteTitle;
-        input.maxLength = 50;
+        input.maxLength = 15;
         input.placeholder = '제목을 입력하세요';
         input.className = 'note-title-input';
+        // 슬래시(/) 입력 방지(구분자 사용 방지)
+        input.addEventListener('input', () => {
+            if (input.value.includes('/')) {
+                input.value = input.value.replace(/\//g, '');
+            }
+        });
         span.replaceWith(input);
         input.focus();
 

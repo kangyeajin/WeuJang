@@ -2,6 +2,11 @@
 document.getElementById('addNoteForm').addEventListener('submit', async function (e) {
     e.preventDefault(); // 폼의 기본 동작(페이지 이동) 막기
 
+    const selected = document.querySelector('input[name="template"]:checked');
+    if (!selected) {
+        alert('템플릿을 선택해주세요');
+        return;
+    }
     const formData = new FormData(this);
     console.log(Object.fromEntries(formData.entries()));
     const jsonData = {};
@@ -29,5 +34,14 @@ document.getElementById('addNoteForm').addEventListener('submit', async function
     } catch (error) {
         console.error('예외 발생:', error);
         alert('네트워크 오류가 발생했습니다.');
+    }
+});
+
+//제목 입력 시 슬래시(/) 방지
+const titleInput = document.getElementById('title');
+
+titleInput.addEventListener('input', () => {
+    if (titleInput.value.includes('/')) {
+        titleInput.value = titleInput.value.replace(/\//g, '');
     }
 });
