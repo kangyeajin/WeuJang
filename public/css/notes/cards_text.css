@@ -1,3 +1,7 @@
+body {
+  overflow: hidden;
+}
+
 /* main에서 스크롤 처리 */
 .main {
   display: flex;
@@ -5,9 +9,10 @@
   align-items: center;
   /* 화면 전체 높이 */
   /* min-height: 100vh; */
-      max-height: 100vh;
+  max-height: 100vh;
   /* 모바일에서 너무 꽉 차는 것 방지 */
-  padding: 2.3rem 2.3rem 1rem 2.3rem;;
+  padding: 2.3rem 2.3rem 1rem 2.3rem;
+  ;
   /* index-sticker-list가 절대 위치 잡을 기준 */
   position: relative;
   box-sizing: border-box;
@@ -16,20 +21,22 @@
 /* 문제와 답 세트 컨테이너 */
 .note-container {
   position: relative;
-    display: flex;
-    flex-direction: column; /* 세로로 나열 */
+  display: flex;
+  flex-direction: column;
+  /* 세로로 나열 */
   width: 100%;
   min-width: 350px;
   max-width: 1200px;
   /* height: auto; */
-  height: calc(85dvh - 4rem); /* 동적 뷰포트 사용 */
+  height: calc(85dvh - 4rem);
+  /* 동적 뷰포트 사용 */
   max-height: calc(85dvh - 4rem);
   /* 너무 길어지면 스크롤 허용 */
   overflow: auto;
   background-color: #f9f9f9;
   border: 2px solid #ccc;
   border-radius: 8px;
-      padding-top: 1rem;
+  padding-top: 1rem;
   box-sizing: border-box;
 
   /* 임의로 높이 고정 */
@@ -37,60 +44,63 @@
   /* 상단바 높이만큼 마진 적용 */
   /* margin-bottom: 71px; */
 }
-  
-  /* 각 문제와 답 쌍 */
-    .note {
-    align-items: flex-start;
-    padding: 15px 25px;
-    border-radius: 8px;
-    cursor: default;
-    position: relative;
-  }
-  
-  /* 문제 부분 */
-  .note .question {
-    font-size: 1rem;
-    margin-bottom: 10px;
-    flex: 1;
-    /* font-weight: bold;
+
+/* 각 문제와 답 쌍 */
+.note {
+  align-items: flex-start;
+  padding: 15px 25px;
+  border-radius: 8px;
+  cursor: default;
+  position: relative;
+}
+
+/* 문제 부분 */
+.note .question {
+  font-size: 1rem;
+  margin-bottom: 10px;
+  flex: 1;
+  /* font-weight: bold;
     text-indent: -0.8em;
     padding: 0 0 0 0.8em;  */
-  }
-  
-  /* 답 부분 */
-  .note .answer {
-    font-size: 1rem;
-    color: #ff4e00d4; /* 답변 색상 */
-    padding: 0 0 0 1em;
-  }
-  
-  /* 문제와 답 사이의 구분선 */
-  .note .divider {
-    margin: 10px 0;
-    border-top: 1px solid #ccc;
-  }
+}
 
-  .no-data {
+/* 답 부분 */
+.note .answer {
+  font-size: 1rem;
+  color: #ff4e00d4;
+  /* 답변 색상 */
+  padding: 0 0 0 1em;
+}
+
+/* 문제와 답 사이의 구분선 */
+.note .divider {
+  margin: 10px 0;
+  border-top: 1px solid #ccc;
+}
+
+.no-data {
   text-align: center;
   font-size: 1.1rem;
   color: #999;
   margin: 5rem auto;
-  text-decoration: none; /* 밑줄 제거 */
+  text-decoration: none;
+  /* 밑줄 제거 */
 }
 
 .no-data:hover {
   color: #000000;
 }
 
-  /* 메타 정보 (별, 힌트)를 좌우 배치 */
-  .meta {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%; /* left의 너비에 맞추기 */
-    box-sizing: border-box;
-    padding: 0 1.2rem 0 0;
-  }
+/* 메타 정보 (별, 힌트)를 좌우 배치 */
+.meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  /* left의 너비에 맞추기 */
+  box-sizing: border-box;
+  padding: 0 1.2rem 0 0;
+}
 
 .spanHeart {
   display: flex;
@@ -99,14 +109,15 @@
   align-items: center;
   cursor: pointer;
 }
-  .img-heart {
-    width: 25px;
-    height: 25px;
+
+.img-heart {
+  width: 25px;
+  height: 25px;
 }
 
-  
-  /* 모바일에서 세로로 나열될 때 보기 좋게 조정 */
-  /* @media (max-width: 768px) {
+
+/* 모바일에서 세로로 나열될 때 보기 좋게 조정 */
+/* @media (max-width: 768px) {
     .note-container {
       width: 100%;
       padding: 10px;
@@ -126,7 +137,7 @@
       font-size: 0.9rem;
     }
   } */
-  
+
 
 /* 힌트 팝업 */
 .hint-popup {
@@ -136,8 +147,9 @@
   border-radius: 8px;
   padding: 10px;
   z-index: 9999;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-  max-width: 90vw; /* 모바일 대응 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  max-width: 90vw;
+  /* 모바일 대응 */
   width: 100%;
   box-sizing: border-box;
   word-break: break-word;
@@ -229,9 +241,11 @@
   transition: background-color 0.5s ease;
   animation: highlight-fade 2s forwards;
 }
+
 .yellow-border {
   position: relative;
 }
+
 .yellow-border::before {
   content: "";
   position: absolute;
@@ -294,11 +308,11 @@
   cursor: pointer;
 }
 
-.spanTextLefts{
+.spanTextLefts {
   white-space: pre-line;
 }
 
-.spanTextRigths{
+.spanTextRigths {
   white-space: pre-line;
 }
 

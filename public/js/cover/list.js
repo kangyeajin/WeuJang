@@ -68,6 +68,8 @@ function setCoverOpt(data) {
     const coverPreview = document.getElementById("coverPreview");//가림판 미리보기 화면
     const coverImage = document.getElementById("previewImage");
     const decorationText = document.getElementById('decorationText');//꾸밈 문구
+    const question = document.getElementById('sample-question');//문제 미리보기
+    const answer = document.getElementById('sample-answer');//답 미리보기
 
     if (!data.Img) {
         coverImage.src = "";
@@ -82,6 +84,9 @@ function setCoverOpt(data) {
     decorationText.textContent = data.text;
     decorationText.style.fontSize = data.text_size + "px";
     decorationText.style.color = data.text_color;
+    question.style.color = data.question_color;
+    answer.style.color = data.answer_color;
+    answer.style.opacity = data.answer_opacity;
 }
 
 // 수정/등록 화면으로 이동

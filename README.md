@@ -1,5 +1,4 @@
 ## 외우장(WeuJang)
-
 ### < 프로젝트 실행 방법 >
 1. 터미널에서 프로젝트 폴더로 이동 
   - cd ..\WeuJang\
@@ -39,3 +38,6 @@ npm 버전 : 10.8.1<br>
 1. `nodemailer` 라이브러리 다운 **npm i nodemailer**
 2. 네이버 메일 환경 설정 변경 (notion 참고) https://www.notion.so/2203c3393b15803b83c0d8102ceae34c?source=copy_link
 2. `.env` 파일에서 `EMAIL_ID, EMAIL_PW` 항목 수정하기
+
+### < 기타 >
+1. public 폴더에 upload 폴더 추가하기

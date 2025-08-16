@@ -6,7 +6,7 @@ let loading = false;
 let done = false; // 데이터 끝났는지 여부
 let html = "";
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   const container = document.querySelector('.note-container');
   container.addEventListener("scroll", handleScroll); // note-container에 스크롤 이벤트 등록
   getCard();  // DOM이 로드된 후 자동 실행
@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 async function getNoteInfo() {
   try {
-    const jsonData = { note_id : noteId };
+    const jsonData = { note_id: noteId };
 
     const response = await fetch('/note/get_note', {
       method: 'POST',
@@ -30,9 +30,9 @@ async function getNoteInfo() {
     if (!response.ok) {
       // 오류 
     } else {
-        var data = '';
-        data = JSON.parse(result);
-        document.querySelector('.note-title-detail').textContent = data[0].title;
+      var data = '';
+      data = JSON.parse(result);
+      document.querySelector('.note-title-detail').textContent = data[0].title;
     }
 
   } catch (error) { console.error('수첩정보 요청 실패:', error); }
@@ -43,19 +43,19 @@ async function getCard() {
   loading = true; // 로딩 상태 설정
   try {
 
-fetch(`/api/cards?note_id=${noteId}&page=${page}`)
-  .then(res => res.json())
-  .then(data => {
-    const cards = data.cards;
-    if (!cards || cards.length === 0) {
+    fetch(`/api/cards?note_id=${noteId}&page=${page}`)
+      .then(res => res.json())
+      .then(data => {
+        const cards = data.cards;
+        if (!cards || cards.length === 0) {
           if (page == 1) {
             document.querySelector('.note-container').innerHTML
               = `<a class="no-data" href="/add_card?note_id=${noteId}">등록된 문제가 없습니다.</>`;
           }
-      done = true; // 더 이상 데이터 없음 표시
-      return;
-    }
-    for (let i = 0; i < cards.length; i++) {
+          done = true; // 더 이상 데이터 없음 표시
+          return;
+        }
+        for (let i = 0; i < cards.length; i++) {
           var heart_fivefg = false;
 
           html += `     <input type="hidden" value="${cards[i].wrongCnt}" id="wrongCnt_${cards[i].card_id}"></input>
@@ -65,10 +65,10 @@ fetch(`/api/cards?note_id=${noteId}&page=${page}`)
           // 북마크
           if (cards[i].bookmark == '1') {
             html += `<div class="note yellow-border" data-index="${cards[i].card_id}" >`
-          }else{
+          } else {
             html += `<div class="note" data-index="${cards[i].card_id}" >`
           }
-      html += `<div class="question">
+          html += `<div class="question">
           <div class="meta">
             <span class="spanHeart" id="heart_${cards[i].card_id}" onclick="setWrongCnt(${cards[i].card_id})" >`;
           // 하트(틀린갯수)표시
@@ -97,9 +97,9 @@ fetch(`/api/cards?note_id=${noteId}&page=${page}`)
                             <p onclick="delCard(${cards[i].card_id})">문제 삭제</p>`
           // 북마크 설정 문구
           if (cards[i].bookmark == '1') {
-          html += `         <p id='pBookmarkSet_${cards[i].card_id}' onclick="setBookmark(${cards[i].card_id})">북마크 해제</p>`
+            html += `         <p id='pBookmarkSet_${cards[i].card_id}' onclick="setBookmark(${cards[i].card_id})">북마크 해제</p>`
           } else {
-          html += `         <p id='pBookmarkSet_${cards[i].card_id}' onclick="setBookmark(${cards[i].card_id})">북마크 적용</p>`
+            html += `         <p id='pBookmarkSet_${cards[i].card_id}' onclick="setBookmark(${cards[i].card_id})">북마크 적용</p>`
           }
           html += `      </div>
                       </div>
@@ -111,15 +111,17 @@ fetch(`/api/cards?note_id=${noteId}&page=${page}`)
                         <button class="edit-cancel-btn hidden" onclick="cardEditCancel(${cards[i].card_id})">취소</button>
                       </div>
       </div>`;
-    }
-    noteCon.innerHTML = html;
-        
-    getNoteBookmarkList(noteId); //북마크 목록
-  })
-  .catch(err => {
-    console.error("카드 불러오기 실패:", err);
-  });
-  }catch (error) {console.error('카드 요청 실패:', error);} 
+        }
+        noteCon.innerHTML = html;
+
+        getNoteBookmarkList(noteId); //북마크 목록
+
+        setQnAColor(); // 문제,답 색상 설정 적용
+      })
+      .catch(err => {
+        console.error("카드 불러오기 실패:", err);
+      });
+  } catch (error) { console.error('카드 요청 실패:', error); }
   finally {
     loading = false;
   }
@@ -127,7 +129,7 @@ fetch(`/api/cards?note_id=${noteId}&page=${page}`)
 
 // 스크롤 이벤트
 function handleScroll() {
-  try{
+  try {
     const container = document.querySelector('.note-container');
 
     const scrollTop = container.scrollTop;
@@ -139,13 +141,13 @@ function handleScroll() {
       ++page; // 다음 목록 생성 
       getCard();
     }
-  }catch (error) {
-    console.error('스크롤 이벤트 처리 실패:', error); 
+  } catch (error) {
+    console.error('스크롤 이벤트 처리 실패:', error);
   }
 }
 
 document.addEventListener('click', function (e) {
-// 힌트 팝업
+  // 힌트 팝업
   const popup = document.getElementById('hint-popup');
   const popupContent = popup.querySelector('.hint-content');
 
@@ -259,12 +261,12 @@ async function getNoteBookmarkList(noteId, cardId) {
       alert(result); // 오류 메시지
     } else {
       var html = "";
-      
+
       for (let i = 0; i < data.length; i++) {
         html += `<div class="index-sticker${i === 0 ? ' active' : ''}" id="index-sticker_${data[i].card_id}" onclick="scrollToSticker(${data[i].card_id})" >`
-        if(document.getElementById('cardNum_'+data[i].card_id)) {
-          html += document.getElementById('cardNum_'+data[i].card_id).value
-        }else{
+        if (document.getElementById('cardNum_' + data[i].card_id)) {
+          html += document.getElementById('cardNum_' + data[i].card_id).value
+        } else {
           html += `...` // 아직 로드되지 않은 문제인 경우
         }
         html += `</div>`;
@@ -334,7 +336,7 @@ async function setBookmark(card_id) {
   try {
     var bookmark = document.getElementById("txtBookmark_" + card_id).value;
     if (bookmark == '1') { bookmark = '0'; } else { bookmark = '1'; }
-    const jsonData = { note_id : noteId, card_id, bookmark };
+    const jsonData = { note_id: noteId, card_id, bookmark };
 
     const response = await fetch('/note/set_cardBookmark', {
       method: 'POST',
@@ -346,21 +348,21 @@ async function setBookmark(card_id) {
 
     const result = await response.text();
     var html = "";
-    if(result == '0' || result == '1') {
+    if (result == '0' || result == '1') {
       document.getElementById("txtBookmark_" + card_id).value = result;
       // 북마크 해제하는 경우 css 제거
-      if (bookmark == '0') { 
+      if (bookmark == '0') {
         document.querySelector(`[data-index="${card_id}"]`).classList.remove("yellow-border");
         document.getElementById(`pBookmarkSet_${card_id}`).innerText = "북마크 등록";
-        card_id = ''; 
-      }else{
+        card_id = '';
+      } else {
         document.querySelector(`[data-index="${card_id}"]`).classList.add("yellow-border");
         document.getElementById(`pBookmarkSet_${card_id}`).innerText = "북마크 해제";
       }
       getNoteBookmarkList(noteId, card_id); //북마크 목록 재조회
-    }else{
+    } else {
       alert(result); // 오류 메시지
-      }
+    }
   } catch (error) { console.error('북마크 적용 실패:', error); }
 }
 
@@ -441,7 +443,7 @@ async function cardEditSave(cardId) {
     const newQuestion = document.querySelector(`#spanTextLeft_${cardId} textarea`).value;
     const newAnswer = document.querySelector(`#spanTextRigth_${cardId} input`).value;
     const newHint = document.querySelector(`#spanTextLeft_${cardId} .edit-wrapper input`).value;
-    var hint = document.getElementById("spanHint_"+cardId);
+    var hint = document.getElementById("spanHint_" + cardId);
 
     const confirmDelete = confirm("변경된 내용을 저장하시겠습니까?");
     if (!confirmDelete) return; // 취소 시 함수 종료
@@ -514,4 +516,21 @@ function cardEditCancel(cardId) {
 
   const dotsButton = document.getElementById(`dots-button_${cardId}`);
   dotsButton.classList.remove("hidden");
+}
+
+// 화면에 문제, 답 색상 설정 적용
+function setQnAColor() {
+  const userColorSetting = JSON.parse(localStorage.getItem("coverSettings"));
+  if (userColorSetting) {
+    const questions = document.querySelectorAll('.spanTextLefts');
+    const answers = document.querySelectorAll('.spanTextRigths');
+
+    questions.forEach(qusetion => {
+      qusetion.style.color = userColorSetting.question_color;
+    });
+    answers.forEach(answer => {
+      answer.style.color = userColorSetting.answer_color;
+      answer.style.opacity = userColorSetting.answer_opacity;
+    });
+  }
 }

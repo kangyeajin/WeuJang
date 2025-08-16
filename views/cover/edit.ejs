@@ -48,15 +48,15 @@
         <div class="setting-groups">
             <div class="setting-group">
                 <label>문제 색상:</label>
-                <input id="questionColor" type="color" value="#000000">
+                <input id="questionColor" type="color" value="<%= cover.question_color %>">
             </div>
             <div class="setting-group">
                 <label>답 색상:</label>
-                <input id="answerColor" type="color" value="#ff4e00">
+                <input id="answerColor" type="color" value="<%= cover.answer_color %>">
             </div>
             <div class="setting-group">
                 <label>답 투명도:</label>
-                <input id="answerOpacity" type="range" min="0" max="1" step="0.01" value="0.83">
+                <input id="answerOpacity" type="range" min="0" max="1" step="0.01" value="<%= cover.answer_opacity %>">
             </div>
         </div>
     </div>

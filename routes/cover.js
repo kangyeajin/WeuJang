@@ -18,7 +18,7 @@ router.use(express.urlencoded({ extended: true }));
 router.use(express.json());
 
 /* 가림판 기본 설정 */
-const defaultCoverOpt = { title: "", opacity: 0.87, color: "#ff0000", text: "", text_size: 16, text_color: "#000000", Img: "" };
+const defaultCoverOpt = { title: "", opacity: 0.87, color: "#ff0000", text: "", text_size: 16, text_color: "#000000", Img: "", question_color: "#000000", answer_color: "#ff4e00", answer_opacity: 0.83 };
 
 /* 가림판 화면 이동 */
 router.get('/edit', async (req, res) => {
@@ -111,7 +111,7 @@ router.post('/delete-image', (req, res) => {
 router.post('/change', async (req, res) => {
     const user_id = req.session.user?.id || "admin";
     const cover_id = req.body.cover_id;
-    console.log({ user_id, cover_id });
+
     try {
         // user 테이블의 기본 가림판(cover_id) 변경
         if (await setUserCoverId({ user_id, cover_id })) {
@@ -120,9 +120,7 @@ router.post('/change', async (req, res) => {
             req.session.user.coverId = cover_id;
 
             // 기본 가림판 설정 적용
-            if (cover_id == "-1") {
-                return res.json(defaultCoverOpt);
-            }
+            if (cover_id == "-1") return res.json(defaultCoverOpt);
 
             // 사용자가 선택한 가림판 설정 적용
             const Info = await getCoverOption(user_id, cover_id);

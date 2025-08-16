@@ -28,12 +28,11 @@ async function getCoverOption(user_id, cover_id) {
 /**
  * 가림판 생성
  */
-async function createCover(req) {
+async function createCover(param) {
   try {
-    const { user_id, title, imgUrl, backgroundColor, backgroundOpacity, text, textSize, textColor } = req;
-    const { DT: ENTDT, TM: ENTTM } = getDate();
-
-    const param = { user_id, title, imgUrl, backgroundColor, backgroundOpacity, text, textSize, textColor, ENTDT, ENTTM };
+    const { DT, TM } = getDate();
+    param.ENTDT = DT;
+    param.ENTTM = TM;
     return insertCoverInfo(param);
   } catch (error) {
     console.log("error : ", error);
@@ -44,11 +43,11 @@ async function createCover(req) {
 /**
  * 가림판 수정
  */
-async function updateCover(req) {
+async function updateCover(param) {
   try {
-    const { cover_id, user_id, title, imgUrl, backgroundColor, backgroundOpacity, text, textSize, textColor } = req;
-    const { DT: UPDDT, TM: UPDTM } = getDate();
-    const param = { cover_id, user_id, title, imgUrl, backgroundColor, backgroundOpacity, text, textSize, textColor, UPDDT, UPDTM };
+    const { DT, TM } = getDate();
+    param.UPDDT = DT;
+    param.UPDTM = TM;
     return updateCoverInfo(param);
   } catch (error) {
     console.log("error : ", error);

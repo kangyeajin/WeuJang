@@ -1,3 +1,7 @@
+body {
+  overflow: hidden;
+}
+
 /* main에서 스크롤 처리 */
 .main {
   display: flex;
@@ -5,9 +9,10 @@
   align-items: center;
   /* 화면 전체 높이 */
   /* min-height: 100vh; */
-      max-height: 100vh;
+  max-height: 100vh;
   /* 모바일에서 너무 꽉 차는 것 방지 */
-  padding: 2.3rem 2.3rem 1rem 2.3rem;;
+  padding: 2.3rem 2.3rem 1rem 2.3rem;
+  ;
   /* index-sticker-list가 절대 위치 잡을 기준 */
   position: relative;
   box-sizing: border-box;
@@ -21,7 +26,8 @@
   min-width: 350px;
   max-width: 1200px;
   /* height: auto; */
-  height: calc(85dvh - 4rem); /* 동적 뷰포트 사용 */
+  height: calc(85dvh - 4rem);
+  /* 동적 뷰포트 사용 */
   max-height: calc(85dvh - 4rem);
   /* 너무 길어지면 스크롤 허용 */
   overflow: auto;
@@ -236,7 +242,8 @@ li {
 #index-sticker-list {
   position: relative;
   width: 50px;
-  height: calc(85dvh - 4rem); /* 동적 뷰포트 사용 */
+  height: calc(85dvh - 4rem);
+  /* 동적 뷰포트 사용 */
   max-height: calc(85dvh - 4rem);
   min-width: 50px;
 }
@@ -263,9 +270,11 @@ li {
   transition: background-color 0.5s ease;
   animation: highlight-fade 2s forwards;
 }
+
 .yellow-border {
   position: relative;
 }
+
 .yellow-border::before {
   content: "";
   position: absolute;
@@ -327,11 +336,11 @@ li {
   cursor: pointer;
 }
 
-.spanTextLefts{
+.spanTextLefts {
   white-space: pre-line;
 }
 
-.spanTextRigths{
+.spanTextRigths {
   white-space: pre-line;
 }
 
@@ -440,7 +449,8 @@ li {
   font-size: 1.1rem;
   color: #999;
   margin: 5rem auto;
-  text-decoration: none; /* 밑줄 제거 */
+  text-decoration: none;
+  /* 밑줄 제거 */
 }
 
 .no-data:hover {

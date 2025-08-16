@@ -33,7 +33,7 @@ async function getUserCoverLists(user_id) {
 async function getCoverInfo(user_id, cover_id) {
   try {
     const [rows] = await pool.query(
-      `SELECT cover_id, title, Img, color, opacity, text, text_size, text_color, ENTDT, ENTTM, UPDDT, UPDTM 
+      `SELECT cover_id, title, Img, color, opacity, text, text_size, text_color, question_color, answer_color, answer_opacity, ENTDT, ENTTM, UPDDT, UPDTM
         FROM sys.cover
         WHERE cover_id = ? and user_id = ? `,
       [cover_id, user_id]
@@ -57,13 +57,13 @@ async function getCoverInfo(user_id, cover_id) {
  */
 async function insertCoverInfo(param) {
   try {
-    const { user_id, title, imgUrl, backgroundColor, backgroundOpacity, text, textSize, textColor, ENTDT, ENTTM } = param;
+    const { user_id, title, imgUrl, backgroundColor, backgroundOpacity, text, textSize, textColor, questionColor, answerColor, answerOpacity, ENTDT, ENTTM } = param;
 
     const [result] = await pool.query(
       `INSERT INTO sys.cover 
-      (user_id, title, Img, color, opacity, text, text_size, text_color, ENTDT, ENTTM)
-       VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [user_id, title, imgUrl, backgroundColor, backgroundOpacity, text, textSize, textColor, ENTDT, ENTTM]
+      (user_id, title, Img, color, opacity, text, text_size, text_color, question_color, answer_color, answer_opacity, ENTDT, ENTTM)
+       VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [user_id, title, imgUrl, backgroundColor, backgroundOpacity, text, textSize, textColor, questionColor, answerColor, answerOpacity, ENTDT, ENTTM]
     );
 
     if (result.affectedRows < 0) return false;
@@ -81,14 +81,13 @@ async function insertCoverInfo(param) {
  */
 async function updateCoverInfo(param) {
   try {
-    const { cover_id, user_id, title, imgUrl, backgroundColor, backgroundOpacity, text, textSize, textColor, UPDDT, UPDTM } = param;
-
+    const { cover_id, user_id, title, imgUrl, backgroundColor, backgroundOpacity, text, textSize, textColor, questionColor, answerColor, answerOpacity, UPDDT, UPDTM } = param;
     const [result] = await pool.query(
       `UPDATE sys.cover 
-      SET title= ?, Img= ?, color= ?, opacity= ?, text= ?, text_size= ?, text_color= ?, UPDDT= ?, UPDTM= ?
+      SET title= ?, Img= ?, color= ?, opacity= ?, text= ?, text_size= ?, text_color= ?, question_color= ?, answer_color= ?, answer_opacity= ?, UPDDT= ?, UPDTM= ?
       WHERE cover_id= ? and user_id= ?
       `,
-      [title, imgUrl, backgroundColor, backgroundOpacity, text, textSize, textColor, UPDDT, UPDTM, cover_id, user_id]
+      [title, imgUrl, backgroundColor, backgroundOpacity, text, textSize, textColor, questionColor, answerColor, answerOpacity, UPDDT, UPDTM, cover_id, user_id]
     );
 
     if (result.affectedRows < 0) return false;

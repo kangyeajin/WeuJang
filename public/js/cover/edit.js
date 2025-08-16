@@ -4,6 +4,8 @@ const coverPreview = document.getElementById("coverPreview");//가림판 미리�
 const previewText = document.getElementById('previewText');//문제, 답 미리보기 화면
 const previewImage = document.getElementById('previewImage');//배경 이미지 
 const decorationText = document.getElementById('decorationText');//꾸밈 문구
+const question = document.getElementById('sample-question');//문제 미리보기
+const answer = document.getElementById('sample-answer');//답 미리보기
 
 window.addEventListener('DOMContentLoaded', () => {
     if (!preImage.value) { //기존에 저장된 이미지 없음
@@ -19,6 +21,9 @@ window.addEventListener('DOMContentLoaded', () => {
     decorationText.textContent = document.getElementById("textInput").value;
     decorationText.style.fontSize = parseInt(document.getElementById("textSize").value) + "px";
     decorationText.style.color = document.getElementById("textColor").value;
+    question.style.color = document.getElementById("questionColor").value;
+    answer.style.color = document.getElementById("answerColor").value;
+    answer.style.opacity = document.getElementById("answerOpacity").value;
 });
 
 // 배경 이미지 업로드
@@ -139,7 +144,7 @@ document.getElementById("saveBtn").addEventListener("click", async () => {
         textColor: document.getElementById("textColor").value,
         questionColor: document.getElementById("questionColor").value,
         answerColor: document.getElementById("answerColor").value,
-        answerOpacity: parseInt(document.getElementById("answerOpacity").value),
+        answerOpacity: parseFloat(document.getElementById("answerOpacity").value),
     };
 
     var response = null;
