@@ -34,18 +34,18 @@
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  background-color: black;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: #fdfcf7;
+  /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid #ccc;
+  border: 3px solid #000000;
   cursor: pointer;
   transition: background-color 0.2s;
 }
 
 .add-button:hover {
-  background-color: #7c7c7c;
+  background-color: #7c7c7c65;
 }
 
 .add-button img {
@@ -54,5 +54,5 @@
 }
 
 .add-button.active {
-  background-color: #7c7c7c;
+  background-color: #7c7c7c65;
 }

@@ -20,6 +20,8 @@ body {
 
 /* 문제와 답 세트 컨테이너 */
 .note-container {
+  box-shadow: 2px 2px 4px rgba(0,0,0,0.1); 
+  border: 1px solid #e0d6c8;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -33,7 +35,7 @@ body {
   max-height: calc(85dvh - 4rem);
   /* 너무 길어지면 스크롤 허용 */
   overflow: auto;
-  background-color: #f9f9f9;
+  background-color: #fdfcf7;
   border: 2px solid #ccc;
   border-radius: 8px;
   padding-top: 1rem;

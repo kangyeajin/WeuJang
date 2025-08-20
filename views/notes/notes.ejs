@@ -13,7 +13,7 @@
     <option value="title">제목순</option>
   </select>
   <!-- 체크박스 버튼 -->
-  <img src="/images/setting.png" class="icon-set" alt="설정">  
+  <img src="/images/eraser.png" class="icon-set" alt="설정">  
     </div>
 </div>
 <div class="folder-grid">
@@ -34,7 +34,7 @@
         
         <!-- 제목 텍스트 영역 -->
         <span class="note-title" title="<%= note.title %>" data-id="<%= note.note_id %>" data-title="<%= note.title %>">
-          <%= note.title && note.title.length > 7 ? note.title.substring(0, 7) + '...' : note.title %>
+          <%= note.title && note.title.length > 8 ? note.title.substring(0, 8) + '...' : note.title %>
         </span>
       </div>
     <% }) %>

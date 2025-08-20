@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const restoreSpan = (title) => {
             const newSpan = document.createElement('span');
-            newSpan.textContent = `${title.length > 7 ? title.substring(0, 7) + '...' : title}`;
+            newSpan.textContent = `${title.length > 8 ? title.substring(0, 8) + '...' : title}`;
             newSpan.className = 'note-title';
             newSpan.dataset.id = noteId;
             newSpan.dataset.title = title;

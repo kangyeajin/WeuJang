@@ -1,7 +1,7 @@
 .folder-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-  gap: 1rem;
+  gap: 2rem;
 }
 
 .folder-item {
@@ -16,14 +16,15 @@
   width: 100%;
   aspect-ratio: 1 / 1;
   object-fit: contain;
-  background-color: white;
-  border: 1px solid #ddd;
+  /* background-color: white;
+  border: 1px solid #ddd; */
   border-radius: 8px;
   padding: 10px;
+      box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .note-title {
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   position: relative;
   display: inline-block;
   cursor: pointer;
@@ -59,6 +60,7 @@
 }
 
 .search-input {
+  background: #fdfcf7;
   width: 50%;
   padding: 6px 10px;
   font-size: 14px;
@@ -78,7 +80,7 @@
   font-size: 14px;
   border: 1px solid #ccc;
   border-radius: 6px;
-  background-color: white;
+  background-color: #fdfcf7;
 }
 
 .settings-btn {
