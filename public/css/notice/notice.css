@@ -40,7 +40,7 @@
 }
 
 .notice-item:hover {
-  background-color: #efe6c39e;
+  background-color: var(--shadow-15);
 }
 
 .notice-subject {

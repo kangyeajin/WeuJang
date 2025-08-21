@@ -16,7 +16,7 @@
   width: 60px;
   /* 접힌 상태 */
   height: 100%;
-  background: #fdfcf7;
+  background: var(--normal-yellow);
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   transition: width 0.3s ease;

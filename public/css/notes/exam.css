@@ -74,10 +74,12 @@
 
 /* 카드 본체 */
 .card {
+  box-shadow: 2px 2px 4px rgba(0,0,0,0.1); 
+  border: var(--border-10);
   width: 100%;
   height: auto;
   aspect-ratio: 4 / 2.2;
-  background-color: #f1f1f1;
+  background-color: var(--normal-yellow);
   border-radius: 10px;
   position: relative;
   display: flex;
@@ -116,7 +118,7 @@
 }
 
 .card-back {
-  background-color: #fff;
+  background-color: var(--dark-yellow);
   transform: rotateY(180deg);
 }
 
@@ -144,7 +146,7 @@ button {
 }
 
 button:hover {
-  background-color: #ddd;
+  background-color: var(--shadow-50);
 }
 
 .hidden {
@@ -165,7 +167,7 @@ button:hover {
 
 .wrong-btn:hover,
 .correct-btn:hover  {
-  background-color: #0056b3;
+  background-color: var(--shadow-50);
 }
 
 .wrong-btn,
@@ -179,12 +181,12 @@ button:hover {
 }
 
 .wrong-btn {
-  background-color: #f44336;
+  background-color: var(--normal-red);
   color: white;
 }
 
 .correct-btn {
-  background-color: #4CAF50;
+  background-color: var(--normal-green);
   color: white;
 }
 
@@ -210,7 +212,7 @@ button:hover {
 
 .progress-fill {
   height: 100%;
-  background-color: #4caf50;
+  background-color: var(--normal-green);
   width: 0%;
   transition: width 0.3s ease-in-out;
 }

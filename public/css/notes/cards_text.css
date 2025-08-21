@@ -21,7 +21,7 @@ body {
 /* 문제와 답 세트 컨테이너 */
 .note-container {
   box-shadow: 2px 2px 4px rgba(0,0,0,0.1); 
-  border: 1px solid #e0d6c8;
+  border: var(--border-10);
   position: relative;
   display: flex;
   flex-direction: column;
@@ -35,8 +35,7 @@ body {
   max-height: calc(85dvh - 4rem);
   /* 너무 길어지면 스크롤 허용 */
   overflow: auto;
-  background-color: #fdfcf7;
-  border: 2px solid #ccc;
+  background-color: var(--normal-yellow);
   border-radius: 8px;
   padding-top: 1rem;
   box-sizing: border-box;
@@ -390,7 +389,7 @@ body {
 }
 
 .edit-save-btn:hover {
-  background-color: #0056b3;
+  background-color: var(--shadow-50);
 }
 
 .edit-save-btn,
@@ -404,12 +403,12 @@ body {
 }
 
 .edit-save-btn {
-  background-color: #4CAF50;
+  background-color: var(--normal-green);
   color: white;
 }
 
 .edit-cancel-btn {
-  background-color: #f44336;
+  background-color: var(--normal-red);
   color: white;
 }
 

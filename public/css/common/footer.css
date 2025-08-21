@@ -9,7 +9,7 @@
   position: absolute;
   bottom: 70px;
   right: 0;
-  background: white;
+  background: var(--normal-yellow);
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.15);
   display: none;
@@ -27,7 +27,7 @@
 }
 
 .fab-menu a:hover {
-  background-color: #f0f0f0;
+  background-color: var(--shadow-15);
 }
 
 .add-button {
@@ -45,7 +45,7 @@
 }
 
 .add-button:hover {
-  background-color: #7c7c7c65;
+  background-color: var(--shadow-15);
 }
 
 .add-button img {

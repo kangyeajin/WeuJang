@@ -25,7 +25,7 @@
 
 .calendar-day {
   aspect-ratio: 1 / 1;
-  border: 1px solid #ddd;
+  border: var(--border-17);
   border-radius: 6px;
   text-align: center;
   line-height: 40px;
@@ -90,12 +90,12 @@
   line-height: 1.6;
 }
 .record-box {
-  border: 1px solid #ddd;
+  border: var(--border-10);
   border-radius: 8px;
   padding: 12px 16px;
   margin-bottom: 12px;
-  background-color: #f9f9f9;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  background-color: var(--normal-yellow);
+  box-shadow: 0 2px 5px var(--shadow-15);
 }
 
 .record-line {
@@ -110,7 +110,7 @@
 
 .calendar-day.selected {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-  border: 2px solid #4CAF50;
+  border: 2px solid var(--normal-green);
   color: #fff;
   font-weight: 700;
   border-radius: 12px;

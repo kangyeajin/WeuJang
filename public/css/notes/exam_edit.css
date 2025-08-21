@@ -24,7 +24,7 @@ h2 {
     background-color: rgba(0, 0, 0, 0.4);
 }
 .modal-content {
-  background-color: #fff;
+  background-color: var(--normal-yellow);
   margin: 10% auto;
   padding: 30px 25px;
   width: 300px;
@@ -60,7 +60,7 @@ h2 {
 .box-label {
   display: inline-block;
   padding: 6px 12px;
-  border: 2px solid #ccc;
+  border: var(--border-17);
   border-radius: 6px;
   font-size: 14px;
   color: #333;
@@ -75,9 +75,9 @@ h2 {
 }
 
 .box-label:hover {
-  background-color: #8f8f8f;
+  background-color: var(--shadow-50);
   color: #fff;
-  border-color: #8f8f8f;
+  /* border-color: var(--shadow-15); */
 }
 
 .pMsg{

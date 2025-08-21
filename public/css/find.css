@@ -6,6 +6,7 @@ body {
     height: 100vh;
     color: #333;
     padding: 50px;
+  background-image: url('/images/WeuJang-bg-login.png');
 }
 
 h2 {

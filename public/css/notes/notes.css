@@ -104,7 +104,7 @@
 
 .icon-set:hover {
   border-radius: 20px;
-  background-color: #e0e0e0;
+  background-color: var(--shadow-15);
   padding: 2px;
 }
 
