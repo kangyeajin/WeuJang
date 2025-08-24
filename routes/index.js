@@ -82,11 +82,12 @@ cardPages.forEach(({ path, css, js }) => {
 
 // 카드 리스트 API
 router.get("/api/cards", async (req, res) => {
+  const sort = req.query.sort;
   const noteId = req.query.note_id;
   const page = parseInt(req.query.page) || 1;
   if (!noteId) return res.status(400).json({ error: "note_id가 없습니다." });
 
-  const cardList = await getCardLists(noteId, page);
+  const cardList = await getCardLists(noteId, page, sort);
   res.json({ cards: cardList || [] });
 });
 

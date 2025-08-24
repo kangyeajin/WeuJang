@@ -6,6 +6,7 @@ let done = false; // 데이터 끝났는지 여부
 let html = "";
 const cards = []; // 카드 정보를 저장할 배열
 let editMode = false; // 편집 모드 여부
+let sort = "";
 
 document.addEventListener('DOMContentLoaded', function () {
   getCard();  // DOM이 로드된 후 자동 실행
@@ -41,7 +42,7 @@ async function getCard() {
   if (loading || done) return;
   loading = true; // 로딩 상태 설정
   try {
-    fetch(`/api/cards?note_id=${noteId}&page=${page}`)
+    fetch(`/api/cards?note_id=${noteId}&page=${page}&sort=${sort}`)
       .then(res => res.json())
       .then(data => {
         const newCards = data.cards;
@@ -537,3 +538,19 @@ function cardEditCancel() {
   dotsButton.classList.remove("hidden");
   editMode = false; // 편집 모드 비활성화
 }
+
+    //정렬
+    document.getElementById('sort-select').addEventListener('change', function () {
+        sort = this.value;
+        done = false;
+        html = '';
+        page = 1;
+        cards.length = 0; // 기존 내용 초기화
+
+        if (sort == 'wrongCnt') { // 하트순 
+          getCard();
+        }else{ // 등록순
+          getCard();
+        }
+    });
+    

@@ -5,6 +5,7 @@ let page = parseInt(urlParams.get('page')) || 1;    // 원하는 페이지 번�
 let loading = false;
 let done = false; // 데이터 끝났는지 여부
 let html = "";
+let sort = "";
 
 document.addEventListener('DOMContentLoaded', function () {
   const container = document.querySelector('.note-container');
@@ -43,7 +44,7 @@ async function getCard() {
   loading = true; // 로딩 상태 설정
   try {
 
-    fetch(`/api/cards?note_id=${noteId}&page=${page}`)
+    fetch(`/api/cards?note_id=${noteId}&page=${page}&sort=${sort}`)
       .then(res => res.json())
       .then(data => {
         const cards = data.cards;
@@ -534,3 +535,20 @@ function setQnAColor() {
     });
   }
 }
+
+    //정렬
+    document.getElementById('sort-select').addEventListener('change', function () {
+      //초기화
+        sort = this.value;
+        done = false;
+        html = '';
+        page = 1;
+        noteCon.innerHTML = html; // 기존 내용 초기화
+
+        if (sort == 'wrongCnt') { // 하트순 
+          getCard();
+        }else{ // 등록순
+          getCard();
+        }
+    });
+    

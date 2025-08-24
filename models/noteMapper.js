@@ -63,10 +63,13 @@ async function insertNoteInfo(param) {
  * @param {string} note_id 노트 id
  * @param {string} page 페이지 번호
  * @param {string} page limit 페이지당 30개씩 조회
+ * @param {string} sort 정렬 기준
  * @returns {Promise<Array>} recordset 반환
  */
-async function getUserCardLists(note_id, page, limit) {
+async function getUserCardLists(note_id, page, limit, sort) {
   try {
+    const allowedSort = ['wrongCnt'];
+    const sortColumn = allowedSort.includes(sort) ? sort +' DESC' : '';
     const offset = (page - 1) * limit;  // 페이지 마다 시작 위치 계산
     const rownumStart = offset; // 예: page = 2 → offset = 30 → rownumStart = 30
 
@@ -76,11 +79,13 @@ async function getUserCardLists(note_id, page, limit) {
      c.card_id, c.note_id, c.question, c.answer, c.hint, c.star,
      c.ENTDT, c.ENTTM, c.UPDDT, c.UPDTM, c.wrongCnt, c.bookmark
    FROM 
-     (SELECT * FROM sys.card WHERE note_id = ? LIMIT ? OFFSET ?) c,
+     (SELECT * FROM sys.card WHERE note_id = ?
+     order by ${sortColumn || 'card_id'}
+      LIMIT ? OFFSET ?) c,
      (SELECT @rownum := ?) r`,
       [note_id, limit, offset, rownumStart]
     );
-
+    
     if (rows.length > 0) {
       return rows;
     } else {

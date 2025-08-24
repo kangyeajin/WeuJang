@@ -508,3 +508,17 @@ button:hover {
   height: 30px;
   cursor: pointer;
 }
+
+/* 정렬 */
+.sort-container{
+  position: absolute;
+  right: 25px;
+}
+
+.sort-container select{
+  padding: 6px 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: #fdfcf7;
+}
